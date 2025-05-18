@@ -24,18 +24,8 @@ jobs:
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@main
 
-      - name: Use Garnix Cache
-        run: |
-          mkdir -p ~/.config/nix
-
-          cat << EOF > ~/.config/nix/nix.conf
-          substituters = https://cache.nixos.org/
-          trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g=
-          trusted-substituters = https://cache.garnix.io
-          EOF
-
       - name: Build Docs
-        run: nix build .#docs
+        run: nix build .#docs --accept-flake-config
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
