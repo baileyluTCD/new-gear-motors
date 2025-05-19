@@ -140,6 +140,28 @@ let
     with self;
     {
 
+      argon2_elixir =
+        let
+          version = "3.2.1";
+          drv = buildMix {
+            inherit version;
+            name = "argon2_elixir";
+            appConfigPath = ./config;
+
+            src = fetchHex {
+              inherit version;
+              pkg = "argon2_elixir";
+              sha256 = "a813b78217394530b5fcf4c8070feee43df03ffef938d044019169c766315690";
+            };
+
+            beamDeps = [
+              comeonin
+              elixir_make
+            ];
+          };
+        in
+        drv;
+
       bandit =
         let
           version = "1.6.11";
@@ -194,6 +216,23 @@ let
               inherit version;
               pkg = "castore";
               sha256 = "ec09e81a9c3db92d27c6651d119d8adc6d1cbbb3d90f8c1293eee2af590bf55d";
+            };
+          };
+        in
+        drv;
+
+      comeonin =
+        let
+          version = "5.5.1";
+          drv = buildMix {
+            inherit version;
+            name = "comeonin";
+            appConfigPath = ./config;
+
+            src = fetchHex {
+              inherit version;
+              pkg = "comeonin";
+              sha256 = "65aac8f19938145377cee73973f192c5645873dcf550a8a6b18187d17c13ccdb";
             };
           };
         in
@@ -337,6 +376,23 @@ let
               postgrex
               telemetry
             ];
+          };
+        in
+        drv;
+
+      elixir_make =
+        let
+          version = "0.9.0";
+          drv = buildMix {
+            inherit version;
+            name = "elixir_make";
+            appConfigPath = ./config;
+
+            src = fetchHex {
+              inherit version;
+              pkg = "elixir_make";
+              sha256 = "db23d4fd8b757462ad02f8aa73431a426fe6671c80b200d9710caf3d1dd0ffdb";
+            };
           };
         in
         drv;
