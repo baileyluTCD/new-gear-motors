@@ -1,6 +1,7 @@
 { inputs, flake, ... }:
 let
   eachSystem = inputs.nixpkgs.lib.genAttrs (import inputs.systems);
+  lib = inputs.nixpkgs.lib;
 in
 eachSystem (
   system:
@@ -13,3 +14,13 @@ eachSystem (
     );
   }
 )
+// {
+  readMixVersion =
+    mixExs:
+    let
+      text = builtins.readFile mixExs;
+      matches = builtins.match ''^.*version: "(.*)".*$'' text;
+    in
+    assert lib.assertMsg (matches != null) "No match could be found for mix.exs version field";
+    builtins.head matches;
+}
