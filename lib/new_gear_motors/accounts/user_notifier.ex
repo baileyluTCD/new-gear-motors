@@ -1,4 +1,11 @@
 defmodule NewGearMotors.Accounts.UserNotifier do
+  @moduledoc """
+  # User Notifier
+
+  This module contains functions for sending emails to a user based on
+  actions such as resetting their password, etc
+  """
+
   import Swoosh.Email
 
   alias NewGearMotors.Mailer

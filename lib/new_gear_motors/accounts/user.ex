@@ -1,4 +1,11 @@
 defmodule NewGearMotors.Accounts.User do
+  @moduledoc """
+  # User Schema
+
+  Contains the types and functions for interacting with `User` rows
+  in the database
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
   @primary_key {:id, :binary_id, autogenerate: true}

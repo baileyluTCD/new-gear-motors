@@ -1,4 +1,10 @@
 defmodule NewGearMotorsWeb.UserAuth do
+  @moduledoc """
+  # User Auth Module
+
+  Contains useful functions for activities such as logging in or logging out a user
+  """
+
   use NewGearMotorsWeb, :verified_routes
 
   import Plug.Conn

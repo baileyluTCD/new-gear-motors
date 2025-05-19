@@ -1,4 +1,13 @@
 defmodule NewGearMotors.Accounts.UserToken do
+  @moduledoc """
+  # User Token
+
+  A web token for an individual user. 
+
+  Similar in concept to a [JWT](https://jwt.io/), just without the
+  JSON part since that does not need to be communicated to the frontend.
+  """
+
   use Ecto.Schema
   import Ecto.Query
   alias NewGearMotors.Accounts.UserToken
