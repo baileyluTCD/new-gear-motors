@@ -10,7 +10,7 @@ pkgs.beamPackages.mixRelease {
   inherit mixNixDeps;
 
   pname = "docs";
-  version = "0.1.0";
+  version = flake.lib.readMixVersion ../../mix.exs;
 
   src = flake;
 
