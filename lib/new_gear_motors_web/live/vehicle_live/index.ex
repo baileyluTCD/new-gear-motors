@@ -4,6 +4,8 @@ defmodule NewGearMotorsWeb.VehicleLive.Index do
   alias NewGearMotors.Vehicles
   alias NewGearMotors.Vehicles.Vehicle
 
+  on_mount {NewGearMotorsWeb.UserAuth, :mount_current_user}
+
   @impl true
   def mount(_params, _session, socket) do
     {:ok, stream(socket, :vehicles, Vehicles.list_vehicles())}

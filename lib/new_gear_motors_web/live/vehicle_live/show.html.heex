@@ -2,9 +2,11 @@
   Vehicle {@vehicle.id}
   <:subtitle>This is a vehicle record from your database.</:subtitle>
   <:actions>
-    <.link patch={~p"/vehicles/#{@vehicle}/show/edit"} phx-click={JS.push_focus()}>
-      <.button>Edit vehicle</.button>
-    </.link>
+    <%= if @current_user do %>
+      <.link patch={~p"/vehicles/#{@vehicle}/show/edit"} phx-click={JS.push_focus()}>
+        <.button>Edit Vehicle</.button>
+      </.link>
+    <% end %>
   </:actions>
 </.header>
 
@@ -17,7 +19,12 @@
 
 <.back navigate={~p"/vehicles"}>Back to vehicles</.back>
 
-<.modal :if={@live_action == :edit} id="vehicle-modal" show on_cancel={JS.patch(~p"/vehicles/#{@vehicle}")}>
+<.modal
+  :if={@live_action == :edit}
+  id="vehicle-modal"
+  show
+  on_cancel={JS.patch(~p"/vehicles/#{@vehicle}")}
+>
   <.live_component
     module={NewGearMotorsWeb.VehicleLive.FormComponent}
     id={@vehicle.id}
