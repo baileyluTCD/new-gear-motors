@@ -36,14 +36,19 @@ defmodule NewGearMotors.ReservationsTest do
       reservation = reservation_fixture()
       update_attrs = %{status: :pending, planned_meeting_time: ~N[2025-05-20 21:58:00]}
 
-      assert {:ok, %Reservation{} = reservation} = Reservations.update_reservation(reservation, update_attrs)
+      assert {:ok, %Reservation{} = reservation} =
+               Reservations.update_reservation(reservation, update_attrs)
+
       assert reservation.status == :pending
       assert reservation.planned_meeting_time == ~N[2025-05-20 21:58:00]
     end
 
     test "update_reservation/2 with invalid data returns error changeset" do
       reservation = reservation_fixture()
-      assert {:error, %Ecto.Changeset{}} = Reservations.update_reservation(reservation, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Reservations.update_reservation(reservation, @invalid_attrs)
+
       assert reservation == Reservations.get_reservation!(reservation.id)
     end
 

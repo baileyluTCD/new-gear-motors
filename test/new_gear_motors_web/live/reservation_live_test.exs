@@ -14,7 +14,7 @@ defmodule NewGearMotorsWeb.ReservationLiveTest do
   end
 
   describe "Index" do
-    setup [:create_reservation]
+    setup [:create_reservation, :register_and_log_in_user]
 
     test "lists all reservations", %{conn: conn} do
       {:ok, _index_live, html} = live(conn, ~p"/reservations")
@@ -69,13 +69,16 @@ defmodule NewGearMotorsWeb.ReservationLiveTest do
     test "deletes reservation in listing", %{conn: conn, reservation: reservation} do
       {:ok, index_live, _html} = live(conn, ~p"/reservations")
 
-      assert index_live |> element("#reservations-#{reservation.id} a", "Delete") |> render_click()
+      assert index_live
+             |> element("#reservations-#{reservation.id} a", "Delete")
+             |> render_click()
+
       refute has_element?(index_live, "#reservations-#{reservation.id}")
     end
   end
 
   describe "Show" do
-    setup [:create_reservation]
+    setup [:create_reservation, :register_and_log_in_user]
 
     test "displays reservation", %{conn: conn, reservation: reservation} do
       {:ok, _show_live, html} = live(conn, ~p"/reservations/#{reservation}")
