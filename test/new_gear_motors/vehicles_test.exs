@@ -21,7 +21,12 @@ defmodule NewGearMotors.VehiclesTest do
     end
 
     test "create_vehicle/1 with valid data creates a vehicle" do
-      valid_attrs = %{name: "some name", description: "some description", price: "some price", manufacturer: "some manufacturer"}
+      valid_attrs = %{
+        name: "some name",
+        description: "some description",
+        price: "some price",
+        manufacturer: "some manufacturer"
+      }
 
       assert {:ok, %Vehicle{} = vehicle} = Vehicles.create_vehicle(valid_attrs)
       assert vehicle.name == "some name"
@@ -36,7 +41,13 @@ defmodule NewGearMotors.VehiclesTest do
 
     test "update_vehicle/2 with valid data updates the vehicle" do
       vehicle = vehicle_fixture()
-      update_attrs = %{name: "some updated name", description: "some updated description", price: "some updated price", manufacturer: "some updated manufacturer"}
+
+      update_attrs = %{
+        name: "some updated name",
+        description: "some updated description",
+        price: "some updated price",
+        manufacturer: "some updated manufacturer"
+      }
 
       assert {:ok, %Vehicle{} = vehicle} = Vehicles.update_vehicle(vehicle, update_attrs)
       assert vehicle.name == "some updated name"
