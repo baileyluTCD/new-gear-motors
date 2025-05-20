@@ -1,0 +1,50 @@
+<.header>
+  Listing Vehicles
+  <:actions>
+    <.link :if={@current_user} patch={~p"/vehicles/new"}>
+      <.button>New Vehicle</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="vehicles"
+  rows={@streams.vehicles}
+  row_click={fn {_id, vehicle} -> JS.navigate(~p"/vehicles/#{vehicle}") end}
+>
+  <:col :let={{_id, vehicle}} label="Name">{vehicle.name}</:col>
+  <:col :let={{_id, vehicle}} label="Price">{vehicle.price}</:col>
+  <:col :let={{_id, vehicle}} label="Description">{vehicle.description}</:col>
+  <:col :let={{_id, vehicle}} label="Manufacturer">{vehicle.manufacturer}</:col>
+  <:action :let={{_id, vehicle}} :if={@current_user}>
+    <div class="sr-only">
+      <.link navigate={~p"/vehicles/#{vehicle}"}>Show</.link>
+    </div>
+    <.link patch={~p"/vehicles/#{vehicle}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, vehicle}}>
+    <.link
+      :if={@current_user}
+      phx-click={JS.push("delete", value: %{id: vehicle.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="vehicle-modal"
+  show
+  on_cancel={JS.patch(~p"/vehicles")}
+>
+  <.live_component
+    module={NewGearMotorsWeb.VehicleLive.FormComponent}
+    id={@vehicle.id || :new}
+    title={@page_title}
+    action={@live_action}
+    vehicle={@vehicle}
+    patch={~p"/vehicles"}
+  />
+</.modal>

@@ -17,17 +17,6 @@ defmodule NewGearMotorsWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", NewGearMotorsWeb do
-    pipe_through :browser
-
-    get "/", PageController, :home
-  end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", NewGearMotorsWeb do
-  #   pipe_through :api
-  # end
-
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:new_gear_motors, :dev_routes) do
     # If you want to use the LiveDashboard in production, you should put
@@ -69,6 +58,10 @@ defmodule NewGearMotorsWeb.Router do
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
     end
+
+    live "/vehicles/new", VehicleLive.Index, :new
+    live "/vehicles/:id/edit", VehicleLive.Index, :edit
+    live "/vehicles/:id/show/edit", VehicleLive.Show, :edit
   end
 
   scope "/", NewGearMotorsWeb do
@@ -81,5 +74,14 @@ defmodule NewGearMotorsWeb.Router do
       live "/users/confirm/:token", UserConfirmationLive, :edit
       live "/users/confirm", UserConfirmationInstructionsLive, :new
     end
+  end
+
+  scope "/", NewGearMotorsWeb do
+    pipe_through :browser
+
+    get "/", PageController, :home
+
+    live "/vehicles", VehicleLive.Index, :index
+    live "/vehicles/:id", VehicleLive.Show, :show
   end
 end
