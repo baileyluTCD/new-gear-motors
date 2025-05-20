@@ -4,55 +4,58 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content={get_csrf_token()} />
-    <.live_title suffix=" · Phoenix Framework">
-      {assigns[:page_title] || "NewGearMotors"}
+    <.live_title suffix=" · New Gear Motors">
+      {assigns[:page_title] || "Home"}
     </.live_title>
     <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
     </script>
   </head>
   <body class="bg-white">
-    <ul class="relative z-10 flex items-center gap-4 px-4 sm:px-6 lg:px-8 justify-end">
-      <%= if @current_user do %>
-        <li class="text-[0.8125rem] leading-6 text-zinc-900">
-          {@current_user.email}
-        </li>
-        <li>
-          <.link
-            href={~p"/users/settings"}
-            class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
-          >
-            Settings
+    <header class="px-4 sm:px-6 lg:px-8 relative z-10 bg-white">
+      <div class="flex items-center justify-between border-b border-zinc-100 py-3 text-sm">
+        <div class="flex items-center gap-4">
+          <.link href={~p"/"} class="hover:text-zinc-700">
+            New Gear Motors
           </.link>
-        </li>
-        <li>
-          <.link
-            href={~p"/users/log_out"}
-            method="delete"
-            class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
-          >
-            Log out
+        </div>
+        <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
+          <.link href={~p"/vehicles"} class="hover:text-zinc-700">
+            Vehicles
           </.link>
-        </li>
-      <% else %>
-        <li>
-          <.link
-            href={~p"/users/register"}
-            class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
-          >
-            Register
-          </.link>
-        </li>
-        <li>
-          <.link
-            href={~p"/users/log_in"}
-            class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
-          >
-            Log in
-          </.link>
-        </li>
-      <% end %>
-    </ul>
+        </div>
+        <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
+          <%= if @current_user do %>
+            <.link
+              href={~p"/users/settings"}
+              class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
+            >
+              {@current_user.email} <.icon name="hero-user" class="h-4 w-4" />
+            </.link>
+            <.link
+              href={~p"/users/log_out"}
+              method="delete"
+              class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
+            >
+              Log out <.icon name="hero-lock-closed" class="h-4 w-4" />
+            </.link>
+          <% else %>
+            <.link
+              href={~p"/users/register"}
+              class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
+            >
+              Register <.icon name="hero-clipboard-document-list" class="h-4 w-4" />
+            </.link>
+            <.link
+              href={~p"/users/log_in"}
+              class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
+            >
+              Log in <.icon name="hero-lock-open" class="h-4 w-4" />
+            </.link>
+          <% end %>
+        </div>
+      </div>
+    </header>
     {@inner_content}
   </body>
 </html>
