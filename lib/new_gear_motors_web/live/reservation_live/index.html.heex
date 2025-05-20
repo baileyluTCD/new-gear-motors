@@ -13,7 +13,9 @@
   row_click={fn {_id, reservation} -> JS.navigate(~p"/reservations/#{reservation}") end}
 >
   <:col :let={{_id, reservation}} label="Status">{reservation.status}</:col>
-  <:col :let={{_id, reservation}} label="Planned meeting time">{reservation.planned_meeting_time}</:col>
+  <:col :let={{_id, reservation}} label="Planned meeting time">
+    {reservation.planned_meeting_time}
+  </:col>
   <:action :let={{_id, reservation}}>
     <div class="sr-only">
       <.link navigate={~p"/reservations/#{reservation}"}>Show</.link>
@@ -30,7 +32,12 @@
   </:action>
 </.table>
 
-<.modal :if={@live_action in [:new, :edit]} id="reservation-modal" show on_cancel={JS.patch(~p"/reservations")}>
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="reservation-modal"
+  show
+  on_cancel={JS.patch(~p"/reservations")}
+>
   <.live_component
     module={NewGearMotorsWeb.ReservationLive.FormComponent}
     id={@reservation.id || :new}

@@ -26,7 +26,11 @@ defmodule NewGearMotorsWeb.ReservationLive.FormComponent do
           prompt="Choose a value"
           options={Ecto.Enum.values(NewGearMotors.Reservations.Reservation, :status)}
         />
-        <.input field={@form[:planned_meeting_time]} type="datetime-local" label="Planned meeting time" />
+        <.input
+          field={@form[:planned_meeting_time]}
+          type="datetime-local"
+          label="Planned meeting time"
+        />
         <:actions>
           <.button phx-disable-with="Saving...">Save Reservation</.button>
         </:actions>
