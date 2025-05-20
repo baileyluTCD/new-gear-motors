@@ -62,6 +62,12 @@ defmodule NewGearMotorsWeb.Router do
     live "/vehicles/new", VehicleLive.Index, :new
     live "/vehicles/:id/edit", VehicleLive.Index, :edit
     live "/vehicles/:id/show/edit", VehicleLive.Show, :edit
+
+    live "/reservations", ReservationLive.Index, :index
+    live "/reservations/new", ReservationLive.Index, :new
+    live "/reservations/:id/edit", ReservationLive.Index, :edit
+    live "/reservations/:id", ReservationLive.Show, :show
+    live "/reservations/:id/show/edit", ReservationLive.Show, :edit
   end
 
   scope "/", NewGearMotorsWeb do
