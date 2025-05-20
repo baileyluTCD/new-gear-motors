@@ -1,4 +1,10 @@
 defmodule NewGearMotors.Vehicles.Vehicle do
+  @moduledoc """
+  # Vehicle Schema
+
+  The type and constraints for a vehicle
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 
