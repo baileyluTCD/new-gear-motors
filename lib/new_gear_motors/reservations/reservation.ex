@@ -8,7 +8,7 @@ defmodule NewGearMotors.Reservations.Reservation do
     field :status, Ecto.Enum, values: [:denied, :pending, :accepted]
     field :planned_meeting_time, :naive_datetime
     belongs_to :user, NewGearMotors.Accounts.User
-    has_many :messages, NewGearMotors.Reservations.Message
+    has_many :messages, NewGearMotors.Reservations.Messages.Message
 
     timestamps(type: :utc_datetime)
   end

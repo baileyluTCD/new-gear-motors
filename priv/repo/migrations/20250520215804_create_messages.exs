@@ -5,13 +5,13 @@ defmodule NewGearMotors.Repo.Migrations.CreateMessages do
     create table(:messages, primary_key: false) do
       add :id, :binary_id, primary_key: true
       add :text, :string
-      add :from, references(:users, on_delete: :nothing, type: :binary_id)
-      add :to, references(:users, on_delete: :nothing, type: :binary_id)
+      add :reservation_id, references(:reservations, on_delete: :delete_all, type: :binary_id)
+      add :from_id, references(:users, on_delete: :delete_all, type: :binary_id)
 
       timestamps(type: :utc_datetime)
     end
 
-    create index(:messages, [:from])
-    create index(:messages, [:to])
+    create index(:messages, [:reservation_id])
+    create index(:messages, [:from_id])
   end
 end

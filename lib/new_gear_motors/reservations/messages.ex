@@ -1,22 +1,104 @@
 defmodule NewGearMotors.Reservations.Messages do
-  use Ecto.Schema
-  import Ecto.Changeset
+  @moduledoc """
+  The Messages context.
+  """
 
-  @primary_key {:id, :binary_id, autogenerate: true}
-  @foreign_key_type :binary_id
-  schema "messages" do
-    field :text, :string
-    belongs_to :from, YourApp.Accounts.User
-    belongs_to :to, YourApp.Accounts.User
-    belongs_to :reservation, YourApp.Reservations.Reservation
+  import Ecto.Query, warn: false
+  alias NewGearMotors.Repo
 
-    timestamps(type: :utc_datetime)
+  alias NewGearMotors.Reservations.Messages.Message
+
+  @doc """
+  Returns the list of messages.
+
+  ## Examples
+
+      iex> list_messages()
+      [%Message{}, ...]
+
+  """
+  def list_messages do
+    Repo.all(Message)
   end
 
-  @doc false
-  def changeset(messages, attrs) do
-    messages
-    |> cast(attrs, [:text])
-    |> validate_required([:text])
+  @doc """
+  Gets a single message.
+
+  Raises `Ecto.NoResultsError` if the Message does not exist.
+
+  ## Examples
+
+      iex> get_message!(123)
+      %Message{}
+
+      iex> get_message!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_message!(id), do: Repo.get!(Message, id)
+
+  @doc """
+  Creates a message.
+
+  ## Examples
+
+      iex> create_message(%{field: value})
+      {:ok, %Message{}}
+
+      iex> create_message(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_message(attrs \\ %{}) do
+    %Message{}
+    |> Message.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a message.
+
+  ## Examples
+
+      iex> update_message(message, %{field: new_value})
+      {:ok, %Message{}}
+
+      iex> update_message(message, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_message(%Message{} = message, attrs) do
+    message
+    |> Message.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a message.
+
+  ## Examples
+
+      iex> delete_message(message)
+      {:ok, %Message{}}
+
+      iex> delete_message(message)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_message(%Message{} = message) do
+    Repo.delete(message)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking message changes.
+
+  ## Examples
+
+      iex> change_message(message)
+      %Ecto.Changeset{data: %Message{}}
+
+  """
+  def change_message(%Message{} = message, attrs \\ %{}) do
+    Message.changeset(message, attrs)
   end
 end
