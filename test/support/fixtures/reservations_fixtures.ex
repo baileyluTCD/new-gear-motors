@@ -4,8 +4,6 @@ defmodule NewGearMotors.ReservationsFixtures do
   entities via the `NewGearMotors.Reservations` context.
   """
 
-  import NewGearMotors.Reservations.MessagesFixtures
-
   @doc """
   Generate a reservation.
   """

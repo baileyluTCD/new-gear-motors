@@ -7,8 +7,27 @@ defmodule NewGearMotors.Reservations.MessagesTest do
     alias NewGearMotors.Reservations.Messages.Message
 
     import NewGearMotors.Reservations.MessagesFixtures
+    alias NewGearMotors.ReservationsFixtures
+    alias NewGearMotors.AccountsFixtures
 
-    @invalid_attrs %{text: nil}
+    setup do
+      user = AccountsFixtures.user_fixture()
+      reservation = ReservationsFixtures.reservation_fixture()
+
+      {:ok,
+       %{
+         valid_attrs: %{
+           text: "some text",
+           from_id: user.id,
+           reservation_id: reservation.id
+         },
+         invalid_attrs: %{
+           text: nil,
+           from_id: nil,
+           reservation_id: nil
+         }
+       }}
+    end
 
     test "list_messages/0 returns all messages" do
       message = message_fixture()
@@ -20,15 +39,15 @@ defmodule NewGearMotors.Reservations.MessagesTest do
       assert Messages.get_message!(message.id) == message
     end
 
-    test "create_message/1 with valid data creates a message" do
-      valid_attrs = %{text: "some text"}
-
+    test "create_message/1 with valid data creates a message", %{valid_attrs: valid_attrs} do
       assert {:ok, %Message{} = message} = Messages.create_message(valid_attrs)
       assert message.text == "some text"
     end
 
-    test "create_message/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Messages.create_message(@invalid_attrs)
+    test "create_message/1 with invalid data returns error changeset", %{
+      invalid_attrs: invalid_attrs
+    } do
+      assert {:error, %Ecto.Changeset{}} = Messages.create_message(invalid_attrs)
     end
 
     test "update_message/2 with valid data updates the message" do
@@ -39,9 +58,11 @@ defmodule NewGearMotors.Reservations.MessagesTest do
       assert message.text == "some updated text"
     end
 
-    test "update_message/2 with invalid data returns error changeset" do
+    test "update_message/2 with invalid data returns error changeset", %{
+      invalid_attrs: invalid_attrs
+    } do
       message = message_fixture()
-      assert {:error, %Ecto.Changeset{}} = Messages.update_message(message, @invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = Messages.update_message(message, invalid_attrs)
       assert message == Messages.get_message!(message.id)
     end
 

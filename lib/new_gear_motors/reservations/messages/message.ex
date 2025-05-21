@@ -15,7 +15,8 @@ defmodule NewGearMotors.Reservations.Messages.Message do
   @doc false
   def changeset(messages, attrs) do
     messages
-    |> cast(attrs, [:text])
-    |> validate_required([:text])
+    |> cast(attrs, [:text, :from_id, :reservation_id])
+    |> validate_required([:text, :from_id, :reservation_id])
+    |> validate_length(:text, min: 1, max: 500)
   end
 end
