@@ -2,20 +2,47 @@ defmodule NewGearMotorsWeb.ReservationLive.Show do
   use NewGearMotorsWeb, :live_view
 
   alias NewGearMotors.Reservations
+  alias NewGearMotors.Reservations.Messages
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(%{"id" => id}, _session, socket) do
+    reservation =
+      Reservations.get_reservation!(id)
+      |> Reservations.preload_messages()
+
+    socket =
+      socket
+      |> assign(:page_title, page_title(socket.assigns.live_action))
+      |> stream(:messages, reservation.messages)
+
     {:ok, socket}
   end
 
   @impl true
-  def handle_params(%{"id" => id}, _, socket) do
-    {:noreply,
-     socket
-     |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:reservation, Reservations.get_reservation!(id))}
+  def handle_params(params, _url, socket) do
+    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+  end
+
+  defp apply_action(socket, :new_message, _params), do: socket
+  defp apply_action(socket, :show, _params), do: socket
+
+  defp apply_action(socket, :edit_message, %{"message_id" => message_id}) do
+    message = Messages.get_message!(message_id)
+
+    socket
+    |> assign(:message, message)
+  end
+
+  @impl true
+  def handle_event("delete_message", %{"message_id" => message_id}, socket) do
+    message = Messages.get_message!(message_id)
+    {:ok, _} = Messages.delete_message(message)
+
+    {:noreply, stream_delete(socket, :messages, message)}
   end
 
   defp page_title(:show), do: "Show Reservation"
   defp page_title(:edit), do: "Edit Reservation"
+  defp page_title(:new_message), do: "New Message"
+  defp page_title(:edit_message), do: "Edit Message"
 end
