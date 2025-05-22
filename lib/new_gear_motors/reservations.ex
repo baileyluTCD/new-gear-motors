@@ -22,6 +22,17 @@ defmodule NewGearMotors.Reservations do
   end
 
   @doc """
+  Preloads a reservation's messages
+
+  ## Examples
+
+      iex> preload_messages(reservation)
+      [%Reservation{}, ...]
+
+  """
+  def preload_messages(reservation), do: Repo.preload(reservation, :messages)
+
+  @doc """
   Gets a single reservation.
 
   Raises `Ecto.NoResultsError` if the Reservation does not exist.
