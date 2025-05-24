@@ -66,7 +66,6 @@ defmodule NewGearMotorsWeb.Router do
     live "/reservations", ReservationLive.Index, :index
     live "/reservations/new", ReservationLive.Index, :new
     live "/reservations/:id/edit", ReservationLive.Index, :edit
-    live "/reservations/:id/messages/new", ReservationLive.Show, :new_message
     live "/reservations/:id/messages/:message_id/edit", ReservationLive.Show, :edit_message
     live "/reservations/:id", ReservationLive.Show, :show
     live "/reservations/:id/show/edit", ReservationLive.Show, :edit

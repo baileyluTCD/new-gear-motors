@@ -13,6 +13,14 @@
   <:item title="Planned meeting time">{@reservation.planned_meeting_time}</:item>
 </.list>
 
+<.live_component
+  module={NewGearMotorsWeb.ReservationLive.MessagesComponent}
+  id={@reservation.id}
+  title={@page_title}
+  action={@live_action}
+  messages={@streams.messages}
+/>
+
 <.back navigate={~p"/reservations"}>Back to reservations</.back>
 
 <.modal
