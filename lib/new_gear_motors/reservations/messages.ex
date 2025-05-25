@@ -22,6 +22,37 @@ defmodule NewGearMotors.Reservations.Messages do
   end
 
   @doc """
+  Returns the list of messages for a reservation.
+
+  ## Examples
+
+      iex> list_messages_for_reservation_id(reservation_id)
+      [%Message{}, ...]
+
+  """
+  def list_messages_for_reservation_id(reservation_id) do
+    query =
+      from message in Message,
+        where:
+          message.reservation_id ==
+            ^reservation_id,
+        preload: [:from]
+
+    Repo.all(query)
+  end
+
+  @doc """
+  Preloads a messages's from field
+
+  ## Examples
+
+      iex> preload_from(reservation)
+      [%Message{}, ...]
+
+  """
+  def preload_from(message), do: Repo.preload(message, :from)
+
+  @doc """
   Gets a single message.
 
   Raises `Ecto.NoResultsError` if the Message does not exist.
