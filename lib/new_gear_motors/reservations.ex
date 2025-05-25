@@ -30,7 +30,7 @@ defmodule NewGearMotors.Reservations do
       [%Reservation{}, ...]
 
   """
-  def preload_messages(reservation), do: Repo.preload(reservation, :messages)
+  def preload_messages(reservation), do: Repo.preload(reservation, messages: [:from])
 
   @doc """
   Gets a single reservation.
