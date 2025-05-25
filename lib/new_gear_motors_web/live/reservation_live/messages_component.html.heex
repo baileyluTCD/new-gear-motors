@@ -29,7 +29,7 @@
     phx-change="validate"
     phx-submit="save"
   >
-    <.input field={@form[:text]} placeholder="Message..." />
+    <.input field={@form[:text]} value={@message_text} placeholder="Message..." />
     <:actions>
       <.button phx-disable-with="Sending...">Send Message</.button>
     </:actions>

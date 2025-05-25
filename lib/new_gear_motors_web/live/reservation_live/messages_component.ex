@@ -31,6 +31,7 @@ defmodule NewGearMotorsWeb.ReservationLive.MessagesComponent do
      |> assign(assigns)
      |> stream(:messages, messages)
      |> assign(:message, empty_message)
+     |> assign(:message_text, "")
      |> assign_new(:form, fn ->
        to_form(Messages.change_message(empty_message))
      end)}
@@ -66,7 +67,9 @@ defmodule NewGearMotorsWeb.ReservationLive.MessagesComponent do
   end
 
   defp handle_with_defaults("save", message_params, socket) do
-    save_message(socket, socket.assigns.action, message_params)
+    socket
+    |> assign(:message_text, "")
+    |> save_message(socket.assigns.action, message_params)
   end
 
   defp save_message(socket, :show, message_params) do
