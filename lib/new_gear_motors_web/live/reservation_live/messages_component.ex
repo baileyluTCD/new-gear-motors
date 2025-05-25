@@ -1,11 +1,26 @@
 defmodule NewGearMotorsWeb.ReservationLive.MessagesComponent do
+  require Logger
   use NewGearMotorsWeb, :live_component
+
+  alias Phoenix.PubSub
 
   alias NewGearMotors.Reservations
   alias NewGearMotors.Reservations.Messages
   alias NewGearMotors.Reservations.Messages.Message
 
   @impl true
+  def update(%{event: {:delete, message}}, socket) do
+    {:ok, stream_delete(socket, :messages, message)}
+  end
+
+  def update(%{event: {:new, message}}, socket) do
+    {:ok, stream_insert(socket, :messages, message)}
+  end
+
+  def update(%{event: {:edit, message}}, socket) do
+    {:ok, stream_insert(socket, :messages, message)}
+  end
+
   def update(%{id: id} = assigns, socket) do
     messages = Messages.list_messages_for_reservation_id(id)
 
@@ -25,6 +40,12 @@ defmodule NewGearMotorsWeb.ReservationLive.MessagesComponent do
   def handle_event("delete_message", %{"message_id" => message_id}, socket) do
     message = Messages.get_message!(message_id)
     {:ok, _} = Messages.delete_message(message)
+
+    Phoenix.PubSub.broadcast(
+      NewGearMotors.PubSub,
+      "messages:#{socket.assigns.id}",
+      {:delete, message}
+    )
 
     {:noreply, stream_delete(socket, :messages, message)}
   end
@@ -53,11 +74,18 @@ defmodule NewGearMotorsWeb.ReservationLive.MessagesComponent do
       {:ok, message} ->
         message = message |> Messages.preload_from()
 
+        Phoenix.PubSub.broadcast(
+          NewGearMotors.PubSub,
+          "messages:#{socket.assigns.id}",
+          {:new, message}
+        )
+
         {:noreply,
-         socket
-         |> stream_insert(:messages, message)
-         |> put_flash(:info, "Message sent successfully")
-         |> push_patch(to: socket.assigns.patch)}
+         socket =
+           socket
+           |> put_flash(:info, "Message sent successfully")
+           |> push_patch(to: socket.assigns.patch)
+           |> stream_insert(:messages, message)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, form: to_form(changeset))}

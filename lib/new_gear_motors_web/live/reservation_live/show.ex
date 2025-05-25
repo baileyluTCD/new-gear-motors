@@ -1,10 +1,11 @@
 defmodule NewGearMotorsWeb.ReservationLive.Show do
   use NewGearMotorsWeb, :live_view
+  alias NewGearMotorsWeb.ReservationLive.MessagesComponent
+
+  alias Phoenix.PubSub
 
   alias NewGearMotors.Reservations
   alias NewGearMotors.Reservations.Messages
-
-  require Logger
 
   on_mount {NewGearMotorsWeb.UserAuth, :mount_current_user}
 
@@ -12,12 +13,20 @@ defmodule NewGearMotorsWeb.ReservationLive.Show do
   def mount(%{"id" => id}, _session, socket) do
     reservation = Reservations.get_reservation!(id)
 
+    PubSub.subscribe(NewGearMotors.PubSub, "messages:#{id}")
+
     socket =
       socket
       |> assign(:page_title, page_title(socket.assigns.live_action))
       |> assign(:reservation, reservation)
 
     {:ok, socket}
+  end
+
+  @impl true
+  def handle_info(event, socket) do
+    send_update(MessagesComponent, id: socket.assigns.reservation.id, event: event)
+    {:noreply, socket}
   end
 
   @impl true

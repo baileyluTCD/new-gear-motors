@@ -63,6 +63,12 @@ defmodule NewGearMotorsWeb.ReservationLive.MessagesFormComponent do
       {:ok, message} ->
         notify_parent({:saved, message})
 
+        Phoenix.PubSub.broadcast(
+          NewGearMotors.PubSub,
+          "messages:#{socket.assigns.id}",
+          :edit
+        )
+
         {:noreply,
          socket
          |> put_flash(:info, "Message updated successfully")
