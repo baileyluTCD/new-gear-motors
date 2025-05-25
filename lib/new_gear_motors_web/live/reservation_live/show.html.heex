@@ -18,7 +18,10 @@
   id={@reservation.id}
   title={@page_title}
   action={@live_action}
-  messages={@streams.messages}
+  current_user={@current_user}
+  reservation={@reservation}
+  message_id={@message_id}
+  patch={~p"/reservations/#{@reservation}"}
 />
 
 <.back navigate={~p"/reservations"}>Back to reservations</.back>
