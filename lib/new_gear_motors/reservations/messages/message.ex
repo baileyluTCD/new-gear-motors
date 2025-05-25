@@ -16,6 +16,8 @@ defmodule NewGearMotors.Reservations.Messages.Message do
   def changeset(messages, attrs) do
     messages
     |> cast(attrs, [:text, :from_id, :reservation_id])
+    |> assoc_constraint(:from)
+    |> assoc_constraint(:reservation)
     |> validate_required([:text, :from_id, :reservation_id])
     |> validate_length(:text, min: 1, max: 500)
   end
