@@ -18,7 +18,7 @@ defmodule NewGearMotors.MixProject do
   defp docs do
     [
       main: "readme",
-      extras: ["README.md"]
+      extras: ["README.md", "LICENSE.txt"]
     ]
   end
 
