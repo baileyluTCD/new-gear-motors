@@ -1,6 +1,8 @@
 defmodule NewGearMotorsWeb.ReservationLiveTest do
   use NewGearMotorsWeb.ConnCase
 
+  alias NewGearMotors.Reservations.Messages
+
   import Phoenix.LiveViewTest
   import NewGearMotors.ReservationsFixtures
   import NewGearMotors.Reservations.MessagesFixtures
@@ -179,6 +181,40 @@ defmodule NewGearMotorsWeb.ReservationLiveTest do
       assert show_live
              |> element("#messages-#{message.id} a", "Delete")
              |> render_click()
+
+      refute has_element?(show_live, "#message-#{message.id}")
+    end
+
+    test "creates new message with pubsub", %{conn: conn, reservation: reservation, user: user} do
+      {:ok, show_live, _html} = live(conn, ~p"/reservations/#{reservation}")
+
+      message = message_fixture(%{reservation: reservation, user: user, text: "sent text"})
+      send(show_live.pid, event: {:new, message: message})
+
+      assert render(show_live) =~ "sent text"
+    end
+
+    test "updates message with pubsub", %{
+      conn: conn,
+      reservation: reservation,
+      message: message
+    } do
+      {:ok, show_live, _html} = live(conn, ~p"/reservations/#{reservation}")
+
+      message = Messages.update_message(message, %{text: "edited text"})
+      send(show_live.pid, event: {:edit, message: message})
+
+      assert render(show_live) =~ "edited text"
+    end
+
+    test "deletes message with pubsub", %{
+      conn: conn,
+      reservation: reservation,
+      message: message
+    } do
+      {:ok, show_live, _html} = live(conn, ~p"/reservations/#{reservation}")
+
+      send(show_live.pid, event: {:delete, message: message})
 
       refute has_element?(show_live, "#message-#{message.id}")
     end
