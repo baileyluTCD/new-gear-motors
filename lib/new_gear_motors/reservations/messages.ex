@@ -46,7 +46,7 @@ defmodule NewGearMotors.Reservations.Messages do
 
   ## Examples
 
-      iex> preload_from(reservation)
+      iex> preload_from(message)
       [%Message{}, ...]
 
   """

@@ -25,7 +25,9 @@ defmodule NewGearMotors.Reservations.MessagesTest do
            text: nil,
            from_id: nil,
            reservation_id: nil
-         }
+         },
+         user: user,
+         reservation: reservation
        }}
     end
 
@@ -34,9 +36,33 @@ defmodule NewGearMotors.Reservations.MessagesTest do
       assert Messages.list_messages() == [message]
     end
 
+    test "list_messages_for_reservation_id/1 returns messages for the reservation", %{
+      valid_attrs: valid_attrs,
+      reservation: reservation
+    } do
+      assert {:ok, %Message{} = message} = Messages.create_message(valid_attrs)
+
+      [for_id] = Messages.list_messages_for_reservation_id(reservation.id)
+
+      assert for_id.id == message.id
+    end
+
     test "get_message!/1 returns the message with given id" do
       message = message_fixture()
       assert Messages.get_message!(message.id) == message
+    end
+
+    test "preload_from/1 returns the message with given id", %{
+      valid_attrs: valid_attrs,
+      user: user
+    } do
+      assert {:ok, %Message{} = message} = Messages.create_message(valid_attrs)
+
+      with_from =
+        Messages.get_message!(message.id)
+        |> Messages.preload_from()
+
+      assert with_from.from.email == user.email
     end
 
     test "create_message/1 with valid data creates a message", %{valid_attrs: valid_attrs} do
