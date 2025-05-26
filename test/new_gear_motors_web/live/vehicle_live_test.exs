@@ -1,5 +1,4 @@
 defmodule NewGearMotorsWeb.VehicleLiveTest do
-  alias Credo.Check.Warning.IoInspect
   use NewGearMotorsWeb.ConnCase
 
   import Phoenix.LiveViewTest

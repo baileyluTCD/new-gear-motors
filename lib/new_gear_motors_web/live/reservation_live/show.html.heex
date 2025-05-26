@@ -1,0 +1,43 @@
+<.header>
+  Reservation {@reservation.id}
+  <:subtitle>This is a reservation record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/reservations/#{@reservation}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit Reservation</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Status">{@reservation.status}</:item>
+  <:item title="Planned meeting time">{@reservation.planned_meeting_time}</:item>
+</.list>
+
+<.live_component
+  module={NewGearMotorsWeb.ReservationLive.MessagesComponent}
+  id={@reservation.id}
+  title={@page_title}
+  action={@live_action}
+  current_user={@current_user}
+  reservation={@reservation}
+  message_id={@message_id}
+  patch={~p"/reservations/#{@reservation}"}
+/>
+
+<.back navigate={~p"/reservations"}>Back to reservations</.back>
+
+<.modal
+  :if={@live_action == :edit}
+  id="reservation-modal"
+  show
+  on_cancel={JS.patch(~p"/reservations/#{@reservation}")}
+>
+  <.live_component
+    module={NewGearMotorsWeb.ReservationLive.FormComponent}
+    id={@reservation.id}
+    title={@page_title}
+    action={@live_action}
+    reservation={@reservation}
+    patch={~p"/reservations/#{@reservation}"}
+  />
+</.modal>
