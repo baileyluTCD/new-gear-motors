@@ -1,4 +1,10 @@
 defmodule NewGearMotors.Reservations.Messages.Message do
+  @moduledoc """
+  # Message Schema
+
+  The database type for a given message
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 

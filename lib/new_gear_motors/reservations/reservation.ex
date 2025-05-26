@@ -1,4 +1,10 @@
 defmodule NewGearMotors.Reservations.Reservation do
+  @moduledoc """
+  # Reservation Schema
+
+  The database type for a given reservation
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 
