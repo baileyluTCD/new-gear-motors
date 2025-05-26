@@ -9,7 +9,16 @@ defmodule NewGearMotors.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      docs: &docs/0
+    ]
+  end
+
+  # ExDoc Configuration
+  defp docs do
+    [
+      main: "readme",
+      extras: ["README.md"]
     ]
   end
 
