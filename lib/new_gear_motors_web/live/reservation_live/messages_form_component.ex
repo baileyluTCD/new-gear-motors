@@ -4,6 +4,8 @@ defmodule NewGearMotorsWeb.ReservationLive.MessagesFormComponent do
 
   alias NewGearMotors.Reservations.Messages
 
+  @form_id "edit_messages"
+
   @impl true
   def render(assigns) do
     ~H"""
@@ -44,14 +46,14 @@ defmodule NewGearMotorsWeb.ReservationLive.MessagesFormComponent do
      |> assign(assigns)
      |> assign(:message, message)
      |> assign_new(:form, fn ->
-       to_form(Messages.change_message(message))
+       to_form(Messages.change_message(message), id: @form_id)
      end)}
   end
 
   @impl true
   def handle_event("validate", %{"message" => message_params}, socket) do
     changeset = Messages.change_message(socket.assigns.message, message_params)
-    {:noreply, assign(socket, form: to_form(changeset, action: :validate))}
+    {:noreply, assign(socket, form: to_form(changeset, action: :validate, id: @form_id))}
   end
 
   def handle_event("save", %{"message" => message_params}, socket) do
@@ -75,7 +77,7 @@ defmodule NewGearMotorsWeb.ReservationLive.MessagesFormComponent do
          |> push_patch(to: socket.assigns.patch)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, form: to_form(changeset))}
+        {:noreply, assign(socket, form: to_form(changeset, id: @form_id))}
     end
   end
 

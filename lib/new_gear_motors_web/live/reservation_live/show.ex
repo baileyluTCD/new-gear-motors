@@ -5,7 +5,6 @@ defmodule NewGearMotorsWeb.ReservationLive.Show do
   alias Phoenix.PubSub
 
   alias NewGearMotors.Reservations
-  alias NewGearMotors.Reservations.Messages
 
   on_mount {NewGearMotorsWeb.UserAuth, :mount_current_user}
 
@@ -31,7 +30,10 @@ defmodule NewGearMotorsWeb.ReservationLive.Show do
 
   @impl true
   def handle_params(params, _url, socket) do
-    socket = socket |> assign(:message_id, nil)
+    socket =
+      socket
+      |> assign(:message_id, nil)
+      |> assign(:page_title, page_title(socket.assigns.live_action))
 
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end

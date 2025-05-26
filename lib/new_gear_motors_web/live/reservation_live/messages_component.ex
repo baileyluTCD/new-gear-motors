@@ -2,9 +2,6 @@ defmodule NewGearMotorsWeb.ReservationLive.MessagesComponent do
   require Logger
   use NewGearMotorsWeb, :live_component
 
-  alias Phoenix.PubSub
-
-  alias NewGearMotors.Reservations
   alias NewGearMotors.Reservations.Messages
   alias NewGearMotors.Reservations.Messages.Message
 
@@ -84,11 +81,10 @@ defmodule NewGearMotorsWeb.ReservationLive.MessagesComponent do
         )
 
         {:noreply,
-         socket =
-           socket
-           |> put_flash(:info, "Message sent successfully")
-           |> push_patch(to: socket.assigns.patch)
-           |> stream_insert(:messages, message)}
+         socket
+         |> put_flash(:info, "Message sent successfully")
+         |> push_patch(to: socket.assigns.patch)
+         |> stream_insert(:messages, message)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, form: to_form(changeset))}

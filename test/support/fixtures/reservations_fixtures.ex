@@ -4,6 +4,8 @@ defmodule NewGearMotors.ReservationsFixtures do
   entities via the `NewGearMotors.Reservations` context.
   """
 
+  alias NewGearMotors.Reservations
+
   @doc """
   Generate a reservation.
   """
@@ -14,7 +16,7 @@ defmodule NewGearMotors.ReservationsFixtures do
         planned_meeting_time: ~N[2025-05-19 21:58:00],
         status: :denied
       })
-      |> NewGearMotors.Reservations.create_reservation()
+      |> Reservations.create_reservation()
 
     reservation
   end
