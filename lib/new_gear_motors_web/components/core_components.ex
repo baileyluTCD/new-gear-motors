@@ -1,4 +1,6 @@
 defmodule NewGearMotorsWeb.CoreComponents do
+  use Phoenix.VerifiedRoutes, endpoint: NewGearMotorsWeb.Endpoint, router: NewGearMotorsWeb.Router
+
   @moduledoc """
   Provides core UI components.
 
@@ -18,6 +20,22 @@ defmodule NewGearMotorsWeb.CoreComponents do
 
   alias Phoenix.LiveView.JS
   use Gettext, backend: NewGearMotorsWeb.Gettext
+
+  @doc """
+  Renders the application's logo.
+
+  ## Examples
+
+      <.logo/>
+      <.logo phx-click="go" class="ml-2"/>
+  """
+  attr :class, :string, default: nil
+
+  def logo(assigns) do
+    ~H"""
+    <img class={@class} src={~p"/assets/logo.svg"} alt="New Gear Motors Logo" />
+    """
+  end
 
   @doc """
   Renders a modal.
