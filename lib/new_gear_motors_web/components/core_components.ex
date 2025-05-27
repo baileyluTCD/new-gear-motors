@@ -33,7 +33,7 @@ defmodule NewGearMotorsWeb.CoreComponents do
 
   def logo(assigns) do
     ~H"""
-    <img class={@class} src={~p"/assets/logo.svg"} alt="New Gear Motors Logo" />
+    <img class={@class} src={~p"/assets/logo_no_text.svg"} alt="New Gear Motors Logo" />
     """
   end
 
@@ -241,16 +241,30 @@ defmodule NewGearMotorsWeb.CoreComponents do
   attr :type, :string, default: nil
   attr :class, :string, default: nil
   attr :rest, :global, include: ~w(disabled form name value)
+  attr :preset, :atom, default: :primary
 
   slot :inner_block, required: true
 
   def button(assigns) do
+    class =
+      case assigns.preset do
+        :primary ->
+          "bg-raw-sienna-400 hover:bg-raw-sienna-500 text-zinc-900 active:text-zinc-900/80"
+
+        :semi_transparent ->
+          "border border-raw-sienna-400 text-zinc-100 active:text-zinc-100/80 hover:bg-zinc-800"
+
+        :gradient ->
+          "bg-gradient-to-r from-raw-sienna-300 via-raw-sienna-400 to-raw-sienna-500 text-zinc-900 active:text-zinc-900/80 hover:shadow-[0_0_15px_5px_rgba(234,179,128,0.6)] hover:shadow-raw-sienna-500/50 hover:brightness-110"
+      end
+
     ~H"""
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
-        "text-sm font-semibold leading-6 text-white active:text-white/80",
+        "rounded-2xl py-2 px-3 phx-submit-loading:opacity-75",
+        "text-sm font-semibold leading-6",
+        class,
         @class
       ]}
       {@rest}
