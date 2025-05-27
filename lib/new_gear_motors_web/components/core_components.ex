@@ -258,13 +258,15 @@ defmodule NewGearMotorsWeb.CoreComponents do
           "bg-gradient-to-r from-raw-sienna-300 via-raw-sienna-400 to-raw-sienna-500 text-zinc-900 active:text-zinc-900/80 hover:shadow-[0_0_15px_5px_rgba(234,179,128,0.6)] hover:shadow-raw-sienna-500/50 hover:brightness-110"
       end
 
+    assigns = assign(assigns, :button_class, class)
+
     ~H"""
     <button
       type={@type}
       class={[
         "rounded-2xl py-2 px-3 phx-submit-loading:opacity-75",
         "text-sm font-semibold leading-6",
-        class,
+        @button_class,
         @class
       ]}
       {@rest}
