@@ -14,7 +14,19 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        brand: "#FD4F00",
+        "raw-sienna": {
+          50: "#fcf5ee",
+          100: "#f6e2cf",
+          200: "#ecc39b",
+          300: "#e29e67",
+          400: "#d87938",
+          500: "#d2612e",
+          600: "#b94726",
+          700: "#9a3123",
+          800: "#7e2822",
+          900: "#68221f",
+          950: "#3b0f0d",
+        },
       },
     },
   },
@@ -29,19 +41,19 @@ module.exports = {
       addVariant("phx-click-loading", [
         ".phx-click-loading&",
         ".phx-click-loading &",
-      ]),
+      ])
     ),
     plugin(({ addVariant }) =>
       addVariant("phx-submit-loading", [
         ".phx-submit-loading&",
         ".phx-submit-loading &",
-      ]),
+      ])
     ),
     plugin(({ addVariant }) =>
       addVariant("phx-change-loading", [
         ".phx-change-loading&",
         ".phx-change-loading &",
-      ]),
+      ])
     ),
 
     // Embeds Heroicons (https://heroicons.com) into your app.css bundle
