@@ -14,7 +14,33 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        brand: "#FD4F00",
+        "raw-sienna": {
+          50: "#fcf5ee",
+          100: "#f6e2cf",
+          200: "#ecc39b",
+          300: "#e29e67",
+          400: "#d87938",
+          500: "#d2612e",
+          600: "#b94726",
+          700: "#9a3123",
+          800: "#7e2822",
+          900: "#68221f",
+          950: "#3b0f0d",
+        },
+      },
+      keyframes: {
+        fadeSlideDown: {
+          "0%": { opacity: 0, transform: "translateY(20px)" },
+          "100%": { opacity: 1, transform: "translateY(0)" },
+        },
+        fadeSlideRight: {
+          "0%": { opacity: 0, transform: "translateX(40px)" },
+          "100%": { opacity: 1, transform: "translateX(0)" },
+        },
+      },
+      animation: {
+        fadeSlideDown: "fadeSlideDown 0.8s ease-out forwards",
+        fadeSlideRight: "fadeSlideRight 0.8s ease-out forwards",
       },
     },
   },
