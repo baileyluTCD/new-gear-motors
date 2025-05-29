@@ -28,6 +28,20 @@ module.exports = {
           950: "#3b0f0d",
         },
       },
+      keyframes: {
+        fadeSlideDown: {
+          "0%": { opacity: 0, transform: "translateY(20px)" },
+          "100%": { opacity: 1, transform: "translateY(0)" },
+        },
+        fadeSlideRight: {
+          "0%": { opacity: 0, transform: "translateX(40px)" },
+          "100%": { opacity: 1, transform: "translateX(0)" },
+        },
+      },
+      animation: {
+        fadeSlideDown: "fadeSlideDown 0.8s ease-out forwards",
+        fadeSlideRight: "fadeSlideRight 0.8s ease-out forwards",
+      },
     },
   },
   plugins: [
@@ -41,19 +55,19 @@ module.exports = {
       addVariant("phx-click-loading", [
         ".phx-click-loading&",
         ".phx-click-loading &",
-      ])
+      ]),
     ),
     plugin(({ addVariant }) =>
       addVariant("phx-submit-loading", [
         ".phx-submit-loading&",
         ".phx-submit-loading &",
-      ])
+      ]),
     ),
     plugin(({ addVariant }) =>
       addVariant("phx-change-loading", [
         ".phx-change-loading&",
         ".phx-change-loading &",
-      ])
+      ]),
     ),
 
     // Embeds Heroicons (https://heroicons.com) into your app.css bundle
