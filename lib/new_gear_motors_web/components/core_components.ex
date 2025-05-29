@@ -264,10 +264,10 @@ defmodule NewGearMotorsWeb.CoreComponents do
     <button
       type={@type}
       class={[
+        @class,
         "rounded-2xl py-2 px-3 phx-submit-loading:opacity-75",
         "text-sm font-semibold leading-6",
-        @button_class,
-        @class
+        @button_class
       ]}
       {@rest}
     >
