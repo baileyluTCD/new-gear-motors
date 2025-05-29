@@ -11,7 +11,7 @@
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
     </script>
   </head>
-  <body class="bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-stone-800 via-neutral-900 to-black xl:flex xl:flex-col xl:items-center font-mono">
+  <body class="bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-stone-800 via-neutral-900 to-black xl:flex xl:flex-col xl:items-center font-mono min-h-screen">
     <nav class="sticky top-3 z-50 shadow-10 flex flex-row justify-between items-center bg-zinc-950 rounded-3xl border border-zinc-800 my-3 mx-4 text-zinc-100 xl:5/6 md:p-2 xl:gap-16">
       <.link class="flex flex-row hover:text-zinc-300" href={~p"/"}>
         <.logo class="w-16 m-2" />
@@ -25,7 +25,7 @@
           |> JS.toggle_class("opacity-0", to: "#side_panel_bg")
           |> JS.toggle_class("pointer-events-none", to: "#side_panel_bg")
         }
-        class="transition-transform duration-300 ease-in-out xl:hidden"
+        class="transform-gpu transition-transform duration-300 ease-in-out xl:hidden hover:text-zinc-300"
       >
         <.icon name="hero-bars-3" class="m-3" />
       </button>
@@ -39,33 +39,33 @@
       </div>
       <div class="hidden xl:block">
         <%= if @current_user do %>
-          <.button preset={:semi_transparent}>
-            <.link href={~p"/users/settings"}>
+          <.link href={~p"/users/settings"}>
+            <.button preset={:semi_transparent}>
               {@current_user.email} <.icon name="hero-user" class="h-4 w-4" />
-            </.link>
-          </.button>
-          <.button preset={:semi_transparent}>
-            <.link href={~p"/users/log_out"} method="delete">
+            </.button>
+          </.link>
+          <.link href={~p"/users/log_out"} method="delete">
+            <.button preset={:semi_transparent}>
               Log out <.icon name="hero-lock-closed" class="h-4 w-4" />
-            </.link>
-          </.button>
+            </.button>
+          </.link>
         <% else %>
-          <.button preset={:semi_transparent}>
-            <.link href={~p"/users/register"}>
+          <.link href={~p"/users/register"}>
+            <.button preset={:semi_transparent}>
               Register <.icon name="hero-clipboard-document-list" class="h-4 w-4" />
-            </.link>
-          </.button>
-          <.button preset={:semi_transparent}>
-            <.link href={~p"/users/log_in"}>
+            </.button>
+          </.link>
+          <.link href={~p"/users/log_in"}>
+            <.button preset={:semi_transparent}>
               Log in <.icon name="hero-lock-open" class="h-4 w-4" />
-            </.link>
-          </.button>
+            </.button>
+          </.link>
         <% end %>
       </div>
     </nav>
     <button
       id="side_panel_bg"
-      class="fixed left-0 top-0 z-50 w-full h-full backdrop-blur-md pointer-events-none opacity-0 transition duration-300 ease-in-out"
+      class="transform-gpu fixed left-0 top-0 z-50 w-full h-full backdrop-blur-md pointer-events-none opacity-0 transition duration-300 ease-in-out"
       phx-click={
         JS.toggle_class("rotate-90", to: "#open_panel_button")
         |> JS.toggle_class("-translate-x-full", to: "#side_panel")
@@ -75,9 +75,9 @@
     >
       <div
         id="side_panel"
-        class="bg-zinc-950 border border-zinc-800 h-full w-max relative left-0 flex flex-col py-2 px-8 shadow-xl text-zinc-100 font-bold transition duration-300 ease-in-out -translate-x-full"
+        class="bg-zinc-950 border border-zinc-800 h-full w-max relative left-0 flex flex-col py-2 px-8 shadow-xl text-zinc-100 font-bold transition duration-300 ease-in-out -translate-x-full opacity-90"
       >
-        <.link href={~p"/"} class="flex flex-col border-b pb-3 mb-3">
+        <.link href={~p"/"} class="flex flex-col items-center border-b pb-3 mb-3">
           <.logo class="w-16 m-2" />
           <h1 class="p-1 text-center text-lg">New Gear Motors</h1>
         </.link>
@@ -107,6 +107,8 @@
         </div>
       </div>
     </button>
-    {@inner_content}
+    <main class="text-white h-max">
+      {@inner_content}
+    </main>
   </body>
 </html>
