@@ -70,6 +70,8 @@ defmodule NewGearMotorsWeb.VehicleLive.FormComponent do
         |> put_flash(:info, "File #{basename} uploaded")
         |> assign(:image_url, ~p"/uploads/#{basename}")
 
+      {_, socket} = handle_event("validate", %{"vehicle" => socket.assigns.form.params}, socket)
+
       {:noreply, socket}
     else
       {:noreply, socket}
