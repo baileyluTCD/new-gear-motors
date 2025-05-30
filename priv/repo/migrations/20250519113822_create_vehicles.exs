@@ -8,6 +8,7 @@ defmodule NewGearMotors.Repo.Migrations.CreateVehicles do
       add :price, :string
       add :description, :string
       add :manufacturer, :string
+      add :image_url, :string
 
       timestamps(type: :utc_datetime)
     end
