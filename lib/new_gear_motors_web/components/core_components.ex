@@ -51,7 +51,7 @@ defmodule NewGearMotorsWeb.CoreComponents do
 
   def box(assigns) do
     ~H"""
-    <div class={["bg-gradient-to-br from-neutral-900 via-zinc-900 to-zinc-950", @class]}>
+    <div class={["bg-gradient-to-br from-neutral-800 via-zinc-800 to-zinc-900", @class]}>
       {render_slot(@inner_block)}
     </div>
     """
@@ -485,7 +485,10 @@ defmodule NewGearMotorsWeb.CoreComponents do
 
   def header(assigns) do
     ~H"""
-    <header class={[@actions != [] && "flex items-center justify-between gap-6", @class]}>
+    <header class={[
+      @actions != [] && "mx-auto max-w-2xl flex items-center justify-between gap-6",
+      @class
+    ]}>
       <div>
         <h1 class="text-lg font-semibold leading-8 text-zinc-200">
           {render_slot(@inner_block)}
