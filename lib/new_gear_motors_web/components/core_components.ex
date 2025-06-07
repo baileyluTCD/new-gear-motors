@@ -52,7 +52,7 @@ defmodule NewGearMotorsWeb.CoreComponents do
   def box(assigns) do
     ~H"""
     <div class={[
-      "bg-gradient-to-br from-neutral-800 via-zinc-800 to-zinc-900 rounded-xl border border-zinc-600",
+      "bg-linear-to-br from-neutral-800 via-zinc-800 to-zinc-900 rounded-xl border border-zinc-600",
       @class
     ]}>
       {render_slot(@inner_block)}
@@ -111,7 +111,7 @@ defmodule NewGearMotorsWeb.CoreComponents do
               phx-window-keydown={JS.exec("data-cancel", to: "##{@id}")}
               phx-key="escape"
               phx-click-away={JS.exec("data-cancel", to: "##{@id}")}
-              class="bg-gradient-to-br from-neutral-900 via-zinc-900 to-zinc-950 shadow-zinc-300/10 ring-zinc-300/10 relative hidden rounded-2xl bg-transparent p-14 shadow-lg ring-1 transition"
+              class="bg-linear-to-br from-neutral-900 via-zinc-900 to-zinc-950 shadow-zinc-300/10 ring-zinc-300/10 relative hidden rounded-2xl bg-transparent p-14 shadow-lg ring-1 transition"
             >
               <div class="absolute top-6 right-5">
                 <button
@@ -282,7 +282,7 @@ defmodule NewGearMotorsWeb.CoreComponents do
           "border border-raw-sienna-400 text-zinc-100 active:text-zinc-100/80 hover:bg-zinc-800"
 
         :gradient ->
-          "bg-gradient-to-r from-raw-sienna-300 via-raw-sienna-400 to-raw-sienna-500 text-zinc-900 active:text-zinc-900/80 hover:shadow-[0_0_15px_5px_rgba(234,179,128,0.6)] hover:shadow-raw-sienna-500/50 hover:brightness-110"
+          "bg-linear-to-r from-raw-sienna-300 via-raw-sienna-400 to-raw-sienna-500 text-zinc-900 active:text-zinc-900/80 hover:shadow-[0_0_15px_5px_rgba(234,179,128,0.6)] hover:shadow-raw-sienna-500/50 hover:brightness-110"
       end
 
     assigns = assign(assigns, :button_class, class)
@@ -379,7 +379,7 @@ defmodule NewGearMotorsWeb.CoreComponents do
           name={@name}
           value="true"
           checked={@checked}
-          class="rounded border-zinc-700 text-zinc-100 focus:ring-0"
+          class="rounded-sm border-zinc-700 text-zinc-100 focus:ring-0"
           {@rest}
         />
         {@label}
@@ -396,7 +396,7 @@ defmodule NewGearMotorsWeb.CoreComponents do
       <select
         id={@id}
         name={@name}
-        class="mt-2 block w-full rounded-md border border-gray-300 bg-transparent shadow-sm focus:border-zinc-600 focus:ring-0 sm:text-sm"
+        class="mt-2 block w-full rounded-md border border-gray-300 bg-transparent shadow-xs focus:border-zinc-600 focus:ring-0 sm:text-sm"
         multiple={@multiple}
         {@rest}
       >
@@ -416,7 +416,7 @@ defmodule NewGearMotorsWeb.CoreComponents do
         id={@id}
         name={@name}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-100 focus:ring-0 sm:text-sm sm:leading-6 min-h-[6rem]",
+          "mt-2 block w-full rounded-lg text-zinc-100 focus:ring-0 sm:text-sm sm:leading-6 min-h-24",
           @errors == [] && "border-zinc-700 focus:border-zinc-600",
           @errors != [] && "border-rose-400 focus:border-rose-400"
         ]}
@@ -538,7 +538,7 @@ defmodule NewGearMotorsWeb.CoreComponents do
 
     ~H"""
     <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
-      <table class="w-[40rem] mt-11 sm:w-full">
+      <table class="w-160 mt-11 sm:w-full">
         <thead class="text-sm text-left leading-6 text-zinc-500">
           <tr>
             <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal">{col[:label]}</th>

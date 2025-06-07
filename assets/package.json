@@ -16,7 +16,7 @@
     "phoenix": "workspace:*",
     "phoenix_html": "workspace:*",
     "phoenix_live_view": "workspace:*",
-    "tailwindcss": "^3.0.0",
+    "tailwindcss": "^4.1.8",
     "topbar": "^3.0.0"
   },
   "trustedDependencies": [
