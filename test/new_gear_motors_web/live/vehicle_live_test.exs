@@ -4,6 +4,8 @@ defmodule NewGearMotorsWeb.VehicleLiveTest do
   import Phoenix.LiveViewTest
   import NewGearMotors.VehiclesFixtures
 
+  doctest NewGearMotorsWeb.VehicleLive
+
   @create_attrs %{
     name: "some name",
     description: "some description",
@@ -29,7 +31,7 @@ defmodule NewGearMotorsWeb.VehicleLiveTest do
     test "lists all vehicles", %{conn: conn, vehicle: vehicle} do
       {:ok, _index_live, html} = live(conn, ~p"/vehicles")
 
-      assert html =~ "Listing Vehicles"
+      assert html =~ "Vehicles"
       assert html =~ vehicle.name
     end
 

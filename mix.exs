@@ -41,7 +41,7 @@ defmodule NewGearMotors.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:argon2_elixir, "~> 3.0"},
+      {:argon2_elixir, "~> 4.0"},
       {:phoenix, "~> 1.7.21"},
       {:phoenix_ecto, "~> 4.5"},
       {:ecto_sql, "~> 3.10"},
@@ -51,8 +51,7 @@ defmodule NewGearMotors.MixProject do
       {:phoenix_live_view, "~> 1.0.11", override: true},
       {:floki, ">= 0.30.0"},
       {:phoenix_live_dashboard, "~> 0.8.3"},
-      {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
-      {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
+      {:bun, "~> 1.4", runtime: Mix.env() == :dev},
       {:heroicons,
        github: "tailwindlabs/heroicons",
        tag: "v2.1.1",
@@ -71,7 +70,7 @@ defmodule NewGearMotors.MixProject do
       {:deps_nix, "~> 2.0", only: :dev},
       {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false},
       {:credo, "~> 1.7", runtime: false},
-      {:ex_doc, "~> 0.34", runtime: false, warn_if_outdated: true},
+      {:ex_doc, "~> 0.38", runtime: false, warn_if_outdated: true},
       {:sobelow, "~> 0.13", runtime: false},
       {:mix_audit, "~> 2.1", runtime: false}
     ]
@@ -94,11 +93,14 @@ defmodule NewGearMotors.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.build": ["tailwind new_gear_motors", "esbuild new_gear_motors"],
+      "assets.setup": [
+        "bun.install --if-missing",
+        "bun assets install"
+      ],
+      "assets.build": ["bun new_gear_motors", "bun css"],
       "assets.deploy": [
-        "tailwind new_gear_motors --minify",
-        "esbuild new_gear_motors --minify",
+        "bun css --minify",
+        "bun new_gear_motors --minify",
         "phx.digest"
       ]
     ]

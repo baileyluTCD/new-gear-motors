@@ -25,8 +25,8 @@ config :new_gear_motors, NewGearMotorsWeb.Endpoint,
   debug_errors: true,
   secret_key_base: "A+D+UR0pncvQR3w3ZDNiWcViyZnzkBH+u0cwPUrMUdTswku806lhcreuSyM2fcf4",
   watchers: [
-    esbuild: {Esbuild, :install_and_run, [:new_gear_motors, ~w(--sourcemap=inline --watch)]},
-    tailwind: {Tailwind, :install_and_run, [:new_gear_motors, ~w(--watch)]}
+    bun_js: {Bun, :install_and_run, [:new_gear_motors, ~w(--sourcemap=inline --watch)]},
+    bun_css: {Bun, :install_and_run, [:css, ~w(--watch)]}
   ]
 
 # ## SSL Support

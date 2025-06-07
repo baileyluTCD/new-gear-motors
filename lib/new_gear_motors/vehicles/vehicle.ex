@@ -15,6 +15,7 @@ defmodule NewGearMotors.Vehicles.Vehicle do
     field :description, :string
     field :price, :string
     field :manufacturer, :string
+    field :image_url, :string
 
     timestamps(type: :utc_datetime)
   end
@@ -22,7 +23,7 @@ defmodule NewGearMotors.Vehicles.Vehicle do
   @doc false
   def changeset(vehicle, attrs) do
     vehicle
-    |> cast(attrs, [:name, :price, :description, :manufacturer])
-    |> validate_required([:name, :price, :description, :manufacturer])
+    |> cast(attrs, [:name, :price, :description, :manufacturer, :image_url])
+    |> validate_required([:name, :price, :description, :manufacturer, :image_url])
   end
 end
