@@ -13,6 +13,7 @@
   ],
   "dependencies": {
     "@tailwindcss/cli": "^4.1.8",
+    "marked": "^15.0.12",
     "phoenix": "workspace:*",
     "phoenix_html": "workspace:*",
     "phoenix_live_view": "workspace:*",
