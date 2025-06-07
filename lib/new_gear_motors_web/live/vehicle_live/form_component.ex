@@ -26,7 +26,7 @@ defmodule NewGearMotorsWeb.VehicleLive.FormComponent do
         </.error>
         <.input field={@form[:name]} type="text" label="Name" />
         <.input field={@form[:price]} type="text" label="Price" />
-        <.input field={@form[:description]} type="text" label="Description" />
+        <.input field={@form[:description]} type="textarea" label="Description" />
         <.input field={@form[:manufacturer]} type="text" label="Manufacturer" />
         <:actions>
           <.button phx-disable-with="Saving...">Save Vehicle</.button>
