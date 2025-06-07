@@ -31,25 +31,15 @@ config :new_gear_motors, NewGearMotorsWeb.Endpoint,
 # at the `config/runtime.exs`.
 config :new_gear_motors, NewGearMotors.Mailer, adapter: Swoosh.Adapters.Local
 
-# Configure esbuild (the version is required)
-config :esbuild,
-  version: "0.17.11",
+config :bun,
+  version: "1.2.14",
+  assets: [args: [], cd: Path.expand("../assets", __DIR__)],
   new_gear_motors: [
-    args:
-      ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
-    cd: Path.expand("../assets", __DIR__),
-    env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
-  ]
-
-# Configure tailwind (the version is required)
-config :tailwind,
-  version: "3.4.3",
-  new_gear_motors: [
-    args: ~w(
-      --config=tailwind.config.js
-      --input=css/app.css
-      --output=../priv/static/assets/app.css
-    ),
+    args: ~w(build js/app.js --outdir=../priv/static/assets),
+    cd: Path.expand("../assets", __DIR__)
+  ],
+  css: [
+    args: ~w(run tailwindcss --input=css/app.css --output=../priv/static/assets/app.css),
     cd: Path.expand("../assets", __DIR__)
   ]
 
