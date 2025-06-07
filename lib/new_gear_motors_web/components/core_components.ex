@@ -89,7 +89,7 @@ defmodule NewGearMotorsWeb.CoreComponents do
       phx-mounted={@show && show_modal(@id)}
       phx-remove={hide_modal(@id)}
       data-cancel={JS.exec(@on_cancel, "phx-remove")}
-      class="relative z-50 hidden"
+      class="fixed left-0 top-0 z-50 hidden"
     >
       <div
         id={"#{@id}-bg"}
@@ -416,7 +416,7 @@ defmodule NewGearMotorsWeb.CoreComponents do
         id={@id}
         name={@name}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-100 focus:ring-0 sm:text-sm sm:leading-6 min-h-24",
+          "mt-2 block w-full rounded-lg text-zinc-100 focus:ring-0 sm:text-sm sm:leading-6 min-h-24 bg-transparent",
           @errors == [] && "border-zinc-700 focus:border-zinc-600",
           @errors != [] && "border-rose-400 focus:border-rose-400"
         ]}
@@ -601,8 +601,11 @@ defmodule NewGearMotorsWeb.CoreComponents do
     ~H"""
     <div class="mt-14">
       <dl class="-my-4 divide-y divide-zinc-600">
-        <div :for={item <- @item} class="flex gap-4 py-4 text-sm leading-6 sm:gap-8">
-          <dt class="w-1/4 flex-none text-zinc-500">{item.title}</dt>
+        <div
+          :for={item <- @item}
+          class="flex flex-row justify-between gap-4 py-4 text-sm leading-6 sm:gap-8"
+        >
+          <dt class="w-1/4 text-zinc-500">{item.title}</dt>
           <dd class="text-zinc-300">{render_slot(item)}</dd>
         </div>
       </dl>
