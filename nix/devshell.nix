@@ -13,10 +13,15 @@ pkgs.mkShell {
 
   shellHook = ''
     export FLAKE_ROOT=$(git rev-parse --show-toplevel)
-    ln -sfv ${pkgs.bun}/bin/bun $FLAKE_ROOT/_build/bun
 
-    mix deps.get
+    sh -c "
+      cd $FLAKE_ROOT
 
-    bun install --frozen-lockfile --cwd $FLAKE_ROOT/assets
+      ln -sfv ${pkgs.bun}/bin/bun ./_build/bun
+
+      mix deps.get
+
+      bun install --frozen-lockfile --cwd ./assets
+    "
   '';
 }

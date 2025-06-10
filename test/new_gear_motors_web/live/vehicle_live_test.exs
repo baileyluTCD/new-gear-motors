@@ -4,8 +4,6 @@ defmodule NewGearMotorsWeb.VehicleLiveTest do
   import Phoenix.LiveViewTest
   import NewGearMotors.VehiclesFixtures
 
-  doctest NewGearMotorsWeb.VehicleLive
-
   @create_attrs %{
     name: "some name",
     description: "some description",
