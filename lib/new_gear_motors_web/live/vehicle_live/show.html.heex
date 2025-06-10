@@ -1,5 +1,5 @@
 <article
-  class="w-full flex flex-col items-center hidden"
+  class="w-full lg:w-screen flex flex-col items-center hidden"
   phx-mounted={
     JS.show(
       transition: {"ease-out duration-1000", "opacity-0 scale-95", "opacity-100 scale-100"},
@@ -7,17 +7,23 @@
     )
   }
 >
-  <.box class="p-4">
-    <span class="flex flex-row justify-between p-2">
-      <h1 class="font-bold text-2xl text-center m-2">{@vehicle.name}</h1>
+  <.box class="p-4 sm:w-5/6 lg:w-1/2">
+    <span class="flex flex-col sm:flex-row max-sm:items-center justify-between p-2">
+      <h1 class="max-sm:mb-8 font-bold text-2xl text-center m-2">{@vehicle.name}</h1>
 
-      <.link patch={~p"/vehicles/#{@vehicle}/show/edit"} phx-click={JS.push_focus()}>
-        <.button>Edit</.button>
-      </.link>
+      <div class="max-sm:w-full max-sm:m-2 flex flex-row gap-4 max-sm:justify-between">
+        <.link>
+          <.button>Book Reservation</.button>
+        </.link>
+
+        <.link>
+          <.button>Edit</.button>
+        </.link>
+      </div>
     </span>
 
     <span class="w-full flex flex-col items-center">
-      <img src={@vehicle.image_url} class="rounded-xl border border-zinc-600 m-2" />
+      <img src={@vehicle.image_url} class="rounded-xl border border-zinc-600 m-2 shadow-xl" />
     </span>
 
     <.list>
@@ -25,7 +31,7 @@
       <:item title="Manufacturer">{@vehicle.manufacturer}</:item>
     </.list>
 
-    <div class="p-6 mt-8 m-1 bg-neutral-800 rounded-xl border border-zinc-600">
+    <div class="p-6 mt-8 m-1">
       <markdown-block>{@vehicle.description}</markdown-block>
     </div>
 
