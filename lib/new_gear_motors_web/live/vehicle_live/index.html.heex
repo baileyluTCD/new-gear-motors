@@ -23,37 +23,42 @@
     :for={{id, vehicle} <- @streams.vehicles}
     navigate={~p"/vehicles/#{vehicle}"}
     title={"More Details - #{vehicle.name}"}
+    id={id}
   >
-    <div id={id}>
-      <.box class="w-56 md:w-64 lg:w-96 p-4 m-4 hover:border-zinc-400 hover:scale-105 transition duration-300 flex flex-col items-center">
-        <div class="size-48 md:size-56 lg:size-80 overflow-hidden flex items-center justify-center">
-          <img
-            src={vehicle.image_url}
-            alt={"Vehicle Preview Image - #{vehicle.name}"}
-            class="rounded-lg shadow-xl"
-          />
+    <.box class="w-56 md:w-64 lg:w-96 p-4 m-4 hover:border-zinc-400 hover:scale-105 transition duration-300 flex flex-col items-center">
+      <div class="size-48 md:size-56 lg:size-80 overflow-hidden flex items-center justify-center">
+        <img
+          src={vehicle.image_url}
+          alt={"Vehicle Preview Image - #{vehicle.name}"}
+          class="rounded-lg shadow-xl"
+        />
+      </div>
+      <div class="flex flex-row w-full gap-4 justify-between mt-2">
+        <h2 class="text-2xl font-bold hover:underline">
+          {NewGearMotorsWeb.VehicleHelper.shorten_text(vehicle.name, 14)}
+        </h2>
+        <div class="flex flex-row gap-2">
+          <.link
+            :if={@current_user}
+            id={"#{id}-edit"}
+            patch={~p"/vehicles/#{vehicle}/edit"}
+            title="Edit Vehicle"
+          >
+            <.icon name="hero-pencil-square" class="hover:text-green-500 my-3" />
+          </.link>
+          <.link
+            :if={@current_user}
+            id={"#{id}-delete"}
+            phx-click={JS.push("delete", value: %{id: vehicle.id}) |> hide("##{id}")}
+            data-confirm="Are you sure?"
+            title="Delete Vehicle"
+          >
+            <.icon name="hero-x-mark" class="hover:text-red-500 my-3" />
+          </.link>
         </div>
-        <div class="flex flex-row w-full gap-4 justify-between mt-2">
-          <h2 class="text-2xl font-bold hover:underline">
-            {NewGearMotorsWeb.VehicleHelper.shorten_text(vehicle.name, 14)}
-          </h2>
-          <div class="flex flex-row gap-2">
-            <.link :if={@current_user} patch={~p"/vehicles/#{vehicle}/edit"} title="Edit Vehicle">
-              <.icon name="hero-pencil-square" class="hover:text-green-500 my-3" />
-            </.link>
-            <.link
-              :if={@current_user}
-              phx-click={JS.push("delete", value: %{id: vehicle.id}) |> hide("##{id}")}
-              data-confirm="Are you sure?"
-              title="Delete Vehicle"
-            >
-              <.icon name="hero-x-mark" class="hover:text-red-500 my-3" />
-            </.link>
-          </div>
-        </div>
-        <p class="text-start w-full">{vehicle.price} | {vehicle.manufacturer}</p>
-      </.box>
-    </div>
+      </div>
+      <p class="text-start w-full">{vehicle.price} | {vehicle.manufacturer}</p>
+    </.box>
   </.link>
 </article>
 
