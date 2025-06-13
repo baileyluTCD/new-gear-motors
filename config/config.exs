@@ -51,6 +51,10 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+config :waffle,
+  storage: Waffle.Storage.Local,
+  asset_host: {:system, "./priv/static/"}
+
 # Clear the console for each run of mix test.watch
 config :mix_test_watch,
   clear: true

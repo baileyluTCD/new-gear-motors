@@ -4,6 +4,7 @@ pkgs.mkShell {
     elixir
     bun
     watchman
+    imagemagick
     flake.packages.${system}.appDependencies
     flake.lib.${system}.treefmt.config.build.wrapper
     inputs.bun2nix.packages.${system}.default

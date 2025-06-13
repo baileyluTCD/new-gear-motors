@@ -242,6 +242,22 @@ let
         in
         drv;
 
+      certifi =
+        let
+          version = "2.15.0";
+          drv = buildRebar3 {
+            inherit version;
+            name = "certifi";
+
+            src = fetchHex {
+              inherit version;
+              pkg = "certifi";
+              sha256 = "b147ed22ce71d72eafdad94f055165c1c182f61a2ff49df28bcc71d1d5b94a60";
+            };
+          };
+        in
+        drv;
+
       comeonin =
         let
           version = "5.5.1";
@@ -538,6 +554,32 @@ let
         in
         drv;
 
+      hackney =
+        let
+          version = "1.24.1";
+          drv = buildRebar3 {
+            inherit version;
+            name = "hackney";
+
+            src = fetchHex {
+              inherit version;
+              pkg = "hackney";
+              sha256 = "f4a7392a0b53d8bbc3eb855bdcc919cd677358e65b2afd3840b5b3690c4c8a39";
+            };
+
+            beamDeps = [
+              certifi
+              idna
+              metrics
+              mimerl
+              parse_trans
+              ssl_verify_fun
+              unicode_util_compat
+            ];
+          };
+        in
+        drv;
+
       heroicons = pkgs.fetchFromGitHub {
         owner = "tailwindlabs";
         repo = "heroicons";
@@ -558,6 +600,26 @@ let
               pkg = "hpax";
               sha256 = "8eab6e1cfa8d5918c2ce4ba43588e894af35dbd8e91e6e55c817bca5847df34a";
             };
+          };
+        in
+        drv;
+
+      idna =
+        let
+          version = "6.1.1";
+          drv = buildRebar3 {
+            inherit version;
+            name = "idna";
+
+            src = fetchHex {
+              inherit version;
+              pkg = "idna";
+              sha256 = "92376eb7894412ed19ac475e4a86f7b413c1b9fbb5bd16dccd57934157944cea";
+            };
+
+            beamDeps = [
+              unicode_util_compat
+            ];
           };
         in
         drv;
@@ -647,6 +709,22 @@ let
         in
         drv;
 
+      metrics =
+        let
+          version = "1.0.1";
+          drv = buildRebar3 {
+            inherit version;
+            name = "metrics";
+
+            src = fetchHex {
+              inherit version;
+              pkg = "metrics";
+              sha256 = "69b09adddc4f74a40716ae54d140f93beb0fb8978d8636eaded0c31b6f099f16";
+            };
+          };
+        in
+        drv;
+
       mime =
         let
           version = "2.0.7";
@@ -659,6 +737,22 @@ let
               inherit version;
               pkg = "mime";
               sha256 = "6171188e399ee16023ffc5b76ce445eb6d9672e2e241d2df6050f3c771e80ccd";
+            };
+          };
+        in
+        drv;
+
+      mimerl =
+        let
+          version = "1.4.0";
+          drv = buildRebar3 {
+            inherit version;
+            name = "mimerl";
+
+            src = fetchHex {
+              inherit version;
+              pkg = "mimerl";
+              sha256 = "13af15f9f68c65884ecca3a3891d50a7b57d82152792f3e19d88650aa126b144";
             };
           };
         in
@@ -754,6 +848,22 @@ let
               inherit version;
               pkg = "nimble_pool";
               sha256 = "af2e4e6b34197db81f7aad230c1118eac993acc0dae6bc83bac0126d4ae0813a";
+            };
+          };
+        in
+        drv;
+
+      parse_trans =
+        let
+          version = "3.4.1";
+          drv = buildRebar3 {
+            inherit version;
+            name = "parse_trans";
+
+            src = fetchHex {
+              inherit version;
+              pkg = "parse_trans";
+              sha256 = "620a406ce75dada827b82e453c19cf06776be266f5a67cff34e1ef2cbb60e49a";
             };
           };
         in
@@ -1001,6 +1111,23 @@ let
         in
         drv;
 
+      ssl_verify_fun =
+        let
+          version = "1.1.7";
+          drv = buildMix {
+            inherit version;
+            name = "ssl_verify_fun";
+            appConfigPath = ./config;
+
+            src = fetchHex {
+              inherit version;
+              pkg = "ssl_verify_fun";
+              sha256 = "fe4c190e8f37401d30167c8c405eda19469f34577987c76dde613e838bbc67f8";
+            };
+          };
+        in
+        drv;
+
       swoosh =
         let
           version = "1.19.1";
@@ -1018,6 +1145,7 @@ let
             beamDeps = [
               bandit
               finch
+              hackney
               jason
               mime
               plug
@@ -1100,6 +1228,65 @@ let
 
             beamDeps = [
               telemetry
+            ];
+          };
+        in
+        drv;
+
+      unicode_util_compat =
+        let
+          version = "0.7.1";
+          drv = buildRebar3 {
+            inherit version;
+            name = "unicode_util_compat";
+
+            src = fetchHex {
+              inherit version;
+              pkg = "unicode_util_compat";
+              sha256 = "b3a917854ce3ae233619744ad1e0102e05673136776fb2fa76234f3e03b23642";
+            };
+          };
+        in
+        drv;
+
+      waffle =
+        let
+          version = "1.1.9";
+          drv = buildMix {
+            inherit version;
+            name = "waffle";
+            appConfigPath = ./config;
+
+            src = fetchHex {
+              inherit version;
+              pkg = "waffle";
+              sha256 = "307c63cfdfb4624e7c423868a128ccfcb0e5291ae73a9deecb3a10b7a3eb277c";
+            };
+
+            beamDeps = [
+              hackney
+            ];
+          };
+        in
+        drv;
+
+      waffle_ecto =
+        let
+          version = "0.0.12";
+          drv = buildMix {
+            inherit version;
+            name = "waffle_ecto";
+            appConfigPath = ./config;
+
+            src = fetchHex {
+              inherit version;
+              pkg = "waffle_ecto";
+              sha256 = "585fe6371057066d2e8e3383ddd7a2437ff0668caf3f4cbf5a041e0de9837168";
+            };
+
+            beamDeps = [
+              ecto
+              waffle
             ];
           };
         in
