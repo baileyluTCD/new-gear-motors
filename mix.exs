@@ -41,18 +41,17 @@ defmodule NewGearMotors.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:argon2_elixir, "~> 3.0"},
-      {:phoenix, "~> 1.7.21"},
-      {:phoenix_ecto, "~> 4.5"},
+      {:argon2_elixir, "~> 4.0"},
+      {:bandit, "~> 1.5"},
+      {:bun, "~> 1.4", runtime: Mix.env() == :dev},
+      {:credo, "~> 1.7", runtime: false},
+      {:deps_nix, "~> 2.0", only: :dev},
+      {:dns_cluster, "~> 0.1.1"},
       {:ecto_sql, "~> 3.10"},
-      {:postgrex, ">= 0.0.0"},
-      {:phoenix_html, "~> 4.1"},
-      {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 1.0.11", override: true},
+      {:ex_doc, "~> 0.38", runtime: false, warn_if_outdated: true},
+      {:finch, "~> 0.13"},
       {:floki, ">= 0.30.0"},
-      {:phoenix_live_dashboard, "~> 0.8.3"},
-      {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
-      {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
+      {:gettext, "~> 0.20"},
       {:heroicons,
        github: "tailwindlabs/heroicons",
        tag: "v2.1.1",
@@ -60,20 +59,23 @@ defmodule NewGearMotors.MixProject do
        app: false,
        compile: false,
        depth: 1},
+      {:jason, "~> 1.2"},
+      {:mix_audit, "~> 2.1", runtime: false},
+      {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false},
+      {:mogrify, "~> 0.9.3"},
+      {:phoenix, "~> 1.7.21"},
+      {:phoenix_ecto, "~> 4.5"},
+      {:phoenix_html, "~> 4.1"},
+      {:phoenix_live_dashboard, "~> 0.8.3"},
+      {:phoenix_live_reload, "~> 1.2", only: :dev},
+      {:phoenix_live_view, "~> 1.0.11", override: true},
+      {:postgrex, ">= 0.0.0"},
+      {:sobelow, "~> 0.13", runtime: false},
       {:swoosh, "~> 1.5"},
-      {:finch, "~> 0.13"},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
-      {:gettext, "~> 0.20"},
-      {:jason, "~> 1.2"},
-      {:dns_cluster, "~> 0.1.1"},
-      {:bandit, "~> 1.5"},
-      {:deps_nix, "~> 2.0", only: :dev},
-      {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false},
-      {:credo, "~> 1.7", runtime: false},
-      {:ex_doc, "~> 0.34", runtime: false, warn_if_outdated: true},
-      {:sobelow, "~> 0.13", runtime: false},
-      {:mix_audit, "~> 2.1", runtime: false}
+      {:waffle, "~> 1.1"},
+      {:waffle_ecto, "~> 0.0"}
     ]
   end
 
@@ -94,11 +96,14 @@ defmodule NewGearMotors.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.build": ["tailwind new_gear_motors", "esbuild new_gear_motors"],
+      "assets.setup": [
+        "bun.install --if-missing",
+        "bun assets install"
+      ],
+      "assets.build": ["bun new_gear_motors", "bun css"],
       "assets.deploy": [
-        "tailwind new_gear_motors --minify",
-        "esbuild new_gear_motors --minify",
+        "bun css --minify",
+        "bun new_gear_motors --minify",
         "phx.digest"
       ]
     ]
