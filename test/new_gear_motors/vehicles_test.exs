@@ -3,8 +3,20 @@ defmodule NewGearMotors.VehiclesTest do
 
   alias NewGearMotors.Vehicles
 
+  setup do
+    File.mkdir_p("priv/static/images")
+    File.mkdir_p("priv/static/tmp")
+    System.put_env("TMPDIR", "priv/static/tmp")
+
+    on_exit(fn ->
+      File.rm_rf("priv/static/images")
+      File.rm_rf("priv/static/tmp")
+    end)
+  end
+
   describe "vehicles" do
     alias NewGearMotors.Vehicles.Vehicle
+    alias NewGearMotors.Vehicles.Cover
 
     import NewGearMotors.VehiclesFixtures
 
@@ -21,11 +33,18 @@ defmodule NewGearMotors.VehiclesTest do
     end
 
     test "create_vehicle/1 with valid data creates a vehicle" do
+      cover = %Plug.Upload{
+        path: "test/support/fixtures/vehicles_fixtures/car.jpg",
+        filename: "car.jpg",
+        content_type: "image/jpeg"
+      }
+
       valid_attrs = %{
         name: "some name",
         description: "some description",
         price: "some price",
-        manufacturer: "some manufacturer"
+        manufacturer: "some manufacturer",
+        cover: cover
       }
 
       assert {:ok, %Vehicle{} = vehicle} = Vehicles.create_vehicle(valid_attrs)
@@ -33,6 +52,7 @@ defmodule NewGearMotors.VehiclesTest do
       assert vehicle.description == "some description"
       assert vehicle.price == "some price"
       assert vehicle.manufacturer == "some manufacturer"
+      assert vehicle.cover.file_name == "car.jpg"
     end
 
     test "create_vehicle/1 with invalid data returns error changeset" do
@@ -42,11 +62,18 @@ defmodule NewGearMotors.VehiclesTest do
     test "update_vehicle/2 with valid data updates the vehicle" do
       vehicle = vehicle_fixture()
 
+      updated_cover = %Plug.Upload{
+        path: "test/support/fixtures/vehicles_fixtures/updated_car.jpg",
+        filename: "updated_car.jpg",
+        content_type: "image/jpeg"
+      }
+
       update_attrs = %{
         name: "some updated name",
         description: "some updated description",
         price: "some updated price",
-        manufacturer: "some updated manufacturer"
+        manufacturer: "some updated manufacturer",
+        cover: updated_cover
       }
 
       assert {:ok, %Vehicle{} = vehicle} = Vehicles.update_vehicle(vehicle, update_attrs)
@@ -54,6 +81,7 @@ defmodule NewGearMotors.VehiclesTest do
       assert vehicle.description == "some updated description"
       assert vehicle.price == "some updated price"
       assert vehicle.manufacturer == "some updated manufacturer"
+      assert vehicle.cover.file_name == "updated_car.jpg"
     end
 
     test "update_vehicle/2 with invalid data returns error changeset" do
