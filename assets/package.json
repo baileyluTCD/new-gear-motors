@@ -1,10 +1,6 @@
 {
   "name": "assets",
   "private": true,
-  "devDependencies": {
-    "@tailwindcss/forms": "^0.5.10",
-    "@types/bun": "latest"
-  },
   "peerDependencies": {
     "typescript": "^5"
   },
@@ -12,16 +8,13 @@
     "../deps/*"
   ],
   "dependencies": {
-    "@tailwindcss/cli": "^4.1.8",
     "marked": "^15.0.12",
     "phoenix": "workspace:*",
     "phoenix_html": "workspace:*",
     "phoenix_live_view": "workspace:*",
-    "tailwindcss": "^4.1.8",
     "topbar": "^3.0.0"
   },
   "trustedDependencies": [
-    "@parcel/watcher",
-    "@tailwindcss/oxide"
+    "@parcel/watcher"
   ]
 }

@@ -43,11 +43,11 @@ defmodule NewGearMotors.MixProject do
     [
       {:argon2_elixir, "~> 4.0"},
       {:bandit, "~> 1.5"},
-      {:bun, "~> 1.4", runtime: Mix.env() == :dev},
       {:credo, "~> 1.7", runtime: false},
       {:deps_nix, "~> 2.0", only: :dev},
       {:dns_cluster, "~> 0.1.1"},
       {:ecto_sql, "~> 3.10"},
+      {:esbuild, "~> 0.10", runtime: Mix.env() == :dev},
       {:ex_doc, "~> 0.38", runtime: false, warn_if_outdated: true},
       {:finch, "~> 0.13"},
       {:floki, ">= 0.30.0"},
@@ -61,7 +61,7 @@ defmodule NewGearMotors.MixProject do
        depth: 1},
       {:jason, "~> 1.2"},
       {:mix_audit, "~> 2.1", runtime: false},
-      {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false},
+      {:mix_test_watch, "~> 1.0", runtime: false},
       {:mogrify, "~> 0.9.3"},
       {:phoenix, "~> 1.7.21"},
       {:phoenix_ecto, "~> 4.5"},
@@ -72,6 +72,7 @@ defmodule NewGearMotors.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:sobelow, "~> 0.13", runtime: false},
       {:swoosh, "~> 1.5"},
+      {:tailwind, "~> 0.3", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
       {:waffle, "~> 1.1"},
@@ -96,14 +97,11 @@ defmodule NewGearMotors.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.setup": [
-        "bun.install --if-missing",
-        "bun assets install"
-      ],
-      "assets.build": ["bun new_gear_motors", "bun css"],
+      "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
+      "assets.build": ["tailwind new_gear_motors", "esbuild new_gear_motors"],
       "assets.deploy": [
-        "bun css --minify",
-        "bun new_gear_motors --minify",
+        "tailwind new_gear_motors --minify",
+        "esbuild new_gear_motors --minify",
         "phx.digest"
       ]
     ]

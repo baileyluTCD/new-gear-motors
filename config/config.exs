@@ -31,17 +31,26 @@ config :new_gear_motors, NewGearMotorsWeb.Endpoint,
 # at the `config/runtime.exs`.
 config :new_gear_motors, NewGearMotors.Mailer, adapter: Swoosh.Adapters.Local
 
-config :bun,
-  version: "1.2.14",
-  assets: [args: [], cd: Path.expand("../assets", __DIR__)],
+# Configure esbuild (the version is required)
+config :esbuild,
+  version: "0.17.11",
   new_gear_motors: [
-    args: ~w(build js/app.js --outdir=../priv/static/assets),
-    cd: Path.expand("../assets", __DIR__)
-  ],
-  css: [
-    args: ~w(run tailwindcss --input=css/app.css --output=../priv/static/assets/app.css),
-    cd: Path.expand("../assets", __DIR__)
+    args:
+      ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
+    cd: Path.expand("../assets", __DIR__),
+    env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]
+
+# Configure tailwind (the version is required)
+config :tailwind,
+  version: "4.1.8",
+  new_gear_motors: [
+    args: ~w(
+      --input=assets/css/app.css
+      --output=priv/static/assets/app.css
+    )
+  ],
+  cd: Path.expand("..", __DIR__)
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -55,10 +64,6 @@ config :waffle,
   storage: Waffle.Storage.Local,
   storage_dir_prefix: "priv/static",
   storage_dir: "images"
-
-# Clear the console for each run of mix test.watch
-config :mix_test_watch,
-  clear: true
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

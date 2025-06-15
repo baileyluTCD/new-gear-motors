@@ -2,7 +2,7 @@
   pkgs,
   lib,
   beamPackages,
-  overrides ? (_x: _y: { }),
+  overrides ? (x: y: { }),
 }:
 
 let
@@ -10,7 +10,7 @@ let
   buildRebar3 = lib.makeOverridable beamPackages.buildRebar3;
 
   workarounds = {
-    portCompiler = _unusedArgs: _old: {
+    portCompiler = _unusedArgs: old: {
       buildPlugins = [ pkgs.beamPackages.pc ];
     };
 
@@ -94,7 +94,7 @@ let
   };
 
   defaultOverrides = (
-    _final: prev:
+    final: prev:
 
     let
       apps = {
@@ -182,27 +182,6 @@ let
               telemetry
               thousand_island
               websock
-            ];
-          };
-        in
-        drv;
-
-      bun =
-        let
-          version = "1.4.2";
-          drv = buildMix {
-            inherit version;
-            name = "bun";
-            appConfigPath = ./config;
-
-            src = fetchHex {
-              inherit version;
-              pkg = "bun";
-              sha256 = "834c0965b204b9e28748fbd3596268841fefcf1649b5617a70b379dfe68ad331";
-            };
-
-            beamDeps = [
-              castore
             ];
           };
         in
@@ -430,6 +409,27 @@ let
               pkg = "elixir_make";
               sha256 = "db23d4fd8b757462ad02f8aa73431a426fe6671c80b200d9710caf3d1dd0ffdb";
             };
+          };
+        in
+        drv;
+
+      esbuild =
+        let
+          version = "0.10.0";
+          drv = buildMix {
+            inherit version;
+            name = "esbuild";
+            appConfigPath = ./config;
+
+            src = fetchHex {
+              inherit version;
+              pkg = "esbuild";
+              sha256 = "468489cda427b974a7cc9f03ace55368a83e1a7be12fba7e30969af78e5f8c70";
+            };
+
+            beamDeps = [
+              jason
+            ];
           };
         in
         drv;
@@ -802,6 +802,27 @@ let
         in
         drv;
 
+      mix_test_watch =
+        let
+          version = "1.2.0";
+          drv = buildMix {
+            inherit version;
+            name = "mix_test_watch";
+            appConfigPath = ./config;
+
+            src = fetchHex {
+              inherit version;
+              pkg = "mix_test_watch";
+              sha256 = "278dc955c20b3fb9a3168b5c2493c2e5cffad133548d307e0a50c7f2cfbf34f6";
+            };
+
+            beamDeps = [
+              file_system
+            ];
+          };
+        in
+        drv;
+
       mogrify =
         let
           version = "0.9.3";
@@ -1168,6 +1189,23 @@ let
               plug
               telemetry
             ];
+          };
+        in
+        drv;
+
+      tailwind =
+        let
+          version = "0.3.1";
+          drv = buildMix {
+            inherit version;
+            name = "tailwind";
+            appConfigPath = ./config;
+
+            src = fetchHex {
+              inherit version;
+              pkg = "tailwind";
+              sha256 = "98a45febdf4a87bc26682e1171acdedd6317d0919953c353fcd1b4f9f4b676a2";
+            };
           };
         in
         drv;
