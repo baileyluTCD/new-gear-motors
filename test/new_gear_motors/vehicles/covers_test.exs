@@ -6,13 +6,13 @@ defmodule NewGearMotors.Vehicles.CoversTest do
   alias NewGearMotors.Vehicles.Covers
 
   setup do
-    File.mkdir_p("priv/static/images")
-    File.mkdir_p("priv/static/tmp")
+    File.mkdir_p("priv/static/test/images")
+    File.mkdir_p("priv/static/test/tmp")
     System.put_env("TMPDIR", "priv/static/tmp")
 
     on_exit(fn ->
-      File.rm_rf("priv/static/images")
-      File.rm_rf("priv/static/tmp")
+      File.rm_rf("priv/static/test/images")
+      File.rm_rf("priv/static/test/tmp")
     end)
   end
 
