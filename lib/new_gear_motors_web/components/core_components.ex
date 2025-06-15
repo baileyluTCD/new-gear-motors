@@ -47,14 +47,18 @@ defmodule NewGearMotorsWeb.CoreComponents do
       </.box>
   """
   attr :class, :string, default: nil
+  attr :id, :string, default: nil
   slot :inner_block, required: true
 
   def box(assigns) do
     ~H"""
-    <div class={[
-      "bg-linear-to-br from-neutral-800 via-zinc-800 to-zinc-900 rounded-xl border border-zinc-600",
-      @class
-    ]}>
+    <div
+      id={@id}
+      class={[
+        "bg-linear-to-br from-neutral-800 via-zinc-800 to-zinc-900 rounded-xl border border-zinc-600",
+        @class
+      ]}
+    >
       {render_slot(@inner_block)}
     </div>
     """
@@ -605,7 +609,7 @@ defmodule NewGearMotorsWeb.CoreComponents do
           :for={item <- @item}
           class="flex flex-row justify-between gap-4 py-4 text-sm leading-6 sm:gap-8"
         >
-          <dt class="w-1/4 text-zinc-500">{item.title}</dt>
+          <dt class="w-1/4 text-zinc-200 font-bold">{item.title}</dt>
           <dd class="text-zinc-300">{render_slot(item)}</dd>
         </div>
       </dl>
