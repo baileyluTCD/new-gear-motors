@@ -2,7 +2,7 @@
   pkgs,
   lib,
   beamPackages,
-  overrides ? (x: y: { }),
+  overrides ? (_x: _y: { }),
 }:
 
 let
@@ -10,7 +10,7 @@ let
   buildRebar3 = lib.makeOverridable beamPackages.buildRebar3;
 
   workarounds = {
-    portCompiler = _unusedArgs: old: {
+    portCompiler = _unusedArgs: _old: {
       buildPlugins = [ pkgs.beamPackages.pc ];
     };
 
@@ -94,7 +94,7 @@ let
   };
 
   defaultOverrides = (
-    final: prev:
+    _final: prev:
 
     let
       apps = {
@@ -798,6 +798,23 @@ let
               jason
               yaml_elixir
             ];
+          };
+        in
+        drv;
+
+      mogrify =
+        let
+          version = "0.9.3";
+          drv = buildMix {
+            inherit version;
+            name = "mogrify";
+            appConfigPath = ./config;
+
+            src = fetchHex {
+              inherit version;
+              pkg = "mogrify";
+              sha256 = "0189b1e1de27455f2b9ae8cf88239cefd23d38de9276eb5add7159aea51731e6";
+            };
           };
         in
         drv;

@@ -1,4 +1,9 @@
-{ pkgs, flake, inputs, ... }:
+{
+  pkgs,
+  flake,
+  inputs,
+  ...
+}:
 pkgs.mkShell {
   packages = with pkgs; [
     elixir
