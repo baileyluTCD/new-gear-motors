@@ -6,6 +6,8 @@ defmodule NewGearMotorsWeb.VehicleLive.Index do
 
   import NewGearMotorsWeb.VehicleHelper
 
+  alias NewGearMotors.Vehicles.Covers.Cover
+
   on_mount {NewGearMotorsWeb.UserAuth, :mount_current_user}
 
   @impl true
