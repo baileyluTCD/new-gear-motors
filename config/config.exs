@@ -53,7 +53,8 @@ config :phoenix, :json_library, Jason
 
 config :waffle,
   storage: Waffle.Storage.Local,
-  asset_host: {:system, "./priv/static/"}
+  storage_dir_prefix: "priv/static",
+  storage_dir: "images"
 
 # Clear the console for each run of mix test.watch
 config :mix_test_watch,

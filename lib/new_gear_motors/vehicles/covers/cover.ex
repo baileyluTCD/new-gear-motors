@@ -1,4 +1,4 @@
-defmodule NewGearMotors.Vehicles.Cover do
+defmodule NewGearMotors.Vehicles.Covers.Cover do
   @moduledoc """
   # Vehicle Cover Schema
 
@@ -7,7 +7,7 @@ defmodule NewGearMotors.Vehicles.Cover do
   use Waffle.Definition
   use Waffle.Ecto.Definition
 
-  @versions [:original, :thumb]
+  @versions [:original]
   @extensions ~w(.jpg .jpeg .gif .png .avif)
 
   def validate({file, _}) do
@@ -19,15 +19,14 @@ defmodule NewGearMotors.Vehicles.Cover do
     end
   end
 
-  def transform(:thumb, _) do
-    {:convert, "", :avif}
+  def transform(:original, _) do
+    {:convert, "-format avif", :avif}
   end
 
-  def filename(version, _) do
-    version
-  end
+  def filename(_version, {file, _scope}) do
+    hash = :crypto.hash(:sha256, file.file_name) |> Base.encode16()
+    file_title = file.file_name |> Path.rootname() |> String.downcase()
 
-  def storage_dir(_, {_file, user}) do
-    "uploads/avatars/#{user.id}"
+    "#{file_title}-#{hash}"
   end
 end

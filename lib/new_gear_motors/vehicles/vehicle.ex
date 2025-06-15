@@ -6,6 +6,7 @@ defmodule NewGearMotors.Vehicles.Vehicle do
   """
 
   use Ecto.Schema
+  use Waffle.Ecto.Schema
   import Ecto.Changeset
 
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -15,7 +16,7 @@ defmodule NewGearMotors.Vehicles.Vehicle do
     field :description, :string
     field :price, :string
     field :manufacturer, :string
-    field :cover, NewGearMotors.Vehicles.Cover
+    field :cover, NewGearMotors.Vehicles.Covers.Cover.Type
 
     timestamps(type: :utc_datetime)
   end
@@ -23,7 +24,7 @@ defmodule NewGearMotors.Vehicles.Vehicle do
   @doc false
   def changeset(vehicle, attrs) do
     vehicle
-    |> cast(attrs, [:name, :price, :description, :manufacturer])
+    |> cast(attrs, [:name, :price, :description, :manufacturer, :cover])
     |> cast_attachments(attrs, [:cover])
     |> validate_required([:name, :price, :description, :manufacturer, :cover])
   end

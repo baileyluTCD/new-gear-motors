@@ -68,11 +68,6 @@ defmodule NewGearMotors.Vehicles do
 
   """
   def update_vehicle(%Vehicle{} = vehicle, attrs) do
-    if attrs["image_url"] && attrs["image_url"] != vehicle.image_url do
-      img_path = Path.join("priv/static/uploads", Path.basename(vehicle.image_url))
-      File.rm!(img_path)
-    end
-
     vehicle
     |> Vehicle.changeset(attrs)
     |> Repo.update()
@@ -91,9 +86,6 @@ defmodule NewGearMotors.Vehicles do
 
   """
   def delete_vehicle(%Vehicle{} = vehicle) do
-    img_path = Path.join("priv/static/uploads", Path.basename(vehicle.image_url))
-    File.rm!(img_path)
-
     Repo.delete(vehicle)
   end
 
