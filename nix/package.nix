@@ -25,15 +25,11 @@ pkgs.beamPackages.mixRelease {
   ];
 
   postBuild = ''
-    tailwind_path="$(mix do \
+    bun_path="$(mix do \
       app.config --no-deps-check --no-compile, \
-      eval 'Tailwind.bin_path() |> IO.puts()')"
-    esbuild_path="$(mix do \
-      app.config --no-deps-check --no-compile, \
-      eval 'Esbuild.bin_path() |> IO.puts()')"
+      eval 'Bun.bin_path() |> IO.puts()')"
 
-    ln -sfv ${pkgs.tailwindcss}/bin/tailwindcss "$tailwind_path"
-    ln -sfv ${pkgs.esbuild}/bin/esbuild "$esbuild_path"
+    ln -sfv ${pkgs.bun}/bin/bun "$bun_path"
     ln -sfv ${mixNixDeps.heroicons} deps/heroicons
 
     mix do \

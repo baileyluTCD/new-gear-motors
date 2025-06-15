@@ -2,6 +2,7 @@ defmodule NewGearMotorsWeb.VehicleLive.Show do
   use NewGearMotorsWeb, :live_view
 
   alias NewGearMotors.Vehicles
+  alias NewGearMotors.Vehicles.Covers.Cover
 
   on_mount {NewGearMotorsWeb.UserAuth, :mount_current_user}
 

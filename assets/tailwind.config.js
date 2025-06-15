@@ -45,7 +45,6 @@ module.exports = {
     },
   },
   plugins: [
-    require("@tailwindcss/forms"),
     // Allows prefixing tailwind classes with LiveView classes to add rules
     // only when LiveView classes are applied, for example:
     //
@@ -55,25 +54,25 @@ module.exports = {
       addVariant("phx-click-loading", [
         ".phx-click-loading&",
         ".phx-click-loading &",
-      ]),
+      ])
     ),
     plugin(({ addVariant }) =>
       addVariant("phx-submit-loading", [
         ".phx-submit-loading&",
         ".phx-submit-loading &",
-      ]),
+      ])
     ),
     plugin(({ addVariant }) =>
       addVariant("phx-change-loading", [
         ".phx-change-loading&",
         ".phx-change-loading &",
-      ]),
+      ])
     ),
 
     // Embeds Heroicons (https://heroicons.com) into your app.css bundle
     // See your `CoreComponents.icon/1` for more information.
     //
-    plugin(function ({ matchComponents, theme }) {
+    plugin(function({ matchComponents, theme }) {
       let iconsDir = path.join(__dirname, "../deps/heroicons/optimized");
       let values = {};
       let icons = [

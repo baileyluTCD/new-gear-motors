@@ -4,5 +4,6 @@ pkgs.symlinkJoin {
   paths = with pkgs; [
     postgresql
     inotifyTools
+    imagemagick
   ];
 }

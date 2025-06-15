@@ -1,4 +1,5 @@
 defmodule NewGearMotorsWeb.VehicleLiveTest do
+  alias NewGearMotors.Vehicles.Vehicle
   use NewGearMotorsWeb.ConnCase
 
   import Phoenix.LiveViewTest
@@ -18,6 +19,17 @@ defmodule NewGearMotorsWeb.VehicleLiveTest do
   }
   @invalid_attrs %{name: nil, description: nil, price: nil, manufacturer: nil}
 
+  @cover %{
+    name: "car.jpg",
+    content: File.read!("test/support/fixtures/vehicles_fixtures/car.jpg"),
+    type: "image/jpeg"
+  }
+  @updated_cover %{
+    name: "updated_car.jpg",
+    content: File.read!("test/support/fixtures/vehicles_fixtures/updated_car.jpg"),
+    type: "image/jpeg"
+  }
+
   defp create_vehicle(_) do
     vehicle = vehicle_fixture()
     %{vehicle: vehicle}
@@ -29,7 +41,7 @@ defmodule NewGearMotorsWeb.VehicleLiveTest do
     test "lists all vehicles", %{conn: conn, vehicle: vehicle} do
       {:ok, _index_live, html} = live(conn, ~p"/vehicles")
 
-      assert html =~ "Listing Vehicles"
+      assert html =~ "Vehicles"
       assert html =~ vehicle.name
     end
 
@@ -42,13 +54,13 @@ defmodule NewGearMotorsWeb.VehicleLiveTest do
     test "has no edit button", %{conn: conn, vehicle: vehicle} do
       {:ok, index_live, _html} = live(conn, ~p"/vehicles")
 
-      refute has_element?(index_live, "#vehicles-#{vehicle.id} a", "Edit")
+      refute has_element?(index_live, "#vehicles-#{vehicle.id}-edit a")
     end
 
     test "has no delete button", %{conn: conn, vehicle: vehicle} do
       {:ok, index_live, _html} = live(conn, ~p"/vehicles")
 
-      refute has_element?(index_live, "#vehicles-#{vehicle.id} a", "Delete")
+      refute has_element?(index_live, "#vehicles-#{vehicle.id}-delete a")
     end
   end
 
@@ -67,6 +79,10 @@ defmodule NewGearMotorsWeb.VehicleLiveTest do
              |> render_change() =~ "can&#39;t be blank"
 
       assert index_live
+             |> file_input("#vehicle-form", :cover, [@cover])
+             |> render_upload("car.jpg") =~ "img src=\"/images/car"
+
+      assert index_live
              |> form("#vehicle-form", vehicle: @create_attrs)
              |> render_submit()
 
@@ -81,8 +97,8 @@ defmodule NewGearMotorsWeb.VehicleLiveTest do
       {:ok, index_live, _html} = live(conn, ~p"/vehicles")
 
       assert index_live
-             |> element("#vehicles-#{vehicle.id} a", "Edit")
-             |> render_click() =~ "Edit"
+             |> element("a#vehicles-#{vehicle.id}-edit")
+             |> render_click() =~ "Edit Vehicle"
 
       assert_patch(index_live, ~p"/vehicles/#{vehicle}/edit")
 
@@ -104,7 +120,7 @@ defmodule NewGearMotorsWeb.VehicleLiveTest do
     test "deletes vehicle in listing", %{conn: conn, vehicle: vehicle} do
       {:ok, index_live, _html} = live(conn, ~p"/vehicles")
 
-      assert index_live |> element("#vehicles-#{vehicle.id} a", "Delete") |> render_click()
+      assert index_live |> element("a#vehicles-#{vehicle.id}-delete") |> render_click()
       refute has_element?(index_live, "#vehicles-#{vehicle.id}")
     end
   end
@@ -115,14 +131,19 @@ defmodule NewGearMotorsWeb.VehicleLiveTest do
     test "updates vehicle within modal", %{conn: conn, vehicle: vehicle} do
       {:ok, show_live, _html} = live(conn, ~p"/vehicles/#{vehicle}")
 
-      assert show_live |> element("a", "Edit Vehicle") |> render_click() =~
-               "Edit Vehicle"
+      assert show_live
+             |> element("a", "Edit")
+             |> render_click() =~ "Edit Vehicle"
 
       assert_patch(show_live, ~p"/vehicles/#{vehicle}/show/edit")
 
       assert show_live
              |> form("#vehicle-form", vehicle: @invalid_attrs)
              |> render_change() =~ "can&#39;t be blank"
+
+      assert show_live
+             |> file_input("#vehicle-form", :cover, [@updated_cover])
+             |> render_upload("updated_car.jpg") =~ "img src=\"/images/car"
 
       assert show_live
              |> form("#vehicle-form", vehicle: @update_attrs)
