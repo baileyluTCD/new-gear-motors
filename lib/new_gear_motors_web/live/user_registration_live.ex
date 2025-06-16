@@ -54,6 +54,8 @@ defmodule NewGearMotorsWeb.UserRegistrationLive do
   end
 
   def handle_event("save", %{"user" => user_params}, socket) do
+    user_params = Map.put(user_params, "is_admin", false)
+
     case Accounts.register_user(user_params) do
       {:ok, user} ->
         {:ok, _} =
@@ -71,6 +73,8 @@ defmodule NewGearMotorsWeb.UserRegistrationLive do
   end
 
   def handle_event("validate", %{"user" => user_params}, socket) do
+    user_params = Map.put(user_params, "is_admin", false)
+
     changeset = Accounts.change_user_registration(%User{}, user_params)
     {:noreply, assign_form(socket, Map.put(changeset, :action, :validate))}
   end
