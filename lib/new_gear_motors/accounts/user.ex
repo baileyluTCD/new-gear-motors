@@ -16,6 +16,7 @@ defmodule NewGearMotors.Accounts.User do
     field :hashed_password, :string, redact: true
     field :current_password, :string, virtual: true, redact: true
     field :confirmed_at, :utc_datetime
+    field :is_admin, :boolean
 
     timestamps(type: :utc_datetime)
   end
@@ -45,7 +46,7 @@ defmodule NewGearMotors.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:email, :password, :is_admin])
     |> validate_email(opts)
     |> validate_password(opts)
   end
