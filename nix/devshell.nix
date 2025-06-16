@@ -2,22 +2,23 @@
   pkgs,
   flake,
   ...
-}: let
- install-deps = pkgs.writeShellApplication {
-  name = "install-deps";
-  text = ''
-    root=$(git rev-parse --show-toplevel)
-    cd "$root"
+}:
+let
+  install-deps = pkgs.writeShellApplication {
+    name = "install-deps";
+    text = ''
+      root=$(git rev-parse --show-toplevel)
+      cd "$root"
 
-    mix deps.get
+      mix deps.get
 
-    tailwind_path="$(mix eval 'Tailwind.bin_path() |> IO.puts()')"
-    ln -sfv ${pkgs.tailwindcss_4}/bin/tailwindcss "$tailwind_path"
+      tailwind_path="$(mix eval 'Tailwind.bin_path() |> IO.puts()')"
+      ln -sfv ${pkgs.tailwindcss_4}/bin/tailwindcss "$tailwind_path"
 
-    cd ./assets
-    npm install
-  '';
- };
+      cd ./assets
+      npm install
+    '';
+  };
 in
 pkgs.mkShell {
   packages = with pkgs; [
