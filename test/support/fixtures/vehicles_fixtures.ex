@@ -4,17 +4,26 @@ defmodule NewGearMotors.VehiclesFixtures do
   entities via the `NewGearMotors.Vehicles` context.
   """
 
+  alias NewGearMotors.Vehicles.Covers.Cover
+
   @doc """
   Generate a vehicle.
   """
   def vehicle_fixture(attrs \\ %{}) do
+    cover = %Plug.Upload{
+      path: "test/support/fixtures/vehicles_fixtures/car.jpg",
+      filename: "car.jpg",
+      content_type: "image/jpeg"
+    }
+
     {:ok, vehicle} =
       attrs
       |> Enum.into(%{
         description: "some description",
         manufacturer: "some manufacturer",
         name: "some name",
-        price: "some price"
+        price: "some price",
+        cover: cover
       })
       |> NewGearMotors.Vehicles.create_vehicle()
 

@@ -4,13 +4,13 @@
   system,
 }:
 let
-  mixNixDeps = pkgs.callPackages ../deps.nix { };
+  mixNixDeps = pkgs.callPackages (flake + "/deps.nix") { };
 in
-pkgs.beamPackages.mixRelease {
+pkgs.beamPackages.mixRelease rec {
   inherit mixNixDeps;
 
   pname = "new-gear-motors";
-  version = flake.lib.readMixVersion ../mix.exs;
+  version = flake.lib.readMixVersion (flake + "/mix.exs");
 
   src = flake;
 
@@ -20,9 +20,22 @@ pkgs.beamPackages.mixRelease {
   DATABASE_URL = "";
   SECRET_KEY_BASE = "";
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with pkgs; [
     flake.packages.${system}.appDependencies
+    nodejs
+    npmHooks.npmConfigHook
   ];
+
+  npmDeps = pkgs.fetchNpmDeps {
+    inherit version;
+
+    pname = "${pname}-npm-deps";
+    src = (flake + "/assets");
+    hash = "sha256-nraoH7P/9t30QyIVXFWnGPy7owAm0Xy8YlmUfWdxDrk=";
+  };
+
+  npmRoot = "./assets";
+  makeCacheWritable = true;
 
   postBuild = ''
     tailwind_path="$(mix do \
@@ -32,7 +45,7 @@ pkgs.beamPackages.mixRelease {
       app.config --no-deps-check --no-compile, \
       eval 'Esbuild.bin_path() |> IO.puts()')"
 
-    ln -sfv ${pkgs.tailwindcss}/bin/tailwindcss "$tailwind_path"
+    ln -sfv ${pkgs.tailwindcss_4}/bin/tailwindcss "$tailwind_path"
     ln -sfv ${pkgs.esbuild}/bin/esbuild "$esbuild_path"
     ln -sfv ${mixNixDeps.heroicons} deps/heroicons
 

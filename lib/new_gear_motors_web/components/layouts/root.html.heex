@@ -11,7 +11,7 @@
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
     </script>
   </head>
-  <body class="bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-stone-800 via-neutral-900 to-black xl:flex xl:flex-col xl:items-center font-mono min-h-screen">
+  <body class="bg-radial-[ellipse_at_bottom_right] from-stone-800 via-neutral-900 to-black xl:flex xl:flex-col xl:items-center font-mono min-h-screen">
     <nav class="sticky top-3 z-50 shadow-10 flex flex-row justify-between items-center bg-zinc-950 rounded-3xl border border-zinc-800 my-3 mx-4 text-zinc-100 xl:5/6 md:p-2 xl:gap-16">
       <.link class="flex flex-row hover:text-zinc-300" href={~p"/"}>
         <.logo class="w-16 m-2" />
@@ -107,7 +107,7 @@
         </div>
       </div>
     </button>
-    <main class="text-white h-max">
+    <main class="text-zinc-100 h-max">
       {@inner_content}
     </main>
   </body>

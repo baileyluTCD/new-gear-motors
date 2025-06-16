@@ -43,15 +43,14 @@ config :esbuild,
 
 # Configure tailwind (the version is required)
 config :tailwind,
-  version: "3.4.3",
+  version: "4.1.8",
   new_gear_motors: [
     args: ~w(
-      --config=tailwind.config.js
-      --input=css/app.css
-      --output=../priv/static/assets/app.css
-    ),
-    cd: Path.expand("../assets", __DIR__)
-  ]
+      --input=assets/css/app.css
+      --output=priv/static/assets/app.css
+    )
+  ],
+  cd: Path.expand("..", __DIR__)
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -61,9 +60,10 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-# Clear the console for each run of mix test.watch
-config :mix_test_watch,
-  clear: true
+config :waffle,
+  storage: Waffle.Storage.Local,
+  storage_dir_prefix: "priv/static",
+  storage_dir: "images"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

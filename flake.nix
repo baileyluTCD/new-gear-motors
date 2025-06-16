@@ -2,7 +2,7 @@
   description = "New Gear Motors Flake";
 
   inputs = {
-    nixpkgs.url = "github:baileyluTCD/nixpkgs/build-mix-copy-hidden";
+    nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-unstable";
     systems.url = "github:nix-systems/default";
 
     blueprint.url = "github:numtide/blueprint";

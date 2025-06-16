@@ -20,7 +20,9 @@ import "phoenix_html";
 // Establish Phoenix Socket and LiveView configuration.
 import { Socket } from "phoenix";
 import { LiveSocket } from "phoenix_live_view";
-import topbar from "../vendor/topbar";
+import topbar from "topbar";
+
+import "./markdown-block.js";
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")

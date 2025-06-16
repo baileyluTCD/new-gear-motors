@@ -1,0 +1,20 @@
+{
+  "name": "assets",
+  "private": true,
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "workspaces": [
+    "../deps/*"
+  ],
+  "dependencies": {
+    "marked": "^15.0.12",
+    "phoenix": "*",
+    "phoenix_html": "*",
+    "phoenix_live_view": "*",
+    "topbar": "^3.0.0"
+  },
+  "trustedDependencies": [
+    "@parcel/watcher"
+  ]
+}
