@@ -2,7 +2,7 @@
   pkgs,
   lib,
   beamPackages,
-  overrides ? (x: y: { }),
+  overrides ? (_x: _y: { }),
 }:
 
 let
@@ -10,7 +10,7 @@ let
   buildRebar3 = lib.makeOverridable beamPackages.buildRebar3;
 
   workarounds = {
-    portCompiler = _unusedArgs: old: {
+    portCompiler = _unusedArgs: _old: {
       buildPlugins = [ pkgs.beamPackages.pc ];
     };
 
@@ -94,7 +94,7 @@ let
   };
 
   defaultOverrides = (
-    final: prev:
+    _final: prev:
 
     let
       apps = {
