@@ -188,6 +188,33 @@ defmodule NewGearMotors.Accounts do
   end
 
   @doc """
+  Returns an `%Ecto.Changeset{}` for changing the user admin status.
+
+  ## Examples
+
+      iex> change_admin_status(user)
+      %Ecto.Changeset{data: %User{}}
+
+  """
+  def change_admin_status(user, attrs \\ %{}) do
+    User.promotion_changeset(user, attrs)
+  end
+
+  @doc """
+  Updates the user's admin status
+
+  ## Examples
+
+      iex> update_admin_status(user)
+      {:ok, %User{}}
+
+  """
+  def update_admin_status(user, attrs \\ %{}) do
+    User.promotion_changeset(user, attrs)
+    |> Repo.update!()
+  end
+
+  @doc """
   Updates the user password.
 
   ## Examples

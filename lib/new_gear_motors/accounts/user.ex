@@ -47,6 +47,7 @@ defmodule NewGearMotors.Accounts.User do
   def registration_changeset(user, attrs, opts \\ []) do
     user
     |> cast(attrs, [:email, :password, :is_admin])
+    |> put_change(:is_admin, false)
     |> validate_email(opts)
     |> validate_password(opts)
   end
@@ -92,6 +93,21 @@ defmodule NewGearMotors.Accounts.User do
       |> unique_constraint(:email)
     else
       changeset
+    end
+  end
+
+  @doc """
+  A user changeset for promoting the user.
+
+  It requires the is_admin status to change otherwise an error is added.
+  """
+  def promotion_changeset(user, attrs, opts \\ []) do
+    user
+    |> cast(attrs, [:is_admin])
+    |> validate_required([:is_admin])
+    |> case do
+      %{changes: %{is_admin: _}} = changeset -> changeset
+      %{} = changeset -> add_error(changeset, :is_admin, "did not change")
     end
   end
 

@@ -124,6 +124,23 @@ defmodule NewGearMotors.AccountsTest do
     end
   end
 
+  describe "change_admin_status/2" do
+    test "returns a user admin stauts changeset" do
+      assert %Ecto.Changeset{} = changeset = Accounts.change_admin_status(%User{})
+      assert changeset.required == [:is_admin]
+    end
+
+    test "allows fields to be set" do
+      changeset =
+        Accounts.change_admin_status(%User{}, %{
+          "is_admin" => true
+        })
+
+      assert changeset.valid?
+      assert get_change(changeset, :is_admin) == true
+    end
+  end
+
   describe "apply_user_email/3" do
     setup do
       %{user: user_fixture()}
