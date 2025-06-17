@@ -16,21 +16,17 @@ defmodule NewGearMotorsWeb.ReservationLiveTest do
   @update_message_attrs %{text: "updated text"}
   @invalid_message_attrs %{text: nil}
 
-  defp create_reservation(_) do
-    reservation = reservation_fixture()
-    user = user_fixture()
-
-    message = message_fixture(%{user: user, reservation: reservation})
+  defp create_reservation(%{user: user}) do
+    reservation = reservation_fixture(%{user: user})
 
     %{
-      user: user,
       reservation: reservation,
-      message: message
+      message: message_fixture(%{user: user, reservation: reservation})
     }
   end
 
   describe "Index" do
-    setup [:create_reservation, :register_and_log_in_user]
+    setup [:register_and_log_in_user, :create_reservation]
 
     test "lists all reservations", %{conn: conn} do
       {:ok, _index_live, html} = live(conn, ~p"/reservations")
@@ -94,7 +90,7 @@ defmodule NewGearMotorsWeb.ReservationLiveTest do
   end
 
   describe "Show" do
-    setup [:create_reservation, :register_and_log_in_user]
+    setup [:register_and_log_in_user, :create_reservation]
 
     test "displays reservation", %{conn: conn, reservation: reservation} do
       {:ok, _show_live, html} = live(conn, ~p"/reservations/#{reservation}")
@@ -126,7 +122,7 @@ defmodule NewGearMotorsWeb.ReservationLiveTest do
   end
 
   describe "Messages" do
-    setup [:create_reservation, :register_and_log_in_user]
+    setup [:register_and_log_in_user, :create_reservation]
 
     test "displays messages", %{conn: conn, reservation: reservation} do
       {:ok, _show_live, html} = live(conn, ~p"/reservations/#{reservation}")

@@ -2,13 +2,31 @@ defmodule NewGearMotors.ReservationsTest do
   use NewGearMotors.DataCase
 
   alias NewGearMotors.Reservations
+  import NewGearMotors.AccountsFixtures
 
   describe "reservations" do
     alias NewGearMotors.Reservations.Reservation
 
     import NewGearMotors.ReservationsFixtures
 
-    @invalid_attrs %{status: nil, planned_meeting_time: nil}
+    setup do
+      user = user_fixture()
+
+      {:ok,
+       %{
+         valid_attrs: %{
+           status: :denied,
+           planned_meeting_time: ~N[2025-05-19 21:58:00],
+           user_id: user.id
+         },
+         invalid_attrs: %{
+           status: nil,
+           planned_meeting_time: nil,
+           user_id: nil
+         },
+         user: user
+       }}
+    end
 
     test "list_reservations/0 returns all reservations" do
       reservation = reservation_fixture()
@@ -20,16 +38,18 @@ defmodule NewGearMotors.ReservationsTest do
       assert Reservations.get_reservation!(reservation.id) == reservation
     end
 
-    test "create_reservation/1 with valid data creates a reservation" do
-      valid_attrs = %{status: :denied, planned_meeting_time: ~N[2025-05-19 21:58:00]}
-
+    test "create_reservation/1 with valid data creates a reservation", %{
+      valid_attrs: valid_attrs
+    } do
       assert {:ok, %Reservation{} = reservation} = Reservations.create_reservation(valid_attrs)
       assert reservation.status == :denied
       assert reservation.planned_meeting_time == ~N[2025-05-19 21:58:00]
     end
 
-    test "create_reservation/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Reservations.create_reservation(@invalid_attrs)
+    test "create_reservation/1 with invalid data returns error changeset", %{
+      invalid_attrs: invalid_attrs
+    } do
+      assert {:error, %Ecto.Changeset{}} = Reservations.create_reservation(invalid_attrs)
     end
 
     test "update_reservation/2 with valid data updates the reservation" do
@@ -43,11 +63,13 @@ defmodule NewGearMotors.ReservationsTest do
       assert reservation.planned_meeting_time == ~N[2025-05-20 21:58:00]
     end
 
-    test "update_reservation/2 with invalid data returns error changeset" do
+    test "update_reservation/2 with invalid data returns error changeset", %{
+      invalid_attrs: invalid_attrs
+    } do
       reservation = reservation_fixture()
 
       assert {:error, %Ecto.Changeset{}} =
-               Reservations.update_reservation(reservation, @invalid_attrs)
+               Reservations.update_reservation(reservation, invalid_attrs)
 
       assert reservation == Reservations.get_reservation!(reservation.id)
     end
