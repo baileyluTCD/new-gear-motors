@@ -27,7 +27,7 @@ defmodule NewGearMotors.Reservations do
   ## Examples
 
       iex> preload_messages(reservation)
-      [%Reservation{}, ...]
+      %Reservation{messages: []}
 
   """
   def preload_messages(reservation), do: Repo.preload(reservation, messages: [:from])
