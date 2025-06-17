@@ -3,10 +3,22 @@ defmodule NewGearMotorsWeb.ReservationLive.Index do
 
   alias NewGearMotors.Reservations
   alias NewGearMotors.Reservations.Reservation
+  alias NewGearMotors.Accounts
+
+  on_mount {NewGearMotorsWeb.UserAuth, :mount_current_user}
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, stream(socket, :reservations, Reservations.list_reservations())}
+    with_reservations =
+      socket.assigns.current_user
+      |> Accounts.preload_reservations()
+
+    socket =
+      socket
+      |> assign(:current_user, with_reservations)
+      |> stream(:reservations, with_reservations.reservations)
+
+    {:ok, socket}
   end
 
   @impl true

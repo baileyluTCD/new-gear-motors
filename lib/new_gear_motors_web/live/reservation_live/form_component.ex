@@ -51,11 +51,19 @@ defmodule NewGearMotorsWeb.ReservationLive.FormComponent do
 
   @impl true
   def handle_event("validate", %{"reservation" => reservation_params}, socket) do
+    reservation_params =
+      reservation_params
+      |> Map.put("user_id", socket.assigns.current_user.id)
+
     changeset = Reservations.change_reservation(socket.assigns.reservation, reservation_params)
     {:noreply, assign(socket, form: to_form(changeset, action: :validate))}
   end
 
   def handle_event("save", %{"reservation" => reservation_params}, socket) do
+    reservation_params =
+      reservation_params
+      |> Map.put("user_id", socket.assigns.current_user.id)
+
     save_reservation(socket, socket.assigns.action, reservation_params)
   end
 
