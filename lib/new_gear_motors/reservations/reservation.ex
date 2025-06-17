@@ -22,7 +22,8 @@ defmodule NewGearMotors.Reservations.Reservation do
   @doc false
   def changeset(reservation, attrs) do
     reservation
-    |> cast(attrs, [:status, :planned_meeting_time])
-    |> validate_required([:status, :planned_meeting_time])
+    |> cast(attrs, [:status, :planned_meeting_time, :user_id])
+    |> assoc_constraint(:user)
+    |> validate_required([:status, :planned_meeting_time, :user_id])
   end
 end
