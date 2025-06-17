@@ -17,6 +17,8 @@ defmodule NewGearMotorsWeb.ConnCase do
 
   use ExUnit.CaseTemplate
 
+  alias NewGearMotors.Accounts
+
   using do
     quote do
       # The default endpoint for testing
@@ -46,6 +48,22 @@ defmodule NewGearMotorsWeb.ConnCase do
   """
   def register_and_log_in_user(%{conn: conn}) do
     user = NewGearMotors.AccountsFixtures.user_fixture()
+    %{conn: log_in_user(conn, user), user: user}
+  end
+
+  @doc """
+  Setup helper that registers, logs in, and promotes to admin users.
+
+      setup :register_log_in_and_promote_user
+
+  It stores an updated connection and a registered user in the
+  test context.
+  """
+  def register_log_in_and_promote_user(%{conn: conn}) do
+    user =
+      NewGearMotors.AccountsFixtures.user_fixture()
+      |> Accounts.update_admin_status(%{is_admin: true})
+
     %{conn: log_in_user(conn, user), user: user}
   end
 

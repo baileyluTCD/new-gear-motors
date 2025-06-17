@@ -1,7 +1,7 @@
 <.header>
   Vehicles
   <:actions>
-    <.link :if={@current_user} patch={~p"/vehicles/new"}>
+    <.link :if={@current_user && @current_user.is_admin} patch={~p"/vehicles/new"}>
       <.button>New Vehicle</.button>
     </.link>
   </:actions>
@@ -38,7 +38,7 @@
         </h2>
         <div class="flex flex-row gap-2">
           <.link
-            :if={@current_user}
+            :if={@current_user && @current_user.is_admin}
             id={"#{id}-edit"}
             patch={~p"/vehicles/#{vehicle}/edit"}
             title="Edit Vehicle"
@@ -46,7 +46,7 @@
             <.icon name="hero-pencil-square" class="hover:text-green-500 my-3" />
           </.link>
           <.link
-            :if={@current_user}
+            :if={@current_user && @current_user.is_admin}
             id={"#{id}-delete"}
             phx-click={JS.push("delete", value: %{id: vehicle.id}) |> hide("##{id}")}
             data-confirm="Are you sure?"

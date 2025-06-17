@@ -41,8 +41,14 @@ defmodule NewGearMotorsWeb.UserRegistrationLiveTest do
       {:ok, lv, _html} = live(conn, ~p"/users/register")
 
       email = unique_user_email()
-      form = form(lv, "#registration_form", user: valid_user_attributes(email: email))
+
+      user_attrs_without_admin =
+        valid_user_attributes(email: email)
+        |> Map.delete(:is_admin)
+
+      form = form(lv, "#registration_form", user: user_attrs_without_admin)
       render_submit(form)
+
       conn = follow_trigger_action(form, conn)
 
       assert redirected_to(conn) == ~p"/"

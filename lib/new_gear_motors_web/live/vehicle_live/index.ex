@@ -21,15 +21,27 @@ defmodule NewGearMotorsWeb.VehicleLive.Index do
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do
-    socket
-    |> assign(:page_title, "Edit Vehicle")
-    |> assign(:vehicle, Vehicles.get_vehicle!(id))
+    if socket.assigns.current_user.is_admin do
+      socket
+      |> assign(:page_title, "Edit Vehicle")
+      |> assign(:vehicle, Vehicles.get_vehicle!(id))
+    else
+      socket
+      |> put_flash(:error, "You must be an admin to access this resource.")
+      |> push_patch(to: ~p"/vehicles")
+    end
   end
 
   defp apply_action(socket, :new, _params) do
-    socket
-    |> assign(:page_title, "New Vehicle")
-    |> assign(:vehicle, %Vehicle{})
+    if socket.assigns.current_user.is_admin do
+      socket
+      |> assign(:page_title, "New Vehicle")
+      |> assign(:vehicle, %Vehicle{})
+    else
+      socket
+      |> put_flash(:error, "You must be an admin to access this resource.")
+      |> push_patch(to: ~p"/vehicles")
+    end
   end
 
   defp apply_action(socket, :index, _params) do
@@ -45,9 +57,13 @@ defmodule NewGearMotorsWeb.VehicleLive.Index do
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    vehicle = Vehicles.get_vehicle!(id)
-    {:ok, _} = Vehicles.delete_vehicle(vehicle)
+    if socket.assigns.current_user.is_admin do
+      vehicle = Vehicles.get_vehicle!(id)
+      {:ok, _} = Vehicles.delete_vehicle(vehicle)
 
-    {:noreply, stream_delete(socket, :vehicles, vehicle)}
+      {:noreply, stream_delete(socket, :vehicles, vehicle)}
+    else
+      {:noreply, put_flash(socket, :error, "You must be an admin to access this resource.")}
+    end
   end
 end

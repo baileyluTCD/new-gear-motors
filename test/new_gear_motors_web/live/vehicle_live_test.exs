@@ -67,6 +67,22 @@ defmodule NewGearMotorsWeb.VehicleLiveTest do
   describe "Logged in Index" do
     setup [:create_vehicle, :register_and_log_in_user]
 
+    test "has no edit button", %{conn: conn, vehicle: vehicle} do
+      {:ok, index_live, _html} = live(conn, ~p"/vehicles")
+
+      refute has_element?(index_live, "#vehicles-#{vehicle.id}-edit a")
+    end
+
+    test "has no delete button", %{conn: conn, vehicle: vehicle} do
+      {:ok, index_live, _html} = live(conn, ~p"/vehicles")
+
+      refute has_element?(index_live, "#vehicles-#{vehicle.id}-delete a")
+    end
+  end
+
+  describe "Admin Logged in Index" do
+    setup [:create_vehicle, :register_log_in_and_promote_user]
+
     test "saves new vehicle", %{conn: conn} do
       {:ok, index_live, _html} = live(conn, ~p"/vehicles")
 
@@ -127,6 +143,16 @@ defmodule NewGearMotorsWeb.VehicleLiveTest do
 
   describe "Logged in Show" do
     setup [:create_vehicle, :register_and_log_in_user]
+
+    test "has no edit button", %{conn: conn, vehicle: vehicle} do
+      {:ok, index_live, _html} = live(conn, ~p"/vehicles")
+
+      refute has_element?(index_live, "a", "Edit")
+    end
+  end
+
+  describe "Admin Logged in Show" do
+    setup [:create_vehicle, :register_log_in_and_promote_user]
 
     test "updates vehicle within modal", %{conn: conn, vehicle: vehicle} do
       {:ok, show_live, _html} = live(conn, ~p"/vehicles/#{vehicle}")

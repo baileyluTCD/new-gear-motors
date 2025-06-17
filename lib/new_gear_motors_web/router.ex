@@ -51,6 +51,14 @@ defmodule NewGearMotorsWeb.Router do
   end
 
   scope "/", NewGearMotorsWeb do
+    pipe_through [:browser, :require_admin_user]
+
+    live "/vehicles/new", VehicleLive.Index, :new
+    live "/vehicles/:id/edit", VehicleLive.Index, :edit
+    live "/vehicles/:id/show/edit", VehicleLive.Show, :edit
+  end
+
+  scope "/", NewGearMotorsWeb do
     pipe_through [:browser, :require_authenticated_user]
 
     live_session :require_authenticated_user,
@@ -58,10 +66,6 @@ defmodule NewGearMotorsWeb.Router do
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
     end
-
-    live "/vehicles/new", VehicleLive.Index, :new
-    live "/vehicles/:id/edit", VehicleLive.Index, :edit
-    live "/vehicles/:id/show/edit", VehicleLive.Show, :edit
 
     live "/reservations", ReservationLive.Index, :index
     live "/reservations/new", ReservationLive.Index, :new

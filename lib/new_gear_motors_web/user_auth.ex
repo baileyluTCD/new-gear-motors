@@ -170,6 +170,21 @@ defmodule NewGearMotorsWeb.UserAuth do
     end
   end
 
+  def on_mount(:ensure_admin, params, session, socket) do
+    {:cont, socket} = on_mount(:ensure_authenticated, params, session, socket)
+
+    if socket.assigns.current_user.is_admin do
+      {:cont, socket}
+    else
+      socket =
+        socket
+        |> Phoenix.LiveView.put_flash(:error, "You must be an admin to access this page.")
+        |> Phoenix.LiveView.redirect(to: ~p"/")
+
+      {:halt, socket}
+    end
+  end
+
   def on_mount(:redirect_if_user_is_authenticated, _params, session, socket) do
     socket = mount_current_user(socket, session)
 
@@ -215,6 +230,23 @@ defmodule NewGearMotorsWeb.UserAuth do
       |> put_flash(:error, "You must log in to access this page.")
       |> maybe_store_return_to()
       |> redirect(to: ~p"/users/log_in")
+      |> halt()
+    end
+  end
+
+  @doc """
+  Used for routes that require the user to be authenticated and have an admin status.
+  """
+  def require_admin_user(conn, opts) do
+    conn = require_authenticated_user(conn, opts)
+
+    if conn.assigns.current_user.is_admin do
+      conn
+    else
+      conn
+      |> put_flash(:error, "You must be an admin user to access this page.")
+      |> maybe_store_return_to()
+      |> redirect(to: ~p"/")
       |> halt()
     end
   end
