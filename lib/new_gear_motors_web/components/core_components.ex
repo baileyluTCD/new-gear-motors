@@ -277,7 +277,7 @@ defmodule NewGearMotorsWeb.CoreComponents do
   slot :inner_block, required: true
 
   def button(assigns) do
-    class =
+    preset_class =
       case assigns.preset do
         :primary ->
           "bg-raw-sienna-400 hover:bg-raw-sienna-500 text-zinc-900 active:text-zinc-900/80"
@@ -289,7 +289,7 @@ defmodule NewGearMotorsWeb.CoreComponents do
           "bg-linear-to-r from-raw-sienna-300 via-raw-sienna-400 to-raw-sienna-500 text-zinc-900 active:text-zinc-900/80 hover:shadow-[0_0_15px_5px_rgba(234,179,128,0.6)] hover:shadow-raw-sienna-500/50 hover:brightness-110"
       end
 
-    assigns = assign(assigns, :button_class, class)
+    assigns = assign(assigns, :preset_class, preset_class)
 
     ~H"""
     <button
@@ -298,7 +298,7 @@ defmodule NewGearMotorsWeb.CoreComponents do
         @class,
         "rounded-2xl py-2 px-3 phx-submit-loading:opacity-75",
         "text-sm font-semibold leading-6",
-        @button_class
+        @preset_class
       ]}
       {@rest}
     >
@@ -336,6 +336,7 @@ defmodule NewGearMotorsWeb.CoreComponents do
   attr :id, :any, default: nil
   attr :name, :any
   attr :label, :string, default: nil
+  attr :class, :string, default: nil
   attr :value, :any
 
   attr :type, :string,
@@ -422,7 +423,8 @@ defmodule NewGearMotorsWeb.CoreComponents do
         class={[
           "mt-2 block w-full rounded-lg text-zinc-100 focus:ring-0 sm:text-sm sm:leading-6 min-h-24 bg-transparent",
           @errors == [] && "border-zinc-700 focus:border-zinc-600",
-          @errors != [] && "border-rose-400 focus:border-rose-400"
+          @errors != [] && "border-rose-400 focus:border-rose-400",
+          @class
         ]}
         {@rest}
       ><%= Phoenix.HTML.Form.normalize_value("textarea", @value) %></textarea>
@@ -543,9 +545,9 @@ defmodule NewGearMotorsWeb.CoreComponents do
     ~H"""
     <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
       <table class="w-160 mt-11 sm:w-full">
-        <thead class="text-sm text-left leading-6 text-zinc-500">
+        <thead class="text-sm text-left leading-6 text-zinc-100">
           <tr>
-            <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal">{col[:label]}</th>
+            <th :for={col <- @col} class="p-0 pb-4 pr-6 font-bold">{col[:label]}</th>
             <th :if={@action != []} class="relative p-0 pb-4">
               <span class="sr-only">{gettext("Actions")}</span>
             </th>
@@ -564,7 +566,7 @@ defmodule NewGearMotorsWeb.CoreComponents do
             >
               <div class="block py-4 pr-6">
                 <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-950 sm:rounded-l-xl" />
-                <span class={["relative", i == 0 && "font-semibold text-zinc-100"]}>
+                <span class={["relative"]}>
                   {render_slot(col, @row_item.(row))}
                 </span>
               </div>
