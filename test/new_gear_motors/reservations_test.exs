@@ -3,6 +3,7 @@ defmodule NewGearMotors.ReservationsTest do
 
   alias NewGearMotors.Reservations
   import NewGearMotors.AccountsFixtures
+  import NewGearMotors.VehiclesFixtures
 
   describe "reservations" do
     alias NewGearMotors.Reservations.Reservation
@@ -11,18 +12,21 @@ defmodule NewGearMotors.ReservationsTest do
 
     setup do
       user = user_fixture()
+      vehicle = vehicle_fixture()
 
       {:ok,
        %{
          valid_attrs: %{
            status: :denied,
            planned_meeting_time: ~N[2025-05-19 21:58:00],
-           user_id: user.id
+           user_id: user.id,
+           vehicle_id: vehicle.id
          },
          invalid_attrs: %{
            status: nil,
            planned_meeting_time: nil,
-           user_id: nil
+           user_id: nil,
+           vehicle_id: nil
          },
          user: user
        }}

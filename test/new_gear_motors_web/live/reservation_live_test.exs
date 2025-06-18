@@ -7,20 +7,23 @@ defmodule NewGearMotorsWeb.ReservationLiveTest do
   import NewGearMotors.ReservationsFixtures
   import NewGearMotors.Reservations.MessagesFixtures
   import NewGearMotors.AccountsFixtures
+  import NewGearMotors.VehiclesFixtures
 
-  @create_attrs %{status: :denied, planned_meeting_time: "2025-05-19T21:58:00"}
-  @update_attrs %{status: :pending, planned_meeting_time: "2025-05-20T21:58:00"}
-  @invalid_attrs %{status: nil, planned_meeting_time: nil}
+  @create_attrs %{planned_meeting_time: "2025-05-19T21:58:00"}
+  @update_attrs %{planned_meeting_time: "2025-05-20T21:58:00"}
+  @invalid_attrs %{planned_meeting_time: nil}
 
   @create_message_attrs %{text: "some text"}
   @update_message_attrs %{text: "updated text"}
   @invalid_message_attrs %{text: nil}
 
   defp create_reservation(%{user: user}) do
-    reservation = reservation_fixture(%{user: user})
+    vehicle = vehicle_fixture()
+    reservation = reservation_fixture(%{user: user, vehicle: vehicle})
 
     %{
       reservation: reservation,
+      vehicle: vehicle,
       message: message_fixture(%{user: user, reservation: reservation})
     }
   end
@@ -34,25 +37,25 @@ defmodule NewGearMotorsWeb.ReservationLiveTest do
       assert html =~ "Listing Reservations"
     end
 
-    test "saves new reservation", %{conn: conn} do
-      {:ok, index_live, _html} = live(conn, ~p"/reservations")
+    test "saves new reservation", %{conn: conn, vehicle: vehicle} do
+      {:ok, vehicle_live, _html} = live(conn, ~p"/vehicles/#{vehicle}")
 
-      assert index_live |> element("a", "New Reservation") |> render_click() =~
-               "New Reservation"
+      assert vehicle_live |> element("a", "Book Reservation") |> render_click() =~
+               "Book Reservation"
 
-      assert_patch(index_live, ~p"/reservations/new")
+      {:ok, reservation_live, _html} = live(conn, ~p"/reservations/vehicles/#{vehicle}/new")
 
-      assert index_live
+      assert reservation_live
              |> form("#reservation-form", reservation: @invalid_attrs)
              |> render_change() =~ "can&#39;t be blank"
 
-      assert index_live
+      assert reservation_live
              |> form("#reservation-form", reservation: @create_attrs)
              |> render_submit()
 
-      assert_patch(index_live, ~p"/reservations")
+      assert_patch(reservation_live, ~p"/reservations")
 
-      html = render(index_live)
+      html = render(reservation_live)
       assert html =~ "Reservation created successfully"
     end
 
