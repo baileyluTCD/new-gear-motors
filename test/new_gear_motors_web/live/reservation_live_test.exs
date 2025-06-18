@@ -31,10 +31,15 @@ defmodule NewGearMotorsWeb.ReservationLiveTest do
   describe "Index" do
     setup [:register_and_log_in_user, :create_reservation]
 
-    test "lists all reservations", %{conn: conn} do
-      {:ok, _index_live, html} = live(conn, ~p"/reservations")
+    test "lists only appropriate reservations", %{conn: conn, reservation: this_users_reservation} do
+      other_users_reservation = reservation_fixture()
+
+      {:ok, index_live, html} = live(conn, ~p"/reservations")
 
       assert html =~ "Listing Reservations"
+
+      refute has_element?(index_live, "#reservations-#{other_users_reservation.id}")
+      assert has_element?(index_live, "#reservations-#{this_users_reservation.id}")
     end
 
     test "saves new reservation", %{conn: conn, vehicle: vehicle} do
@@ -89,6 +94,21 @@ defmodule NewGearMotorsWeb.ReservationLiveTest do
              |> render_click()
 
       refute has_element?(index_live, "#reservations-#{reservation.id}")
+    end
+  end
+
+  describe "Admin Index" do
+    setup [:register_log_in_and_promote_user, :create_reservation]
+
+    test "lists all avalible reservations", %{conn: conn, reservation: this_users_reservation} do
+      other_users_reservation = reservation_fixture()
+
+      {:ok, index_live, html} = live(conn, ~p"/reservations")
+
+      assert html =~ "Listing Reservations"
+
+      assert has_element?(index_live, "#reservations-#{other_users_reservation.id}")
+      assert has_element?(index_live, "#reservations-#{this_users_reservation.id}")
     end
   end
 
