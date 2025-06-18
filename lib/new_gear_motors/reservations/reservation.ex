@@ -14,6 +14,7 @@ defmodule NewGearMotors.Reservations.Reservation do
     field :status, Ecto.Enum, values: [:denied, :pending, :accepted]
     field :planned_meeting_time, :naive_datetime
     belongs_to :user, NewGearMotors.Accounts.User
+    belongs_to :vehicle, NewGearMotors.Vehicles.Vehicle
     has_many :messages, NewGearMotors.Reservations.Messages.Message
 
     timestamps(type: :utc_datetime)
@@ -22,8 +23,9 @@ defmodule NewGearMotors.Reservations.Reservation do
   @doc false
   def changeset(reservation, attrs) do
     reservation
-    |> cast(attrs, [:status, :planned_meeting_time, :user_id])
+    |> cast(attrs, [:status, :planned_meeting_time, :user_id, :vehicle_id])
     |> assoc_constraint(:user)
-    |> validate_required([:status, :planned_meeting_time, :user_id])
+    |> assoc_constraint(:vehicle)
+    |> validate_required([:status, :planned_meeting_time, :user_id, :vehicle_id])
   end
 end
