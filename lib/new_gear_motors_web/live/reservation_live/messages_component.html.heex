@@ -1,26 +1,44 @@
 <div>
-  <h2 class="text-md font-semibold leading-8 text-zinc-800 mt-10">
+  <h2 class="text-2xl font-semibold text-zinc-200 mt-10">
     Messages
   </h2>
 
-  <.table id="messages" rows={@streams.messages}>
-    <:col :let={{_id, message}} label="From">{message.from.email}</:col>
-    <:col :let={{_id, message}} label="Body">{message.text}</:col>
-    <:action :let={{_id, message}}>
-      <.link patch={~p"/reservations/#{@reservation}/messages/#{message}/edit"}>Edit</.link>
-    </:action>
-    <:action :let={{id, message}}>
-      <.link
-        phx-click={
-          JS.push("delete_message", value: %{message_id: message.id}, target: @myself)
-          |> hide("##{id}")
-        }
-        data-confirm="Are you sure?"
-      >
-        Delete
-      </.link>
-    </:action>
-  </.table>
+  <article id="messages" phx-update="stream">
+    <.box
+      :for={{id, message} <- @streams.messages}
+      id={id}
+      class="my-4 transform-gpu transition-transform duration-300 ease-in-out hover:scale-105 hover:border-zinc-300"
+    >
+      <div class="flex flex-row justify-between items-center bg-zinc-900 p-2 rounded-t-xl text-sm border-b border-zinc-700 min-h-14">
+        <p class="font-semibold">{shorten_text(message.from.email, 16)}</p>
+        <div class="flex flex-row gap-2">
+          <.link
+            :if={message.from == @current_user || @current_user.is_admin}
+            patch={~p"/reservations/#{@reservation}/messages/#{message}/edit"}
+          >
+            <.button preset={:semi_transparent} class="px-2 py-1">
+              Edit
+            </.button>
+          </.link>
+          <.link
+            :if={message.from == @current_user || @current_user.is_admin}
+            phx-click={
+              JS.push("delete_message", value: %{message_id: message.id}, target: @myself)
+              |> hide("##{id}")
+            }
+            data-confirm="Are you sure?"
+          >
+            <.button preset={:semi_transparent}>
+              Delete
+            </.button>
+          </.link>
+        </div>
+      </div>
+      <div class="p-4">
+        <markdown-block>{message.text}</markdown-block>
+      </div>
+    </.box>
+  </article>
 
   <.simple_form
     for={@form}
@@ -29,7 +47,13 @@
     phx-change="validate"
     phx-submit="save"
   >
-    <.input field={@form[:text]} value={@message_text} placeholder="Message..." />
+    <.input
+      type="textarea"
+      field={@form[:text]}
+      value={@message_text}
+      placeholder="Enter Message... (Supports Markdown)"
+      class="bg-linear-to-br from-neutral-800 via-zinc-800 to-zinc-900 rounded-xl border border-zinc-600 placeholder:text-zinc-400 focus:border-zinc-200"
+    />
     <:actions>
       <.button phx-disable-with="Sending...">Send Message</.button>
     </:actions>

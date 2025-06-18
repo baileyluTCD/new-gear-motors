@@ -5,6 +5,8 @@ defmodule NewGearMotorsWeb.ReservationLive.MessagesComponent do
   alias NewGearMotors.Reservations.Messages
   alias NewGearMotors.Reservations.Messages.Message
 
+  import NewGearMotorsWeb.VehicleHelper
+
   @impl true
   def update(%{event: {:delete, message}}, socket) do
     {:ok, stream_delete(socket, :messages, message)}

@@ -1,8 +1,8 @@
 <.header>
   Listing Reservations
   <:actions>
-    <.link patch={~p"/reservations/new"}>
-      <.button>New Reservation</.button>
+    <.link patch={~p"/vehicles"}>
+      <.button>Browse Vehicles</.button>
     </.link>
   </:actions>
 </.header>
@@ -11,8 +11,13 @@
   id="reservations"
   rows={@streams.reservations}
   row_click={fn {_id, reservation} -> JS.navigate(~p"/reservations/#{reservation}") end}
+  row_item={&row_with_user_and_vehicle/1}
 >
-  <:col :let={{_id, reservation}} label="Status">{reservation.status}</:col>
+  <:col :let={{_id, reservation}} label="Owner">{reservation.user.email}</:col>
+  <:col :let={{_id, reservation}} label="Vehicle">{reservation.vehicle.name}</:col>
+  <:col :let={{_id, reservation}} label="Status">
+    <p class="capitalize">{reservation.status}</p>
+  </:col>
   <:col :let={{_id, reservation}} label="Planned meeting time">
     {reservation.planned_meeting_time}
   </:col>
@@ -45,6 +50,7 @@
     action={@live_action}
     reservation={@reservation}
     current_user={@current_user}
+    vehicle={@vehicle}
     patch={~p"/reservations"}
   />
 </.modal>

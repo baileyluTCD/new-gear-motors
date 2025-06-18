@@ -10,7 +10,10 @@ defmodule NewGearMotorsWeb.ReservationLive.Show do
 
   @impl true
   def mount(%{"id" => id}, _session, socket) do
-    reservation = Reservations.get_reservation!(id)
+    reservation =
+      Reservations.get_reservation!(id)
+      |> Reservations.preload_vehicle()
+      |> Reservations.preload_user()
 
     PubSub.subscribe(NewGearMotors.PubSub, "messages:#{id}")
 
@@ -18,6 +21,8 @@ defmodule NewGearMotorsWeb.ReservationLive.Show do
       socket
       |> assign(:page_title, page_title(socket.assigns.live_action))
       |> assign(:reservation, reservation)
+      |> assign(:vehicle, reservation.vehicle)
+      |> assign(:owner, reservation.user)
 
     {:ok, socket}
   end

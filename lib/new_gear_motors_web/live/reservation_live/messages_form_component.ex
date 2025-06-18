@@ -24,9 +24,9 @@ defmodule NewGearMotorsWeb.ReservationLive.MessagesFormComponent do
       >
         <.input
           field={@form[:text]}
-          type="text"
+          type="textarea"
           label="Body"
-          placeholder="Message..."
+          placeholder="Send Message..."
           value={@message.text}
         />
         <:actions>
