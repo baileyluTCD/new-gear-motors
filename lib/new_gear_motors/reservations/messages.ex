@@ -9,7 +9,7 @@ defmodule NewGearMotors.Reservations.Messages do
   alias NewGearMotors.Reservations.Messages.Message
 
   @doc """
-  Returns the list of messages.
+  Returns the list of messages sorted by the time they were sent at.
 
   ## Examples
 
@@ -18,7 +18,9 @@ defmodule NewGearMotors.Reservations.Messages do
 
   """
   def list_messages do
-    Repo.all(Message)
+    Message
+    |> order_by(desc: :inserted_at)
+    |> Repo.all()
   end
 
   @doc """
