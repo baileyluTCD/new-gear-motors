@@ -38,6 +38,37 @@ defmodule NewGearMotorsWeb.CoreComponents do
   end
 
   @doc """
+  Renders a given status - i.e. Pending, Accepted, etc
+
+  ## Examples
+
+      <.status/>
+      <.status mode={:accepted}/>
+  """
+  attr :mode, :atom, default: :pending
+
+  def status(assigns) do
+    case assigns.mode do
+      :accepted ->
+        ~H"""
+        <p class="text-green-600"><.icon name="hero-check-circle" class="m-2 w-5 h-5" />Accepted</p>
+        """
+
+      :denied ->
+        ~H"""
+        <p class="text-red-600"><.icon name="hero-x-circle" class="m-2 w-5 h-5" />Denied</p>
+        """
+
+      :pending ->
+        ~H"""
+        <p class="text-yellow-400">
+          <.icon name="hero-question-mark-circle" class="m-2 w-5 h-5" />Pending
+        </p>
+        """
+    end
+  end
+
+  @doc """
   Renders a solid box.
 
   ## Examples
@@ -401,7 +432,7 @@ defmodule NewGearMotorsWeb.CoreComponents do
       <select
         id={@id}
         name={@name}
-        class="mt-2 block w-full rounded-md border border-gray-300 bg-transparent shadow-xs focus:border-zinc-600 focus:ring-0 sm:text-sm"
+        class="mt-2 block w-full rounded-md border border-gray-300 bg-transparent shadow-xs focus:border-zinc-600 focus:ring-0 sm:text-sm capitalize"
         multiple={@multiple}
         {@rest}
       >
@@ -532,6 +563,7 @@ defmodule NewGearMotorsWeb.CoreComponents do
 
   slot :col, required: true do
     attr :label, :string
+    attr :class, :string
   end
 
   slot :action, doc: "the slot for showing user actions in the last table column"
@@ -543,12 +575,14 @@ defmodule NewGearMotorsWeb.CoreComponents do
       end
 
     ~H"""
-    <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
-      <table class="w-160 mt-11 sm:w-full">
-        <thead class="text-sm text-left leading-6 text-zinc-100">
-          <tr>
-            <th :for={col <- @col} class="p-0 pb-4 pr-6 font-bold">{col[:label]}</th>
-            <th :if={@action != []} class="relative p-0 pb-4">
+    <div class="text-center">
+      <table class="w-full mt-11">
+        <thead class="text-sm leading-6 text-zinc-100">
+          <tr class="p-2 bg-zinc-900/50">
+            <th :for={col <- @col} class={[col[:class], "py-6 font-bold"]}>
+              {col[:label]}
+            </th>
+            <th :if={@action != []} class="pb-4">
               <span class="sr-only">{gettext("Actions")}</span>
             </th>
           </tr>
@@ -556,27 +590,35 @@ defmodule NewGearMotorsWeb.CoreComponents do
         <tbody
           id={@id}
           phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
-          class="relative divide-y divide-zinc-900 border-t border-zinc-800 text-sm leading-6 text-zinc-300"
+          class="divide-y divide-zinc-900 border-t border-zinc-800 text-sm leading-6 text-zinc-300"
         >
-          <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:bg-zinc-950">
+          <tr
+            :for={row <- @rows}
+            id={@row_id && @row_id.(row)}
+            class="group transition ease-in-out p-5 even:bg-zinc-800/60 odd:bg-zinc-700/50 hover:bg-zinc-900"
+          >
             <td
-              :for={{col, i} <- Enum.with_index(@col)}
+              :for={{col, _i} <- Enum.with_index(@col)}
               phx-click={@row_click && @row_click.(row)}
-              class={["relative p-0", @row_click && "hover:cursor-pointer"]}
+              class={[
+                col[:class],
+                "p-2",
+                @row_click && "hover:cursor-pointer"
+              ]}
             >
-              <div class="block py-4 pr-6">
-                <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-950 sm:rounded-l-xl" />
-                <span class={["relative"]}>
+              <div class="block py-2 sm:py-4 pr-6">
+                <span class="group-hover:bg-zinc-950 sm:rounded-l-xl" />
+                <span>
                   {render_slot(col, @row_item.(row))}
                 </span>
               </div>
             </td>
-            <td :if={@action != []} class="relative w-14 p-0">
-              <div class="relative whitespace-nowrap py-4 text-right text-sm font-medium">
-                <span class="absolute -inset-y-px -right-4 left-0 group-hover:bg-zinc-950 sm:rounded-r-xl" />
+            <td :if={@action != []} class="w-14 p-0 max-sm:hidden">
+              <div class="whitespace-nowrap pr-2 py-4 text-sm font-medium">
+                <span class="group-hover:bg-zinc-950 sm:rounded-r-xl" />
                 <span
                   :for={action <- @action}
-                  class="relative ml-4 font-semibold leading-6 text-zinc-100 hover:text-zinc-300"
+                  class="p-2 font-semibold text-zinc-100 hover:text-zinc-300"
                 >
                   {render_slot(action, @row_item.(row))}
                 </span>

@@ -7,35 +7,54 @@
   </:actions>
 </.header>
 
-<.table
-  id="reservations"
-  rows={@streams.reservations}
-  row_click={fn {_id, reservation} -> JS.navigate(~p"/reservations/#{reservation}") end}
-  row_item={&row_with_user_and_vehicle/1}
+<div
+  class="absolute left-0 w-screen flex flex-col items-center hidden transform-gpu"
+  phx-mounted={
+    JS.show(
+      transition:
+        {"ease-out duration-700", "opacity-0 translate-y-4", "opacity-100 translate-y-0"},
+      display: "flex"
+    )
+  }
 >
-  <:col :let={{_id, reservation}} label="Owner">{reservation.user.email}</:col>
-  <:col :let={{_id, reservation}} label="Vehicle">{reservation.vehicle.name}</:col>
-  <:col :let={{_id, reservation}} label="Status">
-    <p class="capitalize">{reservation.status}</p>
-  </:col>
-  <:col :let={{_id, reservation}} label="Planned meeting time">
-    {reservation.planned_meeting_time}
-  </:col>
-  <:action :let={{_id, reservation}}>
-    <div class="sr-only">
-      <.link navigate={~p"/reservations/#{reservation}"}>Show</.link>
-    </div>
-    <.link patch={~p"/reservations/#{reservation}/edit"}>Edit</.link>
-  </:action>
-  <:action :let={{id, reservation}}>
-    <.link
-      phx-click={JS.push("delete", value: %{id: reservation.id}) |> hide("##{id}")}
-      data-confirm="Are you sure?"
+  <div class="px-2 w-6/7 lg:w-2/3">
+    <.table
+      id="reservations"
+      rows={@streams.reservations}
+      row_click={fn {_id, reservation} -> JS.navigate(~p"/reservations/#{reservation}") end}
+      row_item={&row_with_user_and_vehicle/1}
     >
-      Delete
-    </.link>
-  </:action>
-</.table>
+      <:col :let={{_id, reservation}} label="Owner">
+        <p class="font-semibold">{reservation.user.email}</p>
+      </:col>
+      <:col :let={{_id, reservation}} label="Vehicle" class="max-md:hidden">
+        <.link class="hover:underline" patch={~p"/vehicles/#{reservation.vehicle}"}>
+          {reservation.vehicle.name}
+        </.link>
+      </:col>
+      <:col :let={{_id, reservation}} label="Status">
+        <.status mode={reservation.status} />
+      </:col>
+      <:col :let={{_id, reservation}} label="Planned meeting time" class="max-lg:hidden">
+        {reservation.planned_meeting_time}
+      </:col>
+      <:action :let={{_id, reservation}}>
+        <div class="sr-only">
+          <.link navigate={~p"/reservations/#{reservation}"}>Show</.link>
+        </div>
+        <.link patch={~p"/reservations/#{reservation}/edit"}>Edit</.link>
+      </:action>
+      <:action :let={{id, reservation}}>
+        <.link
+          phx-click={JS.push("delete", value: %{id: reservation.id}) |> hide("##{id}")}
+          data-confirm="Are you sure?"
+        >
+          Delete
+        </.link>
+      </:action>
+    </.table>
+  </div>
+</div>
 
 <.modal
   :if={@live_action in [:new, :edit]}
