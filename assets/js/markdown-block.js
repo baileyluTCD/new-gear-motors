@@ -9,6 +9,10 @@ class Markdown extends HTMLElement {
     this.outerHTML = `
     <div class="markdown-block">
       <style>
+          .markdown-block {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+          }
           .markdown-block h1 {
             font-size: 1.75rem;
             font-weight: 700;

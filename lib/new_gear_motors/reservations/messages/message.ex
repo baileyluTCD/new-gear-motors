@@ -25,6 +25,6 @@ defmodule NewGearMotors.Reservations.Messages.Message do
     |> assoc_constraint(:from)
     |> assoc_constraint(:reservation)
     |> validate_required([:text, :from_id, :reservation_id])
-    |> validate_length(:text, min: 1, max: 500)
+    |> validate_length(:text, min: 1, max: 255)
   end
 end

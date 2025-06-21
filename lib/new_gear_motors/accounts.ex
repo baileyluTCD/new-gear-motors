@@ -201,6 +201,17 @@ defmodule NewGearMotors.Accounts do
   end
 
   @doc """
+  Preloads a user's reservations
+
+  ## Examples
+
+      iex> preload_reservations(user)
+      %User{reservations: []}
+
+  """
+  def preload_reservations(user), do: Repo.preload(user, reservations: [:user])
+
+  @doc """
   Updates the user's admin status
 
   ## Examples

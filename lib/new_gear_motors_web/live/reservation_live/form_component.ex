@@ -8,8 +8,9 @@ defmodule NewGearMotorsWeb.ReservationLive.FormComponent do
     ~H"""
     <div>
       <.header>
-        {@title}
-        <:subtitle>Use this form to manage reservation records in your database.</:subtitle>
+        {@title} -
+        <.link class="hover:underline" patch={~p"/vehicles/#{@vehicle}"}>{@vehicle.name}</.link>
+        <:subtitle>Use this form to manage reservations for "{@vehicle.name}".</:subtitle>
       </.header>
 
       <.simple_form
@@ -20,16 +21,17 @@ defmodule NewGearMotorsWeb.ReservationLive.FormComponent do
         phx-submit="save"
       >
         <.input
+          field={@form[:planned_meeting_time]}
+          type="datetime-local"
+          label="Proposed meeting time"
+        />
+        <.input
+          :if={@current_user.is_admin}
           field={@form[:status]}
           type="select"
           label="Status"
           prompt="Choose a value"
           options={Ecto.Enum.values(NewGearMotors.Reservations.Reservation, :status)}
-        />
-        <.input
-          field={@form[:planned_meeting_time]}
-          type="datetime-local"
-          label="Planned meeting time"
         />
         <:actions>
           <.button phx-disable-with="Saving...">Save Reservation</.button>
@@ -51,12 +53,34 @@ defmodule NewGearMotorsWeb.ReservationLive.FormComponent do
 
   @impl true
   def handle_event("validate", %{"reservation" => reservation_params}, socket) do
+    reservation_params =
+      reservation_params
+      |> put_default_reservation_params(socket)
+
     changeset = Reservations.change_reservation(socket.assigns.reservation, reservation_params)
     {:noreply, assign(socket, form: to_form(changeset, action: :validate))}
   end
 
   def handle_event("save", %{"reservation" => reservation_params}, socket) do
+    reservation_params =
+      reservation_params
+      |> put_default_reservation_params(socket)
+
     save_reservation(socket, socket.assigns.action, reservation_params)
+  end
+
+  defp put_default_reservation_params(reservation_params, socket) do
+    reservation_params =
+      reservation_params
+      |> Map.put("user_id", socket.assigns.current_user.id)
+      |> Map.put("vehicle_id", socket.assigns.vehicle.id)
+
+    if socket.assigns.current_user.is_admin do
+      reservation_params
+    else
+      reservation_params
+      |> Map.put("status", :pending)
+    end
   end
 
   defp save_reservation(socket, :edit, reservation_params) do

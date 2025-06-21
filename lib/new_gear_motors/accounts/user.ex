@@ -17,6 +17,7 @@ defmodule NewGearMotors.Accounts.User do
     field :current_password, :string, virtual: true, redact: true
     field :confirmed_at, :utc_datetime
     field :is_admin, :boolean
+    has_many :reservations, NewGearMotors.Reservations.Reservation
 
     timestamps(type: :utc_datetime)
   end

@@ -17,6 +17,7 @@ defmodule NewGearMotors.Vehicles.Vehicle do
     field :price, :string
     field :manufacturer, :string
     field :cover, NewGearMotors.Vehicles.Covers.Cover.Type
+    has_many :reservations, NewGearMotors.Reservations.Reservation
 
     timestamps(type: :utc_datetime)
   end
