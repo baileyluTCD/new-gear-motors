@@ -28,6 +28,10 @@ defmodule NewGearMotorsWeb.ReservationLive.Show do
   end
 
   @impl true
+  def handle_info({NewGearMotorsWeb.ReservationLive.FormComponent, {:saved, reservation}}, socket) do
+    {:noreply, assign(socket, :reservation, reservation)}
+  end
+
   def handle_info(event, socket) do
     send_update(MessagesComponent, id: socket.assigns.reservation.id, event: event)
     {:noreply, socket}

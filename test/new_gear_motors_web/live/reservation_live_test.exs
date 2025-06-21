@@ -13,6 +13,9 @@ defmodule NewGearMotorsWeb.ReservationLiveTest do
   @update_attrs %{planned_meeting_time: "2025-05-20T21:58:00"}
   @invalid_attrs %{planned_meeting_time: nil}
 
+  @admin_update_attrs %{planned_meeting_time: "2025-05-20T21:58:00", status: :accepted}
+  @admin_invalid_attrs %{planned_meeting_time: nil, status: nil}
+
   @create_message_attrs %{text: "some text"}
   @update_message_attrs %{text: "updated text"}
   @invalid_message_attrs %{text: nil}
@@ -67,8 +70,9 @@ defmodule NewGearMotorsWeb.ReservationLiveTest do
     test "updates reservation in listing", %{conn: conn, reservation: reservation} do
       {:ok, index_live, _html} = live(conn, ~p"/reservations")
 
-      assert index_live |> element("#reservations-#{reservation.id} a", "Edit") |> render_click() =~
-               "Edit Reservation"
+      assert index_live
+             |> element("#reservations-#{reservation.id} a", "Edit")
+             |> render_click() =~ "Edit Reservation"
 
       assert_patch(index_live, ~p"/reservations/#{reservation}/edit")
 
@@ -84,6 +88,16 @@ defmodule NewGearMotorsWeb.ReservationLiveTest do
 
       html = render(index_live)
       assert html =~ "Reservation updated successfully"
+
+      assert index_live
+             |> element("#reservations-#{reservation.id} a", "Edit")
+             |> render_click() =~ "Edit Reservation"
+
+      assert_raise ArgumentError, fn ->
+        index_live
+        |> form("#reservation-form", reservation: @admin_update_attrs)
+        |> render_submit()
+      end
     end
 
     test "deletes reservation in listing", %{conn: conn, reservation: reservation} do
@@ -141,6 +155,43 @@ defmodule NewGearMotorsWeb.ReservationLiveTest do
 
       html = render(show_live)
       assert html =~ "Reservation updated successfully"
+
+      assert show_live |> element("a", "Edit Reservation") |> render_click() =~
+               "Edit Reservation"
+
+      assert_raise ArgumentError, fn ->
+        show_live
+        |> form("#reservation-form", reservation: @admin_update_attrs)
+        |> render_submit()
+      end
+    end
+  end
+
+  describe "Admin Show" do
+    setup [:register_log_in_and_promote_user, :create_reservation]
+
+    test "updates reservation within modal", %{conn: conn, reservation: reservation} do
+      {:ok, show_live, _html} = live(conn, ~p"/reservations/#{reservation}")
+
+      assert show_live |> element("a", "Edit Reservation") |> render_click() =~
+               "Edit Reservation"
+
+      assert_patch(show_live, ~p"/reservations/#{reservation}/show/edit")
+
+      assert show_live
+             |> form("#reservation-form", reservation: @admin_invalid_attrs)
+             |> render_change() =~ "can&#39;t be blank"
+
+      assert show_live
+             |> form("#reservation-form", reservation: @admin_update_attrs)
+             |> render_submit()
+
+      assert_patch(show_live, ~p"/reservations/#{reservation}")
+
+      html = render(show_live)
+      assert html =~ "Reservation updated successfully"
+
+      assert has_element?(show_live, "p", "accepted")
     end
   end
 
