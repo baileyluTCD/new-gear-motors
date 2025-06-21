@@ -18,7 +18,9 @@ defmodule NewGearMotors.Reservations do
 
   """
   def list_reservations do
-    Repo.all(Reservation)
+    Reservation
+    |> order_by(asc: :status)
+    |> Repo.all()
   end
 
   @doc """
