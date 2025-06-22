@@ -607,7 +607,7 @@ defmodule NewGearMotorsWeb.CoreComponents do
                 @row_click && "hover:cursor-pointer"
               ]}
             >
-              <div class="block py-2 sm:py-4 pr-6">
+              <div class="block py-2 sm:py-4 pr-2 sm:pr-6 md:pr-12 lg:pr-20">
                 <span class="group-hover:bg-zinc-950 sm:rounded-l-xl" />
                 <span>
                   {render_slot(col, @row_item.(row))}
@@ -649,13 +649,19 @@ defmodule NewGearMotorsWeb.CoreComponents do
     attr :title, :string, required: true
   end
 
+  attr :title, :string, required: true
+  attr :class, :string, default: nil
+
   def list(assigns) do
     ~H"""
-    <div class="mt-14">
-      <dl class="-my-4 divide-y divide-zinc-600">
+    <div class={[@class, "my-7"]}>
+      <div class="bg-zinc-900/50 font-bold p-4 text-center text-lg">
+        {render_slot(@title)}
+      </div>
+      <dl class="divide-y divide-zinc-900">
         <div
           :for={item <- @item}
-          class="flex flex-row justify-between gap-4 py-4 text-sm leading-6 sm:gap-8"
+          class="flex flex-row justify-between gap-4 p-4 text-sm leading-6 sm:gap-8 even:bg-zinc-800/60 odd:bg-zinc-700/50"
         >
           <dt class="w-1/4 text-zinc-200 font-bold">{item.title}</dt>
           <dd class="text-zinc-300">{render_slot(item)}</dd>
