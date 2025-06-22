@@ -52,6 +52,15 @@
           Delete
         </.link>
       </:action>
+      <:empty_message>
+        <p>
+          You do not have any reservations for any currently existing vehicles at the moment.
+          <.link patch={~p"/vehicles"} class="text-blue-400 hover:underline">
+            Browse our list of vehicles
+          </.link>
+          to make a booking!
+        </p>
+      </:empty_message>
     </.table>
   </div>
 </div>
