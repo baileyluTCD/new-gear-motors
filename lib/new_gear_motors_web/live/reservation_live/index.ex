@@ -6,6 +6,8 @@ defmodule NewGearMotorsWeb.ReservationLive.Index do
   alias NewGearMotors.Reservations.Reservation
   alias NewGearMotors.Accounts
 
+  import NewGearMotorsWeb.VehicleHelper
+
   on_mount {NewGearMotorsWeb.UserAuth, :mount_current_user}
 
   @impl true
