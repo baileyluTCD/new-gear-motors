@@ -6,65 +6,72 @@ defmodule NewGearMotorsWeb.ReservationLiveTest do
   import Phoenix.LiveViewTest
   import NewGearMotors.ReservationsFixtures
   import NewGearMotors.Reservations.MessagesFixtures
-  import NewGearMotors.AccountsFixtures
+  import NewGearMotors.VehiclesFixtures
 
-  @create_attrs %{status: :denied, planned_meeting_time: "2025-05-19T21:58:00"}
-  @update_attrs %{status: :pending, planned_meeting_time: "2025-05-20T21:58:00"}
-  @invalid_attrs %{status: nil, planned_meeting_time: nil}
+  @create_attrs %{planned_meeting_time: "2025-05-19T21:58:00"}
+  @update_attrs %{planned_meeting_time: "2025-05-20T21:58:00"}
+  @invalid_attrs %{planned_meeting_time: nil}
+
+  @admin_update_attrs %{planned_meeting_time: "2025-05-20T21:58:00", status: :accepted}
+  @admin_invalid_attrs %{planned_meeting_time: nil, status: nil}
 
   @create_message_attrs %{text: "some text"}
   @update_message_attrs %{text: "updated text"}
   @invalid_message_attrs %{text: nil}
 
-  defp create_reservation(_) do
-    reservation = reservation_fixture()
-    user = user_fixture()
-
-    message = message_fixture(%{user: user, reservation: reservation})
+  defp create_reservation(%{user: user}) do
+    vehicle = vehicle_fixture()
+    reservation = reservation_fixture(%{user: user, vehicle: vehicle})
 
     %{
-      user: user,
       reservation: reservation,
-      message: message
+      vehicle: vehicle,
+      message: message_fixture(%{user: user, reservation: reservation})
     }
   end
 
   describe "Index" do
-    setup [:create_reservation, :register_and_log_in_user]
+    setup [:register_and_log_in_user, :create_reservation]
 
-    test "lists all reservations", %{conn: conn} do
-      {:ok, _index_live, html} = live(conn, ~p"/reservations")
+    test "lists only appropriate reservations", %{conn: conn, reservation: this_users_reservation} do
+      other_users_reservation = reservation_fixture()
+
+      {:ok, index_live, html} = live(conn, ~p"/reservations")
 
       assert html =~ "Listing Reservations"
+
+      refute has_element?(index_live, "#reservations-#{other_users_reservation.id}")
+      assert has_element?(index_live, "#reservations-#{this_users_reservation.id}")
     end
 
-    test "saves new reservation", %{conn: conn} do
-      {:ok, index_live, _html} = live(conn, ~p"/reservations")
+    test "saves new reservation", %{conn: conn, vehicle: vehicle} do
+      {:ok, vehicle_live, _html} = live(conn, ~p"/vehicles/#{vehicle}")
 
-      assert index_live |> element("a", "New Reservation") |> render_click() =~
-               "New Reservation"
+      assert vehicle_live |> element("a", "Book Reservation") |> render_click() =~
+               "Book Reservation"
 
-      assert_patch(index_live, ~p"/reservations/new")
+      {:ok, reservation_live, _html} = live(conn, ~p"/reservations/vehicles/#{vehicle}/new")
 
-      assert index_live
+      assert reservation_live
              |> form("#reservation-form", reservation: @invalid_attrs)
              |> render_change() =~ "can&#39;t be blank"
 
-      assert index_live
+      assert reservation_live
              |> form("#reservation-form", reservation: @create_attrs)
              |> render_submit()
 
-      assert_patch(index_live, ~p"/reservations")
+      assert_patch(reservation_live, ~p"/reservations")
 
-      html = render(index_live)
+      html = render(reservation_live)
       assert html =~ "Reservation created successfully"
     end
 
     test "updates reservation in listing", %{conn: conn, reservation: reservation} do
       {:ok, index_live, _html} = live(conn, ~p"/reservations")
 
-      assert index_live |> element("#reservations-#{reservation.id} a", "Edit") |> render_click() =~
-               "Edit Reservation"
+      assert index_live
+             |> element("#reservations-#{reservation.id} a", "Edit")
+             |> render_click() =~ "Edit Reservation"
 
       assert_patch(index_live, ~p"/reservations/#{reservation}/edit")
 
@@ -80,6 +87,16 @@ defmodule NewGearMotorsWeb.ReservationLiveTest do
 
       html = render(index_live)
       assert html =~ "Reservation updated successfully"
+
+      assert index_live
+             |> element("#reservations-#{reservation.id} a", "Edit")
+             |> render_click() =~ "Edit Reservation"
+
+      assert_raise ArgumentError, fn ->
+        index_live
+        |> form("#reservation-form", reservation: @admin_update_attrs)
+        |> render_submit()
+      end
     end
 
     test "deletes reservation in listing", %{conn: conn, reservation: reservation} do
@@ -93,8 +110,23 @@ defmodule NewGearMotorsWeb.ReservationLiveTest do
     end
   end
 
+  describe "Admin Index" do
+    setup [:register_log_in_and_promote_user, :create_reservation]
+
+    test "lists all avalible reservations", %{conn: conn, reservation: this_users_reservation} do
+      other_users_reservation = reservation_fixture()
+
+      {:ok, index_live, html} = live(conn, ~p"/reservations")
+
+      assert html =~ "Listing Reservations"
+
+      assert has_element?(index_live, "#reservations-#{other_users_reservation.id}")
+      assert has_element?(index_live, "#reservations-#{this_users_reservation.id}")
+    end
+  end
+
   describe "Show" do
-    setup [:create_reservation, :register_and_log_in_user]
+    setup [:register_and_log_in_user, :create_reservation]
 
     test "displays reservation", %{conn: conn, reservation: reservation} do
       {:ok, _show_live, html} = live(conn, ~p"/reservations/#{reservation}")
@@ -122,11 +154,48 @@ defmodule NewGearMotorsWeb.ReservationLiveTest do
 
       html = render(show_live)
       assert html =~ "Reservation updated successfully"
+
+      assert show_live |> element("a", "Edit Reservation") |> render_click() =~
+               "Edit Reservation"
+
+      assert_raise ArgumentError, fn ->
+        show_live
+        |> form("#reservation-form", reservation: @admin_update_attrs)
+        |> render_submit()
+      end
+    end
+  end
+
+  describe "Admin Show" do
+    setup [:register_log_in_and_promote_user, :create_reservation]
+
+    test "updates reservation within modal", %{conn: conn, reservation: reservation} do
+      {:ok, show_live, _html} = live(conn, ~p"/reservations/#{reservation}")
+
+      assert show_live |> element("a", "Edit Reservation") |> render_click() =~
+               "Edit Reservation"
+
+      assert_patch(show_live, ~p"/reservations/#{reservation}/show/edit")
+
+      assert show_live
+             |> form("#reservation-form", reservation: @admin_invalid_attrs)
+             |> render_change() =~ "can&#39;t be blank"
+
+      assert show_live
+             |> form("#reservation-form", reservation: @admin_update_attrs)
+             |> render_submit()
+
+      assert_patch(show_live, ~p"/reservations/#{reservation}")
+
+      html = render(show_live)
+      assert html =~ "Reservation updated successfully"
+
+      assert has_element?(show_live, "p", "Accepted")
     end
   end
 
   describe "Messages" do
-    setup [:create_reservation, :register_and_log_in_user]
+    setup [:register_and_log_in_user, :create_reservation]
 
     test "displays messages", %{conn: conn, reservation: reservation} do
       {:ok, _show_live, html} = live(conn, ~p"/reservations/#{reservation}")
@@ -155,7 +224,7 @@ defmodule NewGearMotorsWeb.ReservationLiveTest do
       {:ok, show_live, _html} = live(conn, ~p"/reservations/#{reservation}")
 
       assert show_live
-             |> element("#messages-#{message.id} a", "Edit")
+             |> element("a#messages-#{message.id}-edit")
              |> render_click() =~
                "Edit Message"
 
@@ -179,7 +248,7 @@ defmodule NewGearMotorsWeb.ReservationLiveTest do
       {:ok, show_live, _html} = live(conn, ~p"/reservations/#{reservation}")
 
       assert show_live
-             |> element("#messages-#{message.id} a", "Delete")
+             |> element("a#messages-#{message.id}-delete")
              |> render_click()
 
       refute has_element?(show_live, "#message-#{message.id}")

@@ -38,6 +38,22 @@ defmodule NewGearMotors.Vehicles do
   def get_vehicle!(id), do: Repo.get!(Vehicle, id)
 
   @doc """
+  Gets a single vehicle.
+
+  Returns nil if the Vehicle does not exist.
+
+  ## Examples
+
+      iex> get_vehicle(123)
+      %Vehicle{}
+
+      iex> get_vehicle(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_vehicle(id), do: Repo.get(Vehicle, id)
+
+  @doc """
   Creates a vehicle.
 
   ## Examples

@@ -4,8 +4,6 @@ defmodule NewGearMotors.VehiclesFixtures do
   entities via the `NewGearMotors.Vehicles` context.
   """
 
-  alias NewGearMotors.Vehicles.Covers.Cover
-
   @doc """
   Generate a vehicle.
   """

@@ -18,7 +18,9 @@ defmodule NewGearMotors.Reservations do
 
   """
   def list_reservations do
-    Repo.all(Reservation)
+    Reservation
+    |> order_by(asc: :status)
+    |> Repo.all()
   end
 
   @doc """
@@ -27,10 +29,32 @@ defmodule NewGearMotors.Reservations do
   ## Examples
 
       iex> preload_messages(reservation)
-      [%Reservation{}, ...]
+      %Reservation{messages: []}
 
   """
   def preload_messages(reservation), do: Repo.preload(reservation, messages: [:from])
+
+  @doc """
+  Preloads a reservation's vehicle
+
+  ## Examples
+
+      iex> preload_vehicle(reservation)
+      %Reservation{vehicle: []}
+
+  """
+  def preload_vehicle(reservation), do: Repo.preload(reservation, :vehicle)
+
+  @doc """
+  Preloads a reservation's user
+
+  ## Examples
+
+      iex> preload_user(reservation)
+      %Reservation{user: []}
+
+  """
+  def preload_user(reservation), do: Repo.preload(reservation, :user)
 
   @doc """
   Gets a single reservation.

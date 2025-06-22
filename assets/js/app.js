@@ -23,6 +23,7 @@ import { LiveSocket } from "phoenix_live_view";
 import topbar from "topbar";
 
 import "./markdown-block.js";
+import "./humanize-date.js";
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")

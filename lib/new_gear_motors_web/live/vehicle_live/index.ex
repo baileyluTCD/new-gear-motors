@@ -4,8 +4,6 @@ defmodule NewGearMotorsWeb.VehicleLive.Index do
   alias NewGearMotors.Vehicles
   alias NewGearMotors.Vehicles.Vehicle
 
-  import NewGearMotorsWeb.VehicleHelper
-
   alias NewGearMotors.Vehicles.Covers.Cover
 
   on_mount {NewGearMotorsWeb.UserAuth, :mount_current_user}
@@ -21,7 +19,9 @@ defmodule NewGearMotorsWeb.VehicleLive.Index do
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do
-    if socket.assigns.current_user.is_admin do
+    current_user = socket.assigns.current_user
+
+    if current_user && current_user.is_admin do
       socket
       |> assign(:page_title, "Edit Vehicle")
       |> assign(:vehicle, Vehicles.get_vehicle!(id))

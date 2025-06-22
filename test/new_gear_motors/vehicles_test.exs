@@ -16,7 +16,6 @@ defmodule NewGearMotors.VehiclesTest do
 
   describe "vehicles" do
     alias NewGearMotors.Vehicles.Vehicle
-    alias NewGearMotors.Vehicles.Cover
 
     import NewGearMotors.VehiclesFixtures
 

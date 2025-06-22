@@ -12,7 +12,7 @@
       <h1 class="max-sm:mb-8 font-bold text-2xl text-center m-2">{@vehicle.name}</h1>
 
       <div class="max-sm:w-full max-sm:m-2 flex flex-row gap-4 max-sm:justify-between">
-        <.link>
+        <.link patch={~p"/reservations/vehicles/#{@vehicle}/new"}>
           <.button>Book Reservation</.button>
         </.link>
 
@@ -34,8 +34,9 @@
       />
     </span>
 
-    <div class="w-full px-8">
+    <div class="w-full px-2 shadow-xl">
       <.list>
+        <:title>Information</:title>
         <:item title="Price">{@vehicle.price}</:item>
         <:item title="Manufacturer">{@vehicle.manufacturer}</:item>
       </.list>
