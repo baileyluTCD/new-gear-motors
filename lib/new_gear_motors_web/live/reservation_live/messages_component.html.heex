@@ -1,24 +1,25 @@
 <div>
-  <h2 class="text-2xl font-semibold text-zinc-200 mt-10">
+  <h2 class="text-xl font-semibold text-zinc-200 mt-10 text-center">
     Messages
   </h2>
 
   <article id="messages" phx-update="stream">
-    <.box
+    <div
       :for={{id, message} <- @streams.messages}
       id={id}
-      class="my-4 transform-gpu transition-transform duration-300 ease-in-out hover:scale-105 hover:border-zinc-300"
+      class="my-6 transform-gpu transition-transform duration-300 ease-in-out hover:scale-105 hover:border-zinc-300"
     >
-      <div class="flex flex-row justify-between items-center bg-zinc-900 p-2 rounded-t-xl text-sm border-b border-zinc-700 min-h-14">
-        <p class="font-semibold">{shorten_text(message.from.email, 16)}</p>
+      <div class="flex flex-row justify-between items-center bg-zinc-900/50 p-2 text-sm min-h-14">
+        <p class="font-semibold" title={message.from.email}>
+          {shorten_text(message.from.email, 15)}
+        </p>
         <div class="flex flex-row gap-2">
           <.link
             :if={message.from == @current_user || @current_user.is_admin}
             patch={~p"/reservations/#{@reservation}/messages/#{message}/edit"}
+            title="Edit Message"
           >
-            <.button preset={:semi_transparent} class="px-2 py-1">
-              Edit
-            </.button>
+            <.icon name="hero-pencil-square" class="hover:text-green-500 my-3" />
           </.link>
           <.link
             :if={message.from == @current_user || @current_user.is_admin}
@@ -27,17 +28,16 @@
               |> hide("##{id}")
             }
             data-confirm="Are you sure?"
+            title="Delete Message"
           >
-            <.button preset={:semi_transparent}>
-              Delete
-            </.button>
+            <.icon name="hero-x-mark" class="hover:text-red-500 my-3" />
           </.link>
         </div>
       </div>
-      <div class="p-4">
+      <div class="p-4 bg-zinc-800/50">
         <markdown-block>{message.text}</markdown-block>
       </div>
-    </.box>
+    </div>
   </article>
 
   <.simple_form
@@ -52,7 +52,7 @@
       field={@form[:text]}
       value={@message_text}
       placeholder="Enter Message... (Supports Markdown)"
-      class="bg-linear-to-br from-neutral-800 via-zinc-800 to-zinc-900 rounded-xl border border-zinc-600 placeholder:text-zinc-400 focus:border-zinc-200"
+      class="bg-zinc-800/50 rounded-none placeholder:text-neutral-600 border-none"
     />
     <:actions>
       <.button phx-disable-with="Sending...">Send Message</.button>
