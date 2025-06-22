@@ -191,7 +191,7 @@ defmodule NewGearMotorsWeb.ReservationLiveTest do
       html = render(show_live)
       assert html =~ "Reservation updated successfully"
 
-      assert has_element?(show_live, "p", "accepted")
+      assert has_element?(show_live, "p", "Accepted")
     end
   end
 
@@ -225,7 +225,7 @@ defmodule NewGearMotorsWeb.ReservationLiveTest do
       {:ok, show_live, _html} = live(conn, ~p"/reservations/#{reservation}")
 
       assert show_live
-             |> element("#messages-#{message.id} a", "Edit")
+             |> element("a#messages-#{message.id}-edit")
              |> render_click() =~
                "Edit Message"
 
@@ -249,7 +249,7 @@ defmodule NewGearMotorsWeb.ReservationLiveTest do
       {:ok, show_live, _html} = live(conn, ~p"/reservations/#{reservation}")
 
       assert show_live
-             |> element("#messages-#{message.id} a", "Delete")
+             |> element("a#messages-#{message.id}-delete")
              |> render_click()
 
       refute has_element?(show_live, "#message-#{message.id}")

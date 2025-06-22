@@ -17,6 +17,7 @@
           <.link
             :if={message.from == @current_user || @current_user.is_admin}
             patch={~p"/reservations/#{@reservation}/messages/#{message}/edit"}
+            id={"#{id}-edit"}
             title="Edit Message"
           >
             <.icon name="hero-pencil-square" class="hover:text-green-500 my-3" />
@@ -28,6 +29,7 @@
               |> hide("##{id}")
             }
             data-confirm="Are you sure?"
+            id={"#{id}-delete"}
             title="Delete Message"
           >
             <.icon name="hero-x-mark" class="hover:text-red-500 my-3" />
