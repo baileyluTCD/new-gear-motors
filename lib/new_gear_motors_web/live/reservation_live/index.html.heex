@@ -8,7 +8,7 @@
 </.header>
 
 <div
-  class="absolute left-0 w-screen flex flex-col items-center hidden transform-gpu"
+  class="w-screen flex flex-col items-center hidden transform-gpu"
   phx-mounted={
     JS.show(
       transition:
@@ -36,7 +36,7 @@
         <.status mode={reservation.status} />
       </:col>
       <:col :let={{_id, reservation}} label="Planned meeting time" class="max-lg:hidden">
-        {reservation.planned_meeting_time}
+        <humanize-date>{reservation.planned_meeting_time}</humanize-date>
       </:col>
       <:action :let={{_id, reservation}}>
         <div class="sr-only">
