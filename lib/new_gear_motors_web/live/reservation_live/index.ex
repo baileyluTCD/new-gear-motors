@@ -67,7 +67,7 @@ defmodule NewGearMotorsWeb.ReservationLive.Index do
       nil ->
         socket
         |> put_flash(:error, "No vehicle exists for this id.")
-        |> push_redirect(to: ~p"/vehicles")
+        |> push_navigate(to: ~p"/vehicles")
 
       vehicle ->
         socket

@@ -567,7 +567,7 @@ defmodule NewGearMotorsWeb.CoreComponents do
   end
 
   slot :action, doc: "the slot for showing user actions in the last table column"
-  slot :empty_msg, doc: "the slot for rendering an empty message"
+  slot :empty_message, doc: "the slot for rendering an empty message"
 
   def table(assigns) do
     assigns =
@@ -649,7 +649,7 @@ defmodule NewGearMotorsWeb.CoreComponents do
     attr :title, :string, required: true
   end
 
-  attr :title, :string, required: true
+  slot :title, required: true
   attr :class, :string, default: nil
 
   def list(assigns) do

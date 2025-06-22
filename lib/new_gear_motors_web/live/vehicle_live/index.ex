@@ -4,8 +4,6 @@ defmodule NewGearMotorsWeb.VehicleLive.Index do
   alias NewGearMotors.Vehicles
   alias NewGearMotors.Vehicles.Vehicle
 
-  import NewGearMotorsWeb.VehicleHelper
-
   alias NewGearMotors.Vehicles.Covers.Cover
 
   on_mount {NewGearMotorsWeb.UserAuth, :mount_current_user}

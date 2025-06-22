@@ -6,7 +6,6 @@ defmodule NewGearMotorsWeb.ReservationLiveTest do
   import Phoenix.LiveViewTest
   import NewGearMotors.ReservationsFixtures
   import NewGearMotors.Reservations.MessagesFixtures
-  import NewGearMotors.AccountsFixtures
   import NewGearMotors.VehiclesFixtures
 
   @create_attrs %{planned_meeting_time: "2025-05-19T21:58:00"}

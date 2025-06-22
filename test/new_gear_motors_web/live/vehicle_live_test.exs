@@ -1,5 +1,4 @@
 defmodule NewGearMotorsWeb.VehicleLiveTest do
-  alias NewGearMotors.Vehicles.Vehicle
   use NewGearMotorsWeb.ConnCase
 
   import Phoenix.LiveViewTest
@@ -144,7 +143,7 @@ defmodule NewGearMotorsWeb.VehicleLiveTest do
   describe "Logged in Show" do
     setup [:create_vehicle, :register_and_log_in_user]
 
-    test "has no edit button", %{conn: conn, vehicle: vehicle} do
+    test "has no edit button", %{conn: conn} do
       {:ok, index_live, _html} = live(conn, ~p"/vehicles")
 
       refute has_element?(index_live, "a", "Edit")

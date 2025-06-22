@@ -1,9 +1,7 @@
 defmodule NewGearMotors.Vehicles.CoversTest do
   use NewGearMotors.DataCase
 
-  alias NewGearMotors.Vehicles
   alias NewGearMotors.Vehicles.Covers.Cover
-  alias NewGearMotors.Vehicles.Covers
 
   setup do
     File.mkdir_p("priv/static/test/images")

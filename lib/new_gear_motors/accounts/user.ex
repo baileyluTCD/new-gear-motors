@@ -102,7 +102,7 @@ defmodule NewGearMotors.Accounts.User do
 
   It requires the is_admin status to change otherwise an error is added.
   """
-  def promotion_changeset(user, attrs, opts \\ []) do
+  def promotion_changeset(user, attrs) do
     user
     |> cast(attrs, [:is_admin])
     |> validate_required([:is_admin])
