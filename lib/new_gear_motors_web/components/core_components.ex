@@ -576,8 +576,26 @@ defmodule NewGearMotorsWeb.CoreComponents do
       end
 
     ~H"""
+    <style scoped>
+      table:has(td) ~ #empty-list-message {
+          display: none;
+      }
+
+      table:not(:has(td)) ~ #empty-list-message {
+          display: block;
+      }
+
+      table:has(td) {
+          display: block;
+      }
+
+      table:not(:has(td)) {
+          display: none;
+      }
+    </style>
+
     <div class="text-center flex flex-col items-center">
-      <table :if={Enum.count(@rows) > 0} class="w-full mt-11">
+      <table class="w-full mt-11">
         <thead class="text-sm leading-6 text-zinc-100">
           <tr class="p-2 bg-zinc-900/50">
             <th :for={col <- @col} class={[col[:class], "py-6 font-bold"]}>
@@ -628,7 +646,7 @@ defmodule NewGearMotorsWeb.CoreComponents do
           </tr>
         </tbody>
       </table>
-      <div class="hidden first:block p-10 lg:max-w-2/3" id="empty-list-message">
+      <div class="p-10 lg:max-w-2/3" id="empty-list-message">
         {render_slot(@empty_message)}
       </div>
     </div>
