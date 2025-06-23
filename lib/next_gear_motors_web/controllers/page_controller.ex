@@ -8,4 +8,5 @@ defmodule NextGearMotorsWeb.PageController do
   end
 
   def contact(conn, _params), do: render(conn, :contact)
+  def about(conn, _params), do: render(conn, :about)
 end
