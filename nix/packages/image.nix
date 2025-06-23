@@ -4,6 +4,6 @@
   system,
 }:
 pkgs.dockerTools.buildLayeredImage {
-  name = "nix_phoenix_template_image";
-  config.Cmd = [ "${flake.packages.${system}.default}/bin/new-gear-motors" ];
+  name = "next_gear_motors_image";
+  config.Cmd = [ "${flake.packages.${system}.default}/bin/next-gear-motors" ];
 }

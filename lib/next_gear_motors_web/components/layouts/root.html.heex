@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content={get_csrf_token()} />
-    <.live_title suffix=" · New Gear Motors">
+    <.live_title suffix=" · NextGear Motors">
       {assigns[:page_title] || "Home"}
     </.live_title>
     <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
@@ -15,7 +15,7 @@
     <nav class="sticky top-3 z-50 shadow-10 flex flex-row justify-between items-center bg-zinc-950 rounded-3xl border border-zinc-800 my-3 mx-4 text-zinc-100 xl:5/6 md:p-2 xl:gap-16">
       <.link class="flex flex-row hover:text-zinc-300" href={~p"/"}>
         <.logo class="w-16 m-2" />
-        <p class="max-md:text-sm lg:text-lg p-1 text-center font-bold">New Gear Motors</p>
+        <p class="max-md:text-sm lg:text-lg p-1 text-center font-bold">NextGear Motors</p>
       </.link>
       <button
         id="open_panel_button"
@@ -79,7 +79,7 @@
       >
         <.link href={~p"/"} class="flex flex-col items-center border-b pb-3 mb-3">
           <.logo class="w-16 m-2" />
-          <h1 class="p-1 text-center text-lg">New Gear Motors</h1>
+          <h1 class="p-1 text-center text-lg">NextGear Motors</h1>
         </.link>
         <.link href={~p"/vehicles"} class="hover:text-zinc-300 my-3">
           Vehicles
