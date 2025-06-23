@@ -1,7 +1,7 @@
-defmodule NewGearMotors.VehiclesFixtures do
+defmodule NextGearMotors.VehiclesFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `NewGearMotors.Vehicles` context.
+  entities via the `NextGearMotors.Vehicles` context.
   """
 
   @doc """
@@ -23,7 +23,7 @@ defmodule NewGearMotors.VehiclesFixtures do
         price: "some price",
         cover: cover
       })
-      |> NewGearMotors.Vehicles.create_vehicle()
+      |> NextGearMotors.Vehicles.create_vehicle()
 
     vehicle
   end

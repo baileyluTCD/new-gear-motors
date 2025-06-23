@@ -1,4 +1,4 @@
-defmodule NewGearMotors.Repo.Migrations.CreateReservations do
+defmodule NextGearMotors.Repo.Migrations.CreateReservations do
   use Ecto.Migration
 
   def change do

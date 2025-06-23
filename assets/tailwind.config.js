@@ -8,8 +8,8 @@ const path = require("path");
 module.exports = {
   content: [
     "./js/**/*.js",
-    "../lib/new_gear_motors_web.ex",
-    "../lib/new_gear_motors_web/**/*.*ex",
+    "../lib/next_gear_motors_web.ex",
+    "../lib/next_gear_motors_web/**/*.*ex",
   ],
   theme: {
     extend: {

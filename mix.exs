@@ -1,9 +1,9 @@
-defmodule NewGearMotors.MixProject do
+defmodule NextGearMotors.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :new_gear_motors,
+      app: :next_gear_motors,
       version: "0.6.0",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -27,7 +27,7 @@ defmodule NewGearMotors.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {NewGearMotors.Application, []},
+      mod: {NextGearMotors.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -98,10 +98,10 @@ defmodule NewGearMotors.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.build": ["tailwind new_gear_motors", "esbuild new_gear_motors"],
+      "assets.build": ["tailwind next_gear_motors", "esbuild next_gear_motors"],
       "assets.deploy": [
-        "tailwind new_gear_motors --minify",
-        "esbuild new_gear_motors --minify",
+        "tailwind next_gear_motors --minify",
+        "esbuild next_gear_motors --minify",
         "phx.digest"
       ]
     ]

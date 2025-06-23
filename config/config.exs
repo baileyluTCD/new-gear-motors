@@ -7,19 +7,19 @@
 # General application configuration
 import Config
 
-config :new_gear_motors,
-  ecto_repos: [NewGearMotors.Repo],
+config :next_gear_motors,
+  ecto_repos: [NextGearMotors.Repo],
   generators: [timestamp_type: :utc_datetime, binary_id: true]
 
 # Configures the endpoint
-config :new_gear_motors, NewGearMotorsWeb.Endpoint,
+config :next_gear_motors, NextGearMotorsWeb.Endpoint,
   url: [host: "localhost"],
   adapter: Bandit.PhoenixAdapter,
   render_errors: [
-    formats: [html: NewGearMotorsWeb.ErrorHTML, json: NewGearMotorsWeb.ErrorJSON],
+    formats: [html: NextGearMotorsWeb.ErrorHTML, json: NextGearMotorsWeb.ErrorJSON],
     layout: false
   ],
-  pubsub_server: NewGearMotors.PubSub,
+  pubsub_server: NextGearMotors.PubSub,
   live_view: [signing_salt: "3yrfm40n"]
 
 # Configures the mailer
@@ -29,12 +29,12 @@ config :new_gear_motors, NewGearMotorsWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :new_gear_motors, NewGearMotors.Mailer, adapter: Swoosh.Adapters.Local
+config :next_gear_motors, NextGearMotors.Mailer, adapter: Swoosh.Adapters.Local
 
 # Configure esbuild (the version is required)
 config :esbuild,
   version: "0.17.11",
-  new_gear_motors: [
+  next_gear_motors: [
     args: ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets),
     cd: Path.expand("../assets", __DIR__),
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
@@ -43,7 +43,7 @@ config :esbuild,
 # Configure tailwind (the version is required)
 config :tailwind,
   version: "4.1.8",
-  new_gear_motors: [
+  next_gear_motors: [
     args: ~w(
       --input=assets/css/app.css
       --output=priv/static/assets/app.css

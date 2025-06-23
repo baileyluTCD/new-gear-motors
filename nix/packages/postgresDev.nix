@@ -6,7 +6,7 @@ let
 
   pgSetup = ''
     CREATE USER postgres WITH PASSWORD 'postgres' CREATEDB SUPERUSER;
-    CREATE DATABASE new_gear_motors_dev;
+    CREATE DATABASE next_gear_motors_dev;
   '';
 in
 pkgs.writeShellApplication {

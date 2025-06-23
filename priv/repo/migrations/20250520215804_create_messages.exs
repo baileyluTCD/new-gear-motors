@@ -1,4 +1,4 @@
-defmodule NewGearMotors.Repo.Migrations.CreateMessages do
+defmodule NextGearMotors.Repo.Migrations.CreateMessages do
   use Ecto.Migration
 
   def change do

@@ -1,0 +1,81 @@
+<.header>
+  Vehicles
+  <:actions>
+    <.link :if={@current_user && @current_user.is_admin} patch={~p"/vehicles/new"}>
+      <.button>New Vehicle</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<article
+  class="w-full flex flex-wrap mt-8 md:p-4 items-center justify-center mx-auto hidden transform-gpu"
+  id="vehicles"
+  phx-mounted={
+    JS.show(
+      transition:
+        {"ease-out duration-700", "opacity-0 translate-y-4", "opacity-100 translate-y-0"},
+      display: "flex"
+    )
+  }
+  phx-update="stream"
+>
+  <.box
+    :for={{id, vehicle} <- @streams.vehicles}
+    id={id}
+    class="w-68 md:w-72 lg:w-96 p-4 m-4 hover:border-zinc-400 hover:scale-105 transition duration-300 flex flex-col items-center"
+  >
+    <.link navigate={~p"/vehicles/#{vehicle}"} title={"More Details - #{vehicle.name}"}>
+      <div class="size-48 md:size-56 lg:size-80 overflow-hidden flex items-center justify-center">
+        <img
+          src={Cover.url(vehicle.cover)}
+          alt={"Vehicle Preview Image - #{vehicle.name}"}
+          class="rounded-xl shadow-xl"
+        />
+      </div>
+      <div class="flex flex-row w-full gap-4 justify-between mt-2">
+        <h2 class="text-2xl font-bold hover:underline">
+          {NextGearMotorsWeb.VehicleHelper.shorten_text(vehicle.name, 14)}
+        </h2>
+        <div class="flex flex-row gap-2">
+          <.link
+            :if={@current_user && @current_user.is_admin}
+            id={"#{id}-edit"}
+            patch={~p"/vehicles/#{vehicle}/edit"}
+            title="Edit Vehicle"
+          >
+            <.icon name="hero-pencil-square" class="hover:text-green-500 my-3" />
+          </.link>
+          <.link
+            :if={@current_user && @current_user.is_admin}
+            id={"#{id}-delete"}
+            phx-click={JS.push("delete", value: %{id: vehicle.id}) |> hide("##{id}")}
+            data-confirm="Are you sure?"
+            title="Delete Vehicle"
+          >
+            <.icon name="hero-x-mark" class="hover:text-red-500 my-3" />
+          </.link>
+        </div>
+      </div>
+      <p class="text-start w-full">{vehicle.price} | {vehicle.manufacturer}</p>
+    </.link>
+  </.box>
+  <p class="hidden first:block" id="empty-list-message">
+    No vehicles are currently available! Please check back later.
+  </p>
+</article>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="vehicle-modal"
+  show
+  on_cancel={JS.patch(~p"/vehicles")}
+>
+  <.live_component
+    module={NextGearMotorsWeb.VehicleLive.FormComponent}
+    id={@vehicle.id || :new}
+    title={@page_title}
+    action={@live_action}
+    vehicle={@vehicle}
+    patch={~p"/vehicles"}
+  />
+</.modal>

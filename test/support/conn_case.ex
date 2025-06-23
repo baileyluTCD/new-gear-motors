@@ -1,4 +1,4 @@
-defmodule NewGearMotorsWeb.ConnCase do
+defmodule NextGearMotorsWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -11,30 +11,30 @@ defmodule NewGearMotorsWeb.ConnCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use NewGearMotorsWeb.ConnCase, async: true`, although
+  by setting `use NextGearMotorsWeb.ConnCase, async: true`, although
   this option is not recommended for other databases.
   """
 
   use ExUnit.CaseTemplate
 
-  alias NewGearMotors.Accounts
+  alias NextGearMotors.Accounts
 
   using do
     quote do
       # The default endpoint for testing
-      @endpoint NewGearMotorsWeb.Endpoint
+      @endpoint NextGearMotorsWeb.Endpoint
 
-      use NewGearMotorsWeb, :verified_routes
+      use NextGearMotorsWeb, :verified_routes
 
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
-      import NewGearMotorsWeb.ConnCase
+      import NextGearMotorsWeb.ConnCase
     end
   end
 
   setup tags do
-    NewGearMotors.DataCase.setup_sandbox(tags)
+    NextGearMotors.DataCase.setup_sandbox(tags)
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 
@@ -47,7 +47,7 @@ defmodule NewGearMotorsWeb.ConnCase do
   test context.
   """
   def register_and_log_in_user(%{conn: conn}) do
-    user = NewGearMotors.AccountsFixtures.user_fixture()
+    user = NextGearMotors.AccountsFixtures.user_fixture()
     %{conn: log_in_user(conn, user), user: user}
   end
 
@@ -61,7 +61,7 @@ defmodule NewGearMotorsWeb.ConnCase do
   """
   def register_log_in_and_promote_user(%{conn: conn}) do
     user =
-      NewGearMotors.AccountsFixtures.user_fixture()
+      NextGearMotors.AccountsFixtures.user_fixture()
       |> Accounts.update_admin_status(%{is_admin: true})
 
     %{conn: log_in_user(conn, user), user: user}
@@ -73,7 +73,7 @@ defmodule NewGearMotorsWeb.ConnCase do
   It returns an updated `conn`.
   """
   def log_in_user(conn, user) do
-    token = NewGearMotors.Accounts.generate_user_session_token(user)
+    token = NextGearMotors.Accounts.generate_user_session_token(user)
 
     conn
     |> Phoenix.ConnTest.init_test_session(%{})

@@ -1,7 +1,7 @@
-defmodule NewGearMotors.AccountsFixtures do
+defmodule NextGearMotors.AccountsFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `NewGearMotors.Accounts` context.
+  entities via the `NextGearMotors.Accounts` context.
   """
 
   def unique_user_email, do: "user#{System.unique_integer()}@example.com"
@@ -19,7 +19,7 @@ defmodule NewGearMotors.AccountsFixtures do
     {:ok, user} =
       attrs
       |> valid_user_attributes()
-      |> NewGearMotors.Accounts.register_user()
+      |> NextGearMotors.Accounts.register_user()
 
     user
   end

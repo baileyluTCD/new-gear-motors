@@ -1,4 +1,4 @@
-defmodule NewGearMotors.Repo.Migrations.CreateVehicles do
+defmodule NextGearMotors.Repo.Migrations.CreateVehicles do
   use Ecto.Migration
 
   def change do
