@@ -517,6 +517,17 @@ defmodule NextGearMotors.AccountsTest do
     end
   end
 
+  describe "delete/1" do
+    setup do
+      %{user: user_fixture()}
+    end
+
+    test "deletes user", %{user: user} do
+      assert {:ok, %User{}} = Accounts.delete_user(user)
+      assert_raise Ecto.NoResultsError, fn -> Accounts.get_user!(user.id) end
+    end
+  end
+
   describe "inspect/2 for the User module" do
     test "does not include password" do
       refute inspect(%User{password: "123456"}) =~ "password: \"123456\""

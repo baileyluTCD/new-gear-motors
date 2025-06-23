@@ -207,4 +207,32 @@ defmodule NextGearMotorsWeb.UserSettingsLiveTest do
       assert message == "You must log in to access this page."
     end
   end
+
+  describe "delete account" do
+    setup %{conn: conn} do
+      user = user_fixture()
+      email = unique_user_email()
+
+      token =
+        extract_user_token(fn url ->
+          Accounts.deliver_user_update_email_instructions(%{user | email: email}, user.email, url)
+        end)
+
+      %{conn: log_in_user(conn, user), token: token, email: email, user: user}
+    end
+
+    test "deletes account and log out", %{conn: conn, user: user, token: token, email: email} do
+      {:ok, lv, _html} = live(conn, ~p"/users/settings")
+
+      assert {:error, {:live_redirect, %{kind: :push, to: "/users/settings"}}} =
+               lv
+               |> element("a", "Delete Account")
+               |> render_click()
+
+      assert {:error,
+              {:redirect,
+               %{to: "/users/log_in", flash: %{"error" => "You must log in to access this page."}}}} =
+               live(conn, ~p"/users/settings")
+    end
+  end
 end
