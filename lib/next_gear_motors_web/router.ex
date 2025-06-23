@@ -92,6 +92,7 @@ defmodule NextGearMotorsWeb.Router do
 
     get("/", PageController, :home)
     get("/contact", PageController, :contact)
+    get("/about", PageController, :about)
 
     live("/vehicles", VehicleLive.Index, :index)
     live("/vehicles/:id", VehicleLive.Show, :show)

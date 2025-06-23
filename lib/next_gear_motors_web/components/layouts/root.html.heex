@@ -39,6 +39,9 @@
         <.link href={~p"/contact"} class="hover:text-zinc-300 p-3">
           Contact Us
         </.link>
+        <.link href={~p"/about"} class="hover:text-zinc-300 p-3">
+          About
+        </.link>
       </div>
       <div class="hidden xl:block">
         <%= if @current_user do %>
@@ -92,6 +95,9 @@
         </.link>
         <.link href={~p"/contact"} class="hover:text-zinc-300 my-3">
           Contact Us
+        </.link>
+        <.link href={~p"/about"} class="hover:text-zinc-300 my-3">
+          About
         </.link>
         <div class="flex flex-col mt-10">
           <%= if @current_user do %>
