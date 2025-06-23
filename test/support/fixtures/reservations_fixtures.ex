@@ -1,12 +1,12 @@
-defmodule NewGearMotors.ReservationsFixtures do
+defmodule NextGearMotors.ReservationsFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `NewGearMotors.Reservations` context.
+  entities via the `NextGearMotors.Reservations` context.
   """
 
-  alias NewGearMotors.Reservations
-  import NewGearMotors.AccountsFixtures
-  import NewGearMotors.VehiclesFixtures
+  alias NextGearMotors.Reservations
+  import NextGearMotors.AccountsFixtures
+  import NextGearMotors.VehiclesFixtures
 
   @doc """
   Generate a reservation.

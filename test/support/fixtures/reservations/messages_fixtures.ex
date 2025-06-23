@@ -1,11 +1,11 @@
-defmodule NewGearMotors.Reservations.MessagesFixtures do
+defmodule NextGearMotors.Reservations.MessagesFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `NewGearMotors.Reservations.Messages` context.
+  entities via the `NextGearMotors.Reservations.Messages` context.
   """
-  alias NewGearMotors.AccountsFixtures
-  alias NewGearMotors.ReservationsFixtures
-  alias NewGearMotors.Reservations.Messages
+  alias NextGearMotors.AccountsFixtures
+  alias NextGearMotors.ReservationsFixtures
+  alias NextGearMotors.Reservations.Messages
 
   @doc """
   Generate a message.

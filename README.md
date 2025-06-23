@@ -1,6 +1,6 @@
-# New Gear Motors
+# NextGear Motors
 
-Elixir [Phoenix](https://www.phoenixframework.org/) App built and tested via [nix](https://nixos.org/) flakes for `New Gear Motors`.
+Elixir [Phoenix](https://www.phoenixframework.org/) App built and tested via [nix](https://nixos.org/) flakes for `NextGear Motors`.
 
 It should be noted that this repository uses a [CC BY-NC-SA 4.0](https://subjectguides.york.ac.uk/creative-commons/by-nc-sa) [License](./LICENSE.txt), hence non authorised commercial uses are not allowed. However, for much of the nix code an [MIT Licensed version](https://github.com/baileyluTCD/elixir-blueprint) exists which may be used and referenced.
 

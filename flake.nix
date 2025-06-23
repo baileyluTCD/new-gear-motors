@@ -1,5 +1,5 @@
 {
-  description = "New Gear Motors Flake";
+  description = "NextGear Motors Flake";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-unstable";
