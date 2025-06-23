@@ -9,7 +9,7 @@ in
 pkgs.beamPackages.mixRelease rec {
   inherit mixNixDeps;
 
-  pname = "next-gear-motors";
+  pname = "next_gear_motors";
   version = flake.lib.readMixVersion (flake + "/mix.exs");
 
   src = flake;
