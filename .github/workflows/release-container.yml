@@ -25,10 +25,11 @@ jobs:
         run: nix profile install nixpkgs#skopeo
 
       - name: Upload artifact
-        run: skopeo \
-          --insecure-policy \
-          copy \
-          docker-archive:./result \
-          docker://registry.fly.io/nextgearmotors:latest \
-          --dest-creds x:"$FLY_AUTH_TOKEN" \
-          --format v2s2
+        run: |
+          skopeo \
+            --insecure-policy \
+            copy \
+            docker-archive:./result \
+            docker://registry.fly.io/nextgearmotors:latest \
+            --dest-creds x:"$FLY_AUTH_TOKEN" \
+            --format v2s2
