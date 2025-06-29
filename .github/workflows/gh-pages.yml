@@ -16,7 +16,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build-config:
+  build-docs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
@@ -33,7 +33,7 @@ jobs:
           path: result/lib/doc/
 
   deploy:
-    needs: build-config
+    needs: build-docs
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

@@ -1,0 +1,34 @@
+name: Deploy new gear motors release container
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-image:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+
+      - name: Build image
+        run: nix build .#image --accept-flake-config
+
+      - name: Install Skopeo
+        run: nix-env -iA nixpkgs.skopeo
+
+      - name: Upload artifact
+        run: skopeo \
+          --insecure-policy \
+          copy \
+          docker-archive:./result \
+          docker://registry.fly.io/nextgearmotors:latest \
+          --dest-creds x:"$FLY_AUTH_TOKEN" \
+          --format v2s2
