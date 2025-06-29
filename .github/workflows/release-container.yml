@@ -30,6 +30,6 @@ jobs:
             --insecure-policy \
             copy \
             docker-archive:./result \
-            docker://registry.fly.io/nextgearmotors:latest \
+            docker://registry.fly.io/next-gear-motors:latest \
             --dest-creds x:"${{ secrets.FLY_API_TOKEN }}" \
             --format v2s2
