@@ -33,7 +33,7 @@ jobs:
           path: result/lib/doc/
 
   deploy:
-    needs: build-config
+    needs: build-docs
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

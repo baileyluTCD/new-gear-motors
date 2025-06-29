@@ -21,8 +21,11 @@ jobs:
       - name: Build image
         run: nix build .#image --accept-flake-config
 
+      - name: Install Skopeo
+        run: nix-env -iA nixpkgs.skopeo
+
       - name: Upload artifact
-        run: nix run nixpkgs#skopeo -- \
+        run: skopeo \
           --insecure-policy \
           copy \
           docker-archive:./result \
