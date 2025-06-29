@@ -2,6 +2,7 @@ defmodule NextGearMotorsWeb.UserSettingsLive do
   use NextGearMotorsWeb, :live_view
 
   alias NextGearMotors.Accounts
+  alias NextGearMotorsWeb.UserAuth
 
   def render(assigns) do
     ~H"""
@@ -10,7 +11,7 @@ defmodule NextGearMotorsWeb.UserSettingsLive do
       <:subtitle>Manage your account email address and password settings</:subtitle>
     </.header>
 
-    <div class="space-y-12 divide-y">
+    <div class="space-y-12">
       <div>
         <.simple_form
           for={@email_form}
@@ -69,6 +70,11 @@ defmodule NextGearMotorsWeb.UserSettingsLive do
           </:actions>
         </.simple_form>
       </div>
+      <.link phx-click={JS.push("delete_account")} data-confirm="Are you sure?">
+        <.button preset={:semi_transparent}>
+          Delete Account
+        </.button>
+      </.link>
     </div>
     """
   end
@@ -145,6 +151,13 @@ defmodule NextGearMotorsWeb.UserSettingsLive do
       |> to_form()
 
     {:noreply, assign(socket, password_form: password_form, current_password: password)}
+  end
+
+  def handle_event("delete_account", params, socket) do
+    socket.assigns.current_user
+    |> Accounts.delete_user()
+
+    {:noreply, push_navigate(socket, to: ~p"/users/settings")}
   end
 
   def handle_event("update_password", params, socket) do
