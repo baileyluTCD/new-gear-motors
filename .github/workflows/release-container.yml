@@ -31,5 +31,5 @@ jobs:
             copy \
             docker-archive:./result \
             docker://registry.fly.io/nextgearmotors:latest \
-            --dest-creds x:"${{ secrets.FLY_AUTH_TOKEN }}" \
+            --dest-creds x:"${{ secrets.FLY_API_TOKEN }}" \
             --format v2s2
