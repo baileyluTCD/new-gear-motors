@@ -25,6 +25,8 @@ pkgs.mkShell {
     elixir
     nodejs
     watchman
+    flyctl
+    skopeo
     install-deps
     flake.packages.${system}.appDependencies
     flake.lib.${system}.treefmt.config.build.wrapper
