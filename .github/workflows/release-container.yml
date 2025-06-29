@@ -22,7 +22,7 @@ jobs:
         run: nix build .#image --accept-flake-config
 
       - name: Install Skopeo
-        run: nix-env -iA nixpkgs.skopeo
+        run: nix profile install nixpkgs#skopeo
 
       - name: Upload artifact
         run: skopeo \
