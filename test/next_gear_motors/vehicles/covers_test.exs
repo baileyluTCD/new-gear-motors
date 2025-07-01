@@ -4,12 +4,12 @@ defmodule NextGearMotors.Vehicles.CoversTest do
   alias NextGearMotors.Vehicles.Covers.Cover
 
   setup do
-    File.mkdir_p("priv/static/test/images")
+    File.mkdir_p("priv/static/test/uploads")
     File.mkdir_p("priv/static/test/tmp")
     System.put_env("TMPDIR", "priv/static/tmp")
 
     on_exit(fn ->
-      File.rm_rf("priv/static/test/images")
+      File.rm_rf("priv/static/test/uploads")
       File.rm_rf("priv/static/test/tmp")
     end)
   end

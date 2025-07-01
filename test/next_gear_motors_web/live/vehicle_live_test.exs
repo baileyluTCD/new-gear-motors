@@ -95,7 +95,7 @@ defmodule NextGearMotorsWeb.VehicleLiveTest do
 
       assert index_live
              |> file_input("#vehicle-form", :cover, [@cover])
-             |> render_upload("car.jpg") =~ "img src=\"/images/car"
+             |> render_upload("car.jpg") =~ "img src=\"/uploads/car"
 
       assert index_live
              |> form("#vehicle-form", vehicle: @create_attrs)
@@ -168,7 +168,7 @@ defmodule NextGearMotorsWeb.VehicleLiveTest do
 
       assert show_live
              |> file_input("#vehicle-form", :cover, [@updated_cover])
-             |> render_upload("updated_car.jpg") =~ "img src=\"/images/car"
+             |> render_upload("updated_car.jpg") =~ "img src=\"/uploads/car"
 
       assert show_live
              |> form("#vehicle-form", vehicle: @update_attrs)

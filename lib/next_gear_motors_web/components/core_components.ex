@@ -1,7 +1,8 @@
 defmodule NextGearMotorsWeb.CoreComponents do
   use Phoenix.VerifiedRoutes,
     endpoint: NextGearMotorsWeb.Endpoint,
-    router: NextGearMotorsWeb.Router
+    router: NextGearMotorsWeb.Router,
+    statics: ~w(images)
 
   @moduledoc """
   Provides core UI components.
@@ -35,7 +36,7 @@ defmodule NextGearMotorsWeb.CoreComponents do
 
   def logo(assigns) do
     ~H"""
-    <img class={@class} src={~p"/assets/logo_no_text.svg"} alt="NextGear Motors Logo" />
+    <img class={@class} src={~p"/images/logo_no_text.svg"} alt="NextGear Motors Logo" />
     """
   end
 
