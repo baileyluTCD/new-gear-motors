@@ -26,7 +26,13 @@ erl_crash.dump
 next_gear_motors-*.tar
 
 # Ignore assets that are produced by build tools.
-/priv/static
+/priv/static/assets
+
+# Ignore assets that are produced by tests.
+/priv/static/test/
+
+# Ignore temporary image uploads.
+/priv/static/uploads/
 
 # Ignore digested assets cache.
 /priv/static/cache_manifest.json
