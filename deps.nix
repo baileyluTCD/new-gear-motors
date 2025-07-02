@@ -434,6 +434,51 @@ let
         in
         drv;
 
+      ex_aws =
+        let
+          version = "2.1.9";
+          drv = buildMix {
+            inherit version;
+            name = "ex_aws";
+            appConfigPath = ./config;
+
+            src = fetchHex {
+              inherit version;
+              pkg = "ex_aws";
+              sha256 = "3e6c776703c9076001fbe1f7c049535f042cb2afa0d2cbd3b47cbc4e92ac0d10";
+            };
+
+            beamDeps = [
+              hackney
+              jason
+              sweet_xml
+            ];
+          };
+        in
+        drv;
+
+      ex_aws_s3 =
+        let
+          version = "2.5.7";
+          drv = buildMix {
+            inherit version;
+            name = "ex_aws_s3";
+            appConfigPath = ./config;
+
+            src = fetchHex {
+              inherit version;
+              pkg = "ex_aws_s3";
+              sha256 = "858e51241e50181e29aa2bc128fef548873a3a9cd580471f57eda5b64dec937f";
+            };
+
+            beamDeps = [
+              ex_aws
+              sweet_xml
+            ];
+          };
+        in
+        drv;
+
       ex_doc =
         let
           version = "0.38.1";
@@ -1166,6 +1211,23 @@ let
         in
         drv;
 
+      sweet_xml =
+        let
+          version = "0.7.5";
+          drv = buildMix {
+            inherit version;
+            name = "sweet_xml";
+            appConfigPath = ./config;
+
+            src = fetchHex {
+              inherit version;
+              pkg = "sweet_xml";
+              sha256 = "193b28a9b12891cae351d81a0cead165ffe67df1b73fe5866d10629f4faefb12";
+            };
+          };
+        in
+        drv;
+
       swoosh =
         let
           version = "1.19.1";
@@ -1182,6 +1244,7 @@ let
 
             beamDeps = [
               bandit
+              ex_aws
               finch
               hackney
               jason
@@ -1319,7 +1382,10 @@ let
             };
 
             beamDeps = [
+              ex_aws
+              ex_aws_s3
               hackney
+              sweet_xml
             ];
           };
         in

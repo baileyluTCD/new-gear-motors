@@ -20,3 +20,8 @@ config :logger, level: :info
 
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.
+
+config :waffle,
+  storage: Waffle.Storage.S3,
+  bucket: {:system, "AWS_S3_BUCKET"},
+  asset_host: {:system, "ASSET_HOST"}

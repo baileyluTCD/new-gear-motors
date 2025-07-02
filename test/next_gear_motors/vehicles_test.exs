@@ -2,6 +2,7 @@ defmodule NextGearMotors.VehiclesTest do
   use NextGearMotors.DataCase
 
   alias NextGearMotors.Vehicles
+  alias NextGearMotors.Vehicles.Covers.Cover
 
   setup do
     File.mkdir_p("priv/static/test/uploads")
@@ -60,6 +61,7 @@ defmodule NextGearMotors.VehiclesTest do
 
     test "update_vehicle/2 with valid data updates the vehicle" do
       vehicle = vehicle_fixture()
+      prev_cover = vehicle.cover
 
       updated_cover = %Plug.Upload{
         path: "test/support/fixtures/vehicles_fixtures/updated_car.jpg",
@@ -81,6 +83,8 @@ defmodule NextGearMotors.VehiclesTest do
       assert vehicle.price == "some updated price"
       assert vehicle.manufacturer == "some updated manufacturer"
       assert vehicle.cover.file_name == "updated_car.jpg"
+
+      refute File.exists?("priv/static" <> Cover.url(prev_cover))
     end
 
     test "update_vehicle/2 with invalid data returns error changeset" do
@@ -91,8 +95,12 @@ defmodule NextGearMotors.VehiclesTest do
 
     test "delete_vehicle/1 deletes the vehicle" do
       vehicle = vehicle_fixture()
+      prev_cover = vehicle.cover
+
       assert {:ok, %Vehicle{}} = Vehicles.delete_vehicle(vehicle)
       assert_raise Ecto.NoResultsError, fn -> Vehicles.get_vehicle!(vehicle.id) end
+
+      refute File.exists?("priv/static" <> Cover.url(prev_cover))
     end
 
     test "change_vehicle/1 returns a vehicle changeset" do
