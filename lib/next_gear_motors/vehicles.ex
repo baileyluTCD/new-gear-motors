@@ -7,6 +7,7 @@ defmodule NextGearMotors.Vehicles do
   alias NextGearMotors.Repo
 
   alias NextGearMotors.Vehicles.Vehicle
+  alias NextGearMotors.Vehicles.Covers.Cover
 
   @doc """
   Returns the list of vehicles.
@@ -84,6 +85,10 @@ defmodule NextGearMotors.Vehicles do
 
   """
   def update_vehicle(%Vehicle{} = vehicle, attrs) do
+    if Map.get(attrs, "cover", "") != vehicle.cover do
+      Cover.delete({vehicle.cover, vehicle})
+    end
+
     vehicle
     |> Vehicle.changeset(attrs)
     |> Repo.update()
@@ -102,6 +107,8 @@ defmodule NextGearMotors.Vehicles do
 
   """
   def delete_vehicle(%Vehicle{} = vehicle) do
+    Cover.delete({vehicle.cover, vehicle})
+
     Repo.delete(vehicle)
   end
 
