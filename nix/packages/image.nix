@@ -24,7 +24,6 @@ pkgs.dockerTools.buildLayeredImage {
   contents = [
     nextGearMotors
     pkgs.beamMinimalPackages.erlang
-    flake.packages.${system}.appDependencies
   ];
 
   config.Cmd = [
