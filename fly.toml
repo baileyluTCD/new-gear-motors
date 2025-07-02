@@ -10,6 +10,10 @@ PHX_HOST = 'next-gear-motors.fly.dev'
 PORT = '4000'
 ECTO_IPV6 = 'true'
 ERL_AFLAGS = '-proto_dist inet6_tcp'
+ELIXIR_ERL_OPTIONS = "+fnu"
+AWS_ENDPOINT_URL_S3 = "https://fly.storage.tigris.dev "
+AWS_REGION = "auto"
+BUCKET_NAME = "weathered-butterfly-4548"
 
 [http_service]
 internal_port = 4000
