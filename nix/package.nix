@@ -24,6 +24,7 @@ pkgs.beamPackages.mixRelease rec {
     flake.packages.${system}.appDependencies
     nodejs
     npmHooks.npmConfigHook
+    makeWrapper
   ];
 
   npmDeps = pkgs.fetchNpmDeps {
@@ -52,5 +53,10 @@ pkgs.beamPackages.mixRelease rec {
     mix do \
       app.config --no-deps-check --no-compile, \
       assets.deploy --no-deps-check
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/next_gear_motors \
+      --set PATH ${pkgs.lib.makeBinPath [ flake.packages.${system}.appDependencies ]}
   '';
 }
