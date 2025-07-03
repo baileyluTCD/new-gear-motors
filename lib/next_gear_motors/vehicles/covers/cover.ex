@@ -10,8 +10,11 @@ defmodule NextGearMotors.Vehicles.Covers.Cover do
   @versions [:original]
   @extensions ~w(.jpg .jpeg .gif .png .avif)
 
+  defp to_filename(%{filename: name}), do: name
+  defp to_filename(%{file_name: name}), do: name
+
   def validate({file, _}) do
-    file_extension = file.file_name |> Path.extname() |> String.downcase()
+    file_extension = to_filename(file) |> Path.extname() |> String.downcase()
 
     case Enum.member?(@extensions, file_extension) do
       true -> :ok
@@ -24,8 +27,10 @@ defmodule NextGearMotors.Vehicles.Covers.Cover do
   end
 
   def filename(_version, {file, _scope}) do
-    hash = :crypto.hash(:sha256, file.file_name) |> Base.encode16()
-    file_title = file.file_name |> Path.rootname() |> String.downcase()
+    name = to_filename(file)
+
+    hash = :crypto.hash(:sha256, name) |> Base.encode16()
+    file_title = name |> Path.rootname() |> String.downcase()
 
     "#{file_title}-#{hash}"
   end
