@@ -25,3 +25,13 @@ config :waffle,
   storage: Waffle.Storage.S3,
   bucket: {:system, "BUCKET_NAME"},
   asset_host: {:system, "AWS_ENDPOINT_URL_S3"}
+
+config :ex_aws,
+  debug_requests: true,
+  access_key_id: {:system, "AWS_ACCESS_KEY_ID"},
+  secret_access_key: {:system, "AWS_SECRET_ACCESS_KEY"}
+
+config :ex_aws, :s3,
+  scheme: "https://",
+  host: "fly.storage.tigris.dev",
+  region: "auto"
