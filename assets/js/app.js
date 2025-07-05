@@ -24,6 +24,7 @@ import topbar from "topbar";
 
 import "./markdown-block.js";
 import "./humanize-date.js";
+import "./data-animate.js";
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
