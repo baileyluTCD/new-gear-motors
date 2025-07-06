@@ -4,12 +4,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content={get_csrf_token()} />
+    <meta
+      name="description"
+      content="NextGear Motors are an independent car dealership in Dublin, Ireland, who specialize in the sale of anything from cars or 4x4s to vans."
+    />
     <.live_title suffix=" · NextGear Motors">
       {assigns[:page_title] || "Home"}
     </.live_title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
+      defer
       href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
       rel="stylesheet"
     />
@@ -32,6 +37,7 @@
           |> JS.toggle_class("pointer-events-none", to: "#side_panel_bg")
         }
         class="transform-gpu transition-transform duration-300 ease-in-out xl:hidden hover:text-zinc-300"
+        name="Open side panel menu"
       >
         <.icon name="hero-bars-3" class="m-3" />
       </button>
