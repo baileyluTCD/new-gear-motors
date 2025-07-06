@@ -42,7 +42,7 @@ defmodule NextGearMotors.VehiclesTest do
       valid_attrs = %{
         name: "some name",
         description: "some description",
-        price: "some price",
+        price: "€40,000",
         manufacturer: "some manufacturer",
         cover: cover
       }
@@ -50,9 +50,27 @@ defmodule NextGearMotors.VehiclesTest do
       assert {:ok, %Vehicle{} = vehicle} = Vehicles.create_vehicle(valid_attrs)
       assert vehicle.name == "some name"
       assert vehicle.description == "some description"
-      assert vehicle.price == "some price"
+      assert vehicle.price == "€40,000"
       assert vehicle.manufacturer == "some manufacturer"
       assert vehicle.cover.file_name == "car.jpg"
+    end
+
+    test "create_vehicle/1 with invalid price returns error changeset" do
+      cover = %Plug.Upload{
+        path: "test/support/fixtures/vehicles_fixtures/car.jpg",
+        filename: "car.jpg",
+        content_type: "image/jpeg"
+      }
+
+      invalid_attrs = %{
+        name: "some name",
+        description: "some description",
+        price: "invalid price",
+        manufacturer: "some manufacturer",
+        cover: cover
+      }
+
+      assert {:error, %Ecto.Changeset{}} = Vehicles.create_vehicle(invalid_attrs)
     end
 
     test "create_vehicle/1 with invalid data returns error changeset" do
@@ -72,7 +90,7 @@ defmodule NextGearMotors.VehiclesTest do
       update_attrs = %{
         name: "some updated name",
         description: "some updated description",
-        price: "some updated price",
+        price: "€50,000",
         manufacturer: "some updated manufacturer",
         cover: updated_cover
       }
@@ -80,7 +98,7 @@ defmodule NextGearMotors.VehiclesTest do
       assert {:ok, %Vehicle{} = vehicle} = Vehicles.update_vehicle(vehicle, update_attrs)
       assert vehicle.name == "some updated name"
       assert vehicle.description == "some updated description"
-      assert vehicle.price == "some updated price"
+      assert vehicle.price == "€50,000"
       assert vehicle.manufacturer == "some updated manufacturer"
       assert vehicle.cover.file_name == "updated_car.jpg"
 

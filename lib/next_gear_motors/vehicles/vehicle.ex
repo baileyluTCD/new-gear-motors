@@ -28,5 +28,8 @@ defmodule NextGearMotors.Vehicles.Vehicle do
     |> cast(attrs, [:name, :price, :description, :manufacturer, :cover])
     |> cast_attachments(attrs, [:cover])
     |> validate_required([:name, :price, :description, :manufacturer, :cover])
+    |> validate_format(:price, ~r/^€[0-9|,]*/,
+      message: "price must be a number in euro - i.e. '€20,000'"
+    )
   end
 end

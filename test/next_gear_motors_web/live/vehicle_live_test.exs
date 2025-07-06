@@ -7,13 +7,13 @@ defmodule NextGearMotorsWeb.VehicleLiveTest do
   @create_attrs %{
     name: "some name",
     description: "some description",
-    price: "some price",
+    price: "€40,000",
     manufacturer: "some manufacturer"
   }
   @update_attrs %{
     name: "some updated name",
     description: "some updated description",
-    price: "some updated price",
+    price: "€50,000",
     manufacturer: "some updated manufacturer"
   }
   @invalid_attrs %{name: nil, description: nil, price: nil, manufacturer: nil}
