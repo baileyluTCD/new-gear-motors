@@ -11,4 +11,5 @@ defmodule NextGearMotorsWeb.PageController do
   def about(conn, _params), do: render(conn, :about)
   def privacy(conn, _params), do: render(conn, :privacy)
   def cookies(conn, _params), do: render(conn, :cookies)
+  def not_found(conn, _params), do: render(conn, :not_found)
 end
