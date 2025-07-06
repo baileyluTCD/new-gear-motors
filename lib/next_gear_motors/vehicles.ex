@@ -49,7 +49,7 @@ defmodule NextGearMotors.Vehicles do
       %Vehicle{}
 
       iex> get_vehicle(456)
-      ** (Ecto.NoResultsError)
+      nil
 
   """
   def get_vehicle(id), do: Repo.get(Vehicle, id)

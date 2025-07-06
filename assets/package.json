@@ -8,6 +8,7 @@
     "../deps/*"
   ],
   "dependencies": {
+    "@tailwindcss/typography": "^0.5.16",
     "marked": "^15.0.12",
     "phoenix": "*",
     "phoenix_html": "*",

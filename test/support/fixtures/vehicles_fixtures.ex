@@ -20,7 +20,7 @@ defmodule NextGearMotors.VehiclesFixtures do
         description: "some description",
         manufacturer: "some manufacturer",
         name: "some name",
-        price: "some price",
+        price: "€40,000",
         cover: cover
       })
       |> NextGearMotors.Vehicles.create_vehicle()

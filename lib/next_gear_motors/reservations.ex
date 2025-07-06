@@ -24,37 +24,16 @@ defmodule NextGearMotors.Reservations do
   end
 
   @doc """
-  Preloads a reservation's messages
+  Returns a reservation with some associations preloads - i.e. user, vehicle, etc
 
   ## Examples
 
-      iex> preload_messages(reservation)
-      %Reservation{messages: []}
+      iex> preload(reservation, associations)
+      %Reservation{}
 
   """
-  def preload_messages(reservation), do: Repo.preload(reservation, messages: [:from])
-
-  @doc """
-  Preloads a reservation's vehicle
-
-  ## Examples
-
-      iex> preload_vehicle(reservation)
-      %Reservation{vehicle: []}
-
-  """
-  def preload_vehicle(reservation), do: Repo.preload(reservation, :vehicle)
-
-  @doc """
-  Preloads a reservation's user
-
-  ## Examples
-
-      iex> preload_user(reservation)
-      %Reservation{user: []}
-
-  """
-  def preload_user(reservation), do: Repo.preload(reservation, :user)
+  def preload(reservation, associations),
+    do: Repo.preload(reservation, associations)
 
   @doc """
   Gets a single reservation.
