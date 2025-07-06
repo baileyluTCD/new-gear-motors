@@ -12,8 +12,7 @@ defmodule NextGearMotorsWeb.ReservationLive.Show do
   def mount(%{"id" => id}, _session, socket) do
     reservation =
       Reservations.get_reservation!(id)
-      |> Reservations.preload_vehicle()
-      |> Reservations.preload_user()
+      |> Reservations.preload([:vehicle, :user])
 
     PubSub.subscribe(NextGearMotors.PubSub, "messages:#{id}")
 

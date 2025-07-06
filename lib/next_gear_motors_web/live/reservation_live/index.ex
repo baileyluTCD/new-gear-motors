@@ -42,8 +42,7 @@ defmodule NextGearMotorsWeb.ReservationLive.Index do
   def row_with_user_and_vehicle({id, reservation}) do
     reservation =
       reservation
-      |> Reservations.preload_vehicle()
-      |> Reservations.preload_user()
+      |> Reservations.preload([:vehicle, :user])
 
     {
       id,
@@ -54,7 +53,7 @@ defmodule NextGearMotorsWeb.ReservationLive.Index do
   defp apply_action(socket, :edit, %{"id" => id}) do
     reservation =
       Reservations.get_reservation!(id)
-      |> Reservations.preload_vehicle()
+      |> Reservations.preload(:vehicle)
 
     socket
     |> assign(:page_title, "Edit Reservation")
