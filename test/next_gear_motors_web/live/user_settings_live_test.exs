@@ -221,7 +221,7 @@ defmodule NextGearMotorsWeb.UserSettingsLiveTest do
       %{conn: log_in_user(conn, user), token: token, email: email, user: user}
     end
 
-    test "deletes account and log out", %{conn: conn, user: user, token: token, email: email} do
+    test "deletes account and log out", %{conn: conn} do
       {:ok, lv, _html} = live(conn, ~p"/users/settings")
 
       assert {:error, {:live_redirect, %{kind: :push, to: "/users/settings"}}} =
