@@ -414,7 +414,7 @@ defmodule NextGearMotorsWeb.CoreComponents do
 
     ~H"""
     <div>
-      <label class="flex items-center gap-4 text-sm leading-6 text-zinc-400">
+      <label class="text-sm text-zinc-400">
         <input type="hidden" name={@name} value="false" disabled={@rest[:disabled]} />
         <input
           type="checkbox"
@@ -422,7 +422,7 @@ defmodule NextGearMotorsWeb.CoreComponents do
           name={@name}
           value="true"
           checked={@checked}
-          class="rounded-sm border-zinc-700 text-zinc-100 focus:ring-0"
+          class="rounded-sm border-raw-sienna-700 text-zinc-100 focus:ring-0 checked:bg-raw-sienna-400"
           {@rest}
         />
         {@label}
