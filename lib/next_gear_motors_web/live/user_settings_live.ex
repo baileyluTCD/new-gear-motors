@@ -2,7 +2,6 @@ defmodule NextGearMotorsWeb.UserSettingsLive do
   use NextGearMotorsWeb, :live_view
 
   alias NextGearMotors.Accounts
-  alias NextGearMotorsWeb.UserAuth
 
   def render(assigns) do
     ~H"""
@@ -153,7 +152,7 @@ defmodule NextGearMotorsWeb.UserSettingsLive do
     {:noreply, assign(socket, password_form: password_form, current_password: password)}
   end
 
-  def handle_event("delete_account", params, socket) do
+  def handle_event("delete_account", _params, socket) do
     socket.assigns.current_user
     |> Accounts.delete_user()
 

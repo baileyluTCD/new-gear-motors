@@ -33,6 +33,14 @@ defmodule NextGearMotorsWeb.UserRegistrationLive do
 
         <.input field={@form[:email]} type="email" label="Email" required />
         <.input field={@form[:password]} type="password" label="Password" required />
+        <.input
+          field={@form[:accepted_privacy_policy]}
+          type="checkbox"
+          label={
+            ~H"Accept <.link navigate={~p'/privacy'} class='hover:underline text-blue-400'>Privacy Policy</.link>"
+          }
+          required
+        />
 
         <:actions>
           <.button phx-disable-with="Creating account..." class="w-full">Create an account</.button>
