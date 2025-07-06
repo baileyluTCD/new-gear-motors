@@ -17,6 +17,7 @@ defmodule NextGearMotors.Accounts.User do
     field :current_password, :string, virtual: true, redact: true
     field :confirmed_at, :utc_datetime
     field :is_admin, :boolean
+    field :accepted_privacy_policy, :boolean, virtual: true
     has_many :reservations, NextGearMotors.Reservations.Reservation
 
     timestamps(type: :utc_datetime)
@@ -47,10 +48,19 @@ defmodule NextGearMotors.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password, :is_admin])
+    |> cast(attrs, [:email, :password, :is_admin, :accepted_privacy_policy])
     |> put_change(:is_admin, false)
     |> validate_email(opts)
     |> validate_password(opts)
+    |> validate_privacy_policy(opts)
+  end
+
+  defp validate_privacy_policy(changeset, _opts) do
+    changeset
+    |> validate_required([:accepted_privacy_policy])
+    |> validate_acceptance(:accepted_privacy_policy,
+      message: "you must accept the privacy policy to continue"
+    )
   end
 
   defp validate_email(changeset, opts) do
