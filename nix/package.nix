@@ -32,7 +32,7 @@ pkgs.beamPackages.mixRelease rec {
 
     pname = "${pname}-npm-deps";
     src = (flake + "/assets");
-    hash = "sha256-nraoH7P/9t30QyIVXFWnGPy7owAm0Xy8YlmUfWdxDrk=";
+    hash = "sha256-3L63uGmyxHC3AsGdO44LXUMLwxQMTSz40a4D2P/sEmI=";
   };
 
   npmRoot = "./assets";
