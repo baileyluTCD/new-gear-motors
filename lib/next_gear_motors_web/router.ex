@@ -98,5 +98,7 @@ defmodule NextGearMotorsWeb.Router do
 
     live("/vehicles", VehicleLive.Index, :index)
     live("/vehicles/:id", VehicleLive.Show, :show)
+
+    get("/*path", PageController, :not_found)
   end
 end
