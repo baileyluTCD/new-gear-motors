@@ -372,6 +372,29 @@ let
         in
         drv;
 
+      ecto_psql_extras =
+        let
+          version = "0.8.8";
+          drv = buildMix {
+            inherit version;
+            name = "ecto_psql_extras";
+            appConfigPath = ./config;
+
+            src = fetchHex {
+              inherit version;
+              pkg = "ecto_psql_extras";
+              sha256 = "04c63d92b141723ad6fed2e60a4b461ca00b3594d16df47bbc48f1f4534f2c49";
+            };
+
+            beamDeps = [
+              ecto_sql
+              postgrex
+              table_rex
+            ];
+          };
+        in
+        drv;
+
       ecto_sql =
         let
           version = "3.13.2";
@@ -1037,6 +1060,7 @@ let
 
             beamDeps = [
               ecto
+              ecto_psql_extras
               mime
               phoenix_live_view
               telemetry_metrics
@@ -1252,6 +1276,23 @@ let
               plug
               telemetry
             ];
+          };
+        in
+        drv;
+
+      table_rex =
+        let
+          version = "4.1.0";
+          drv = buildMix {
+            inherit version;
+            name = "table_rex";
+            appConfigPath = ./config;
+
+            src = fetchHex {
+              inherit version;
+              pkg = "table_rex";
+              sha256 = "95932701df195d43bc2d1c6531178fc8338aa8f38c80f098504d529c43bc2601";
+            };
           };
         in
         drv;
