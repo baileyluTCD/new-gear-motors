@@ -10,6 +10,8 @@ defmodule NextGearMotorsWeb.VehicleLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
+    :telemetry.execute([:next_gear_motors, :vehicles], %{visits: 1})
+
     {:ok, stream(socket, :vehicles, Vehicles.list_vehicles())}
   end
 
