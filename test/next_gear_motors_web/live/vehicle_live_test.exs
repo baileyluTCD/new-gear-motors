@@ -44,6 +44,14 @@ defmodule NextGearMotorsWeb.VehicleLiveTest do
       assert html =~ vehicle.name
     end
 
+    test "fires telemetry event", %{conn: conn} do
+      ref = :telemetry_test.attach_event_handlers(self(), [[:next_gear_motors, :vehicles]])
+
+      {:ok, _index_live, _html} = live(conn, ~p"/vehicles")
+
+      assert_received {[:next_gear_motors, :vehicles], ^ref, %{visits: _}, _}
+    end
+
     test "has no new button", %{conn: conn} do
       {:ok, index_live, _html} = live(conn, ~p"/vehicles")
 

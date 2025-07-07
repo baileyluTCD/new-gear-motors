@@ -1,10 +1,24 @@
 defmodule NextGearMotorsWeb.PageControllerTest do
   use NextGearMotorsWeb.ConnCase
 
-  test "GET /", %{conn: conn} do
+  test "GET / has correct contents", %{conn: conn} do
     conn = get(conn, ~p"/")
     assert html_response(conn, 200) =~ "Built for the road."
     assert html_response(conn, 200) =~ "Priced for you."
+  end
+
+  test "GET / fires telemetry events", %{conn: conn} do
+    ref = :telemetry_test.attach_event_handlers(self(), [[:next_gear_motors]])
+
+    _ = get(conn, ~p"/")
+
+    assert_received {[:next_gear_motors], ^ref, %{visits: _}, _}
+  end
+
+  test "GET / does not have a `Dashboard` header without admin login", %{conn: conn} do
+    conn = get(conn, ~p"/")
+
+    refute html_response(conn, 200) =~ "Dashboard"
   end
 
   test "GET /contact", %{conn: conn} do
@@ -33,5 +47,14 @@ defmodule NextGearMotorsWeb.PageControllerTest do
 
     conn = get(conn, ~p"/not_found1")
     assert html_response(conn, 200) =~ "Page Not Found"
+  end
+
+  describe "Admin Only" do
+    setup [:register_log_in_and_promote_user]
+
+    test "GET /", %{conn: conn} do
+      conn = get(conn, ~p"/")
+      assert html_response(conn, 200) =~ "Dashboard"
+    end
   end
 end
