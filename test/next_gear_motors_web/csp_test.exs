@@ -3,9 +3,11 @@ defmodule NextGearMotorsWeb.CSPTest do
 
   use ExUnit.Case, async: true
 
+  @nonce generate_nonce()
+
   describe "Content Security Policy" do
     test "csp/0 forbids insecure access" do
-      csp = csp()
+      csp = csp(@nonce)
 
       assert csp =~ "default-src 'self';"
     end
@@ -17,9 +19,15 @@ defmodule NextGearMotorsWeb.CSPTest do
       System.put_env("AWS_ENDPOINT_URL_S3", "http://mocked.asset.host")
 
       Application.put_env(:waffle, :asset_host, {:system, "AWS_ENDPOINT_URL_S3"})
-      csp = csp()
+      csp = csp(@nonce)
 
       assert csp =~ "http://mocked.asset.host"
+    end
+
+    test "csp/0 uses nonce" do
+      csp = csp(@nonce)
+
+      assert csp =~ @nonce
     end
   end
 end

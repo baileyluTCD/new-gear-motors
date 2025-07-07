@@ -14,6 +14,10 @@ defmodule NextGearMotorsWeb.Plugs.CSP do
   def init(opts), do: opts
 
   def call(conn, _) do
-    put_secure_browser_headers(conn, %{"content-security-policy" => csp()})
+    nonce = generate_nonce()
+
+    conn
+    |> Plug.Conn.assign(:csp_nonce, nonce)
+    |> put_secure_browser_headers(%{"content-security-policy" => csp(nonce)})
   end
 end
