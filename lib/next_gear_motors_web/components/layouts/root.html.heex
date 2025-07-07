@@ -54,6 +54,13 @@
         <.link href={~p"/about"} class="hover:text-zinc-300 p-3">
           About
         </.link>
+        <.link
+          :if={@current_user && @current_user.is_admin}
+          patch={~p"/dashboard"}
+          class="hover:text-zinc-300 p-3"
+        >
+          Dashboard
+        </.link>
       </div>
       <div class="hidden xl:block">
         <%= if @current_user do %>

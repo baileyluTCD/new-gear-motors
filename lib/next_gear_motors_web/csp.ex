@@ -9,10 +9,16 @@ defmodule NextGearMotorsWeb.CSP do
   csp do
     %{
       "default-src" => "'self'",
-      "style-src-elem" => "'self' fonts.googleapis.com",
-      "script-src-elem" => "'self'",
-      "font-src" => "'self' fonts.gstatic.com",
-      "img-src" => "'self' data: <asset_host>"
+      "style-src-elem" => "'self' fonts.googleapis.com 'nonce-<nonce>'",
+      "script-src-elem" => "'self' 'nonce-<nonce>'",
+      "font-src" => "'self' data: fonts.gstatic.com",
+      "img-src" => "'self' blob: data: <asset_host>"
     }
   end
+
+  def generate_nonce(size \\ 24),
+    do:
+      size
+      |> :crypto.strong_rand_bytes()
+      |> Base.url_encode64(padding: false)
 end

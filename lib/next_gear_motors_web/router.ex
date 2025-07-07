@@ -2,6 +2,7 @@ defmodule NextGearMotorsWeb.Router do
   use NextGearMotorsWeb, :router
 
   import NextGearMotorsWeb.UserAuth
+  import Phoenix.LiveDashboard.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -19,17 +20,9 @@ defmodule NextGearMotorsWeb.Router do
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:next_gear_motors, :dev_routes) do
-    # If you want to use the LiveDashboard in production, you should put
-    # it behind authentication and allow only admins to access it.
-    # If your application does not have an admins-only section yet,
-    # you can use Plug.BasicAuth to set up some basic authentication
-    # as long as you are also using SSL (which you should anyway).
-    import Phoenix.LiveDashboard.Router
-
     scope "/dev" do
       pipe_through(:browser)
 
-      live_dashboard("/dashboard", metrics: NextGearMotorsWeb.Telemetry)
       forward("/mailbox", Plug.Swoosh.MailboxPreview)
     end
   end
@@ -56,6 +49,10 @@ defmodule NextGearMotorsWeb.Router do
     live("/vehicles/new", VehicleLive.Index, :new)
     live("/vehicles/:id/edit", VehicleLive.Index, :edit)
     live("/vehicles/:id/show/edit", VehicleLive.Show, :edit)
+
+    live_dashboard "/dashboard",
+      metrics: NextGearMotorsWeb.Telemetry,
+      csp_nonce_assign_key: :csp_nonce
   end
 
   scope "/", NextGearMotorsWeb do

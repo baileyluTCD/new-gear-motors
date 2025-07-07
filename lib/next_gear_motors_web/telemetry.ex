@@ -51,6 +51,14 @@ defmodule NextGearMotorsWeb.Telemetry do
         unit: {:native, :millisecond}
       ),
 
+      # Next Gear Motors Specifc Events
+      sum("next_gear_motors.visits",
+        description: "The number of visits to the home page"
+      ),
+      sum("next_gear_motors.vehicles.visits",
+        description: "The number of visits to the vehicles page"
+      ),
+
       # Database Metrics
       summary("next_gear_motors.repo.query.total_time",
         unit: {:native, :millisecond},
