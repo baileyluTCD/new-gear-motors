@@ -47,6 +47,7 @@ defmodule NextGearMotors.MixProject do
       {:deps_nix, "~> 2.0", only: :dev},
       {:dns_cluster, "~> 0.1.1"},
       {:ecto_sql, "~> 3.10"},
+      {:ecto_psql_extras, "~> 0.8"},
       {:esbuild, "~> 0.10", runtime: Mix.env() == :dev},
       {:ex_aws, "~> 2.1.2"},
       {:ex_aws_s3, "~> 2.0"},
