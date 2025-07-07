@@ -28,7 +28,7 @@ defmodule NextGearMotors.MixProject do
   def application do
     [
       mod: {NextGearMotors.Application, []},
-      extra_applications: [:logger, :runtime_tools, :os_mon]
+      extra_applications: [:logger, :runtime_tools]
     ]
   end
 
