@@ -6,6 +6,7 @@ defmodule NextGearMotors.Reservations.Messages do
   import Ecto.Query, warn: false
   alias NextGearMotors.Repo
   alias NextGearMotors.Reservations.Messages.Message
+  alias NextGearMotors.Accounts.UserNotifier
 
   @doc """
   Returns the list of messages sorted by the time they were sent at.
@@ -82,9 +83,16 @@ defmodule NextGearMotors.Reservations.Messages do
 
   """
   def create_message(attrs \\ %{}) do
-    %Message{}
-    |> Message.create_changeset(attrs)
-    |> Repo.insert()
+    insert =
+      %Message{}
+      |> Message.create_changeset(attrs)
+      |> Repo.insert()
+
+    with {:ok, message} <- insert do
+      UserNotifier.deliver_sent_message(message)
+
+      insert
+    end
   end
 
   @doc """
