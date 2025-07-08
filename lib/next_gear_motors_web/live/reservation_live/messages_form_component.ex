@@ -29,6 +29,7 @@ defmodule NextGearMotorsWeb.ReservationLive.MessagesFormComponent do
           placeholder="Send Message..."
           value={@message.text}
         />
+        <.input field={@form[:rate_limiting]} type="hidden" />
         <:actions>
           <.button phx-disable-with="Saving...">Save Message</.button>
         </:actions>

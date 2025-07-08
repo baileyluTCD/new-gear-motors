@@ -56,6 +56,7 @@
       placeholder="Enter Message... (Supports Markdown)"
       class="bg-zinc-800/50 rounded-none placeholder:text-neutral-600 border-none"
     />
+    <.input field={@form[:rate_limiting]} type="hidden" />
     <:actions>
       <.button phx-disable-with="Sending...">Send Message</.button>
     </:actions>
