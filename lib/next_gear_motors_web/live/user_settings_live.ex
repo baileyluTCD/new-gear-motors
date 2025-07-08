@@ -11,7 +11,23 @@ defmodule NextGearMotorsWeb.UserSettingsLive do
     </.header>
 
     <div class="space-y-12">
+      <div class="pt-12">
+        <h2 class="font-semibold">Account Confirmation Status:</h2>
+        <%= if @current_user.confirmed_at do %>
+          <p>Your account has been successfully confirmed!</p>
+        <% else %>
+          <p>
+            Your account has not yet been been successfully confirmed - please
+            <.link navigate={~p"/users/confirm"} class="text-blue-400 hover:underline">
+              click here
+            </.link>
+            to confirm.
+          </p>
+        <% end %>
+      </div>
+
       <div>
+        <h2 class="font-semibold">Update Email Address:</h2>
         <.simple_form
           for={@email_form}
           id="email_form"
@@ -34,6 +50,7 @@ defmodule NextGearMotorsWeb.UserSettingsLive do
         </.simple_form>
       </div>
       <div>
+        <h2 class="font-semibold">Update Password:</h2>
         <.simple_form
           for={@password_form}
           id="password_form"
@@ -69,11 +86,14 @@ defmodule NextGearMotorsWeb.UserSettingsLive do
           </:actions>
         </.simple_form>
       </div>
-      <.link phx-click={JS.push("delete_account")} data-confirm="Are you sure?">
-        <.button preset={:semi_transparent}>
-          Delete Account
-        </.button>
-      </.link>
+      <div>
+        <h2 class="font-semibold mb-6">Delete Account:</h2>
+        <.link phx-click={JS.push("delete_account")} data-confirm="Are you sure?">
+          <.button preset={:semi_transparent}>
+            Delete Account
+          </.button>
+        </.link>
+      </div>
     </div>
     """
   end
