@@ -7,6 +7,7 @@ defmodule NextGearMotors.Accounts do
   alias NextGearMotors.Repo
 
   alias NextGearMotors.Accounts.{User, UserToken, UserNotifier}
+  alias NextGearMotors.Reservations.Reservation
 
   ## Database getters
 
@@ -226,6 +227,23 @@ defmodule NextGearMotors.Accounts do
 
   """
   def preload_reservations(user), do: Repo.preload(user, reservations: [:user])
+
+  @doc """
+  Count reservations for a given user id
+
+  ## Examples
+
+      iex> count_reservations_for_id(id)
+      0
+
+  """
+  def count_reservations_for_id(id) do
+    query =
+      from reservation in Reservation,
+        where: reservation.user_id == ^id
+
+    Repo.aggregate(query, :count, :id)
+  end
 
   @doc """
   Updates the user's admin status
