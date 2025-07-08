@@ -648,6 +648,23 @@ let
         in
         drv;
 
+      hammer =
+        let
+          version = "7.0.1";
+          drv = buildMix {
+            inherit version;
+            name = "hammer";
+            appConfigPath = ./config;
+
+            src = fetchHex {
+              inherit version;
+              pkg = "hammer";
+              sha256 = "796edf14ab2aa80df72080210fcf944ee5e8868d8ece7a7511264d802f58cc2d";
+            };
+          };
+        in
+        drv;
+
       heroicons = pkgs.fetchFromGitHub {
         owner = "tailwindlabs";
         repo = "heroicons";

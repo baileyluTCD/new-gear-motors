@@ -4,7 +4,7 @@ defmodule NextGearMotors.MixProject do
   def project do
     [
       app: :next_gear_motors,
-      version: "0.8.1",
+      version: "0.9.0",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -56,6 +56,7 @@ defmodule NextGearMotors.MixProject do
       {:floki, ">= 0.30.0"},
       {:gettext, "~> 0.20"},
       {:hackney, "~> 1.9"},
+      {:hammer, "~> 7.0"},
       {:heroicons,
        github: "tailwindlabs/heroicons",
        tag: "v2.1.1",

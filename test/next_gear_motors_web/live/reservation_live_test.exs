@@ -31,7 +31,7 @@ defmodule NextGearMotorsWeb.ReservationLiveTest do
   end
 
   describe "Index" do
-    setup [:register_and_log_in_user, :create_reservation]
+    setup [:register_log_in_and_confirm_user, :create_reservation]
 
     test "lists only appropriate reservations", %{conn: conn, reservation: this_users_reservation} do
       other_users_reservation = reservation_fixture()
@@ -126,7 +126,7 @@ defmodule NextGearMotorsWeb.ReservationLiveTest do
   end
 
   describe "Show" do
-    setup [:register_and_log_in_user, :create_reservation]
+    setup [:register_log_in_and_confirm_user, :create_reservation]
 
     test "displays reservation", %{conn: conn, reservation: reservation} do
       {:ok, _show_live, html} = live(conn, ~p"/reservations/#{reservation}")
@@ -195,7 +195,7 @@ defmodule NextGearMotorsWeb.ReservationLiveTest do
   end
 
   describe "Messages" do
-    setup [:register_and_log_in_user, :create_reservation]
+    setup [:register_log_in_and_confirm_user, :create_reservation]
 
     test "displays messages", %{conn: conn, reservation: reservation} do
       {:ok, _show_live, html} = live(conn, ~p"/reservations/#{reservation}")

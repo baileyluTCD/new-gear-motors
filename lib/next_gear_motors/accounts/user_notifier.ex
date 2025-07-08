@@ -6,6 +6,15 @@ defmodule NextGearMotors.Accounts.UserNotifier do
   actions such as resetting their password, etc
   """
 
+  import NextGearMotorsWeb.VehicleHelper
+  alias NextGearMotors.Reservations.Messages
+
+  @notice """
+
+  NOTICE: This message was automatically generated and this mailbox is not monitored. Please check 'https://nextgearmotors.ie/contact' for up to date contact information.
+
+  """
+
   import Swoosh.Email
 
   alias NextGearMotors.Mailer
@@ -15,9 +24,9 @@ defmodule NextGearMotors.Accounts.UserNotifier do
     email =
       new()
       |> to(recipient)
-      |> from({"NextGearMotors", "contact@example.com"})
+      |> from({"NextGear Motors", "nextgearmotors@zohomail.eu"})
       |> subject(subject)
-      |> text_body(body)
+      |> text_body(body <> @notice)
 
     with {:ok, _metadata} <- Mailer.deliver(email) do
       {:ok, email}
@@ -79,6 +88,28 @@ defmodule NextGearMotors.Accounts.UserNotifier do
     #{url}
 
     If you didn't request this change, please ignore this.
+
+    ==============================
+    """)
+  end
+
+  @doc """
+  Deliver a sent message in the form of an email.
+  """
+  def deliver_sent_message(message) do
+    message = Messages.preload_from(message)
+
+    deliver(message.from.email, "Your Reservation - New Message", """
+
+    ==============================
+
+    Hi #{message.from.email},
+
+    You have one new message relating to one of your reservations:
+
+    #{shorten_text(message.text)}
+
+    Read the rest on 'https://nextgearmotors.ie'.
 
     ==============================
     """)

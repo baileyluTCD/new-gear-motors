@@ -377,7 +377,7 @@ defmodule NextGearMotorsWeb.CoreComponents do
   attr(:type, :string,
     default: "text",
     values: ~w(checkbox color date datetime-local email file month number password
-               range search select tel text textarea time url week)
+               range search select tel text textarea time url week hidden)
   )
 
   attr(:field, Phoenix.HTML.FormField,
@@ -459,7 +459,7 @@ defmodule NextGearMotorsWeb.CoreComponents do
         id={@id}
         name={@name}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-100 focus:ring-0 sm:text-sm sm:leading-6 min-h-24 bg-transparent",
+          "mt-2 block w-full rounded-lg text-zinc-100 focus:ring-0 sm:text-sm sm:leading-6 min-h-24 bg-transparent field-sizing-content",
           @errors == [] && "border-zinc-700 focus:border-zinc-600",
           @errors != [] && "border-rose-400 focus:border-rose-400",
           @class

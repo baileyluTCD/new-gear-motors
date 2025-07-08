@@ -11,7 +11,7 @@ defmodule NextGearMotors.ReservationsTest do
     import NextGearMotors.ReservationsFixtures
 
     setup do
-      user = user_fixture()
+      user = confirmed_user_fixture()
       vehicle = vehicle_fixture()
 
       {:ok,
@@ -48,6 +48,24 @@ defmodule NextGearMotors.ReservationsTest do
       assert {:ok, %Reservation{} = reservation} = Reservations.create_reservation(valid_attrs)
       assert reservation.status == :denied
       assert reservation.planned_meeting_time == ~N[2025-05-19 21:58:00]
+    end
+
+    test "create_reservation/1 with unconfirmed user fails", %{
+      valid_attrs: valid_attrs
+    } do
+      unconfirmed_attrs = %{valid_attrs | user_id: user_fixture().id}
+
+      assert {:error, %Ecto.Changeset{}} = Reservations.create_reservation(unconfirmed_attrs)
+    end
+
+    test "create_reservation/1 more than 3 times for a user fails", %{
+      valid_attrs: valid_attrs
+    } do
+      for _ <- 0..2 do
+        assert {:ok, %Reservation{}} = Reservations.create_reservation(valid_attrs)
+      end
+
+      assert {:error, %Ecto.Changeset{}} = Reservations.create_reservation(valid_attrs)
     end
 
     test "create_reservation/1 with invalid data returns error changeset", %{

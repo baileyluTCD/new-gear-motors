@@ -33,6 +33,7 @@ defmodule NextGearMotorsWeb.ReservationLive.FormComponent do
           prompt="Choose a value"
           options={Ecto.Enum.values(NextGearMotors.Reservations.Reservation, :status)}
         />
+        <.input field={@form[:user_errors]} type="hidden" />
         <:actions>
           <.button phx-disable-with="Saving...">Save Reservation</.button>
         </:actions>
