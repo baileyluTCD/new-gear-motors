@@ -355,6 +355,16 @@ defmodule NextGearMotors.Accounts do
     end
   end
 
+  def confirm_user_no_token(user) do
+    transaction = confirm_user_multi(user)
+    |> Repo.transaction()
+
+    case transaction do
+      {:ok, %{user: user}} -> {:ok, user}
+      _ -> {:error}
+    end
+  end
+
   defp confirm_user_multi(user) do
     Ecto.Multi.new()
     |> Ecto.Multi.update(:user, User.confirm_changeset(user))
