@@ -54,6 +54,7 @@ defmodule NextGearMotors.MixProject do
       {:ex_doc, "~> 0.38", runtime: false, warn_if_outdated: true},
       {:finch, "~> 0.13"},
       {:floki, ">= 0.30.0"},
+      {:gen_smtp, "~> 1.3"},
       {:gettext, "~> 0.20"},
       {:hackney, "~> 1.9"},
       {:hammer, "~> 7.0"},
