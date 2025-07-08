@@ -4,6 +4,8 @@ defmodule NextGearMotors.AccountsFixtures do
   entities via the `NextGearMotors.Accounts` context.
   """
 
+  alias NextGearMotors.Accounts
+
   def unique_user_email, do: "user#{System.unique_integer()}@example.com"
   def valid_user_password, do: "hello world!"
 
@@ -20,7 +22,15 @@ defmodule NextGearMotors.AccountsFixtures do
     {:ok, user} =
       attrs
       |> valid_user_attributes()
-      |> NextGearMotors.Accounts.register_user()
+      |> Accounts.register_user()
+
+    user
+  end
+
+  def confirmed_user_fixture(attrs \\ %{}) do
+    {:ok, user} =
+      user_fixture(attrs)
+      |> Accounts.confirm_user_no_token()
 
     user
   end

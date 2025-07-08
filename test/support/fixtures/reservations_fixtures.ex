@@ -12,7 +12,7 @@ defmodule NextGearMotors.ReservationsFixtures do
   Generate a reservation.
   """
   def reservation_fixture(attrs \\ %{}) do
-    user = Map.get(attrs, :user, user_fixture())
+    user = Map.get(attrs, :user, confirmed_user_fixture())
     vehicle = Map.get(attrs, :vehicle, vehicle_fixture())
 
     {:ok, reservation} =

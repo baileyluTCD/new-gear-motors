@@ -52,6 +52,21 @@ defmodule NextGearMotorsWeb.ConnCase do
   end
 
   @doc """
+  Setup helper that registers, logs in and confirms users.
+
+      setup :register_log_in_and_confirm_user
+
+  It stores an updated connection and a registered user in the
+  test context.
+  """
+  def register_log_in_and_confirm_user(%{conn: conn}) do
+    user =
+      NextGearMotors.AccountsFixtures.confirmed_user_fixture()
+
+    %{conn: log_in_user(conn, user), user: user}
+  end
+
+  @doc """
   Setup helper that registers, logs in, and promotes to admin users.
 
       setup :register_log_in_and_promote_user
@@ -61,7 +76,7 @@ defmodule NextGearMotorsWeb.ConnCase do
   """
   def register_log_in_and_promote_user(%{conn: conn}) do
     user =
-      NextGearMotors.AccountsFixtures.user_fixture()
+      NextGearMotors.AccountsFixtures.confirmed_user_fixture()
       |> Accounts.update_admin_status(%{is_admin: true})
 
     %{conn: log_in_user(conn, user), user: user}

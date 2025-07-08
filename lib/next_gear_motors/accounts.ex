@@ -356,8 +356,9 @@ defmodule NextGearMotors.Accounts do
   end
 
   def confirm_user_no_token(user) do
-    transaction = confirm_user_multi(user)
-    |> Repo.transaction()
+    transaction =
+      confirm_user_multi(user)
+      |> Repo.transaction()
 
     case transaction do
       {:ok, %{user: user}} -> {:ok, user}

@@ -71,7 +71,7 @@ defmodule NextGearMotors.Reservations.MessagesTest do
     end
 
     test "create_message/1 stops working after 25 messages", %{valid_attrs: valid_attrs} do
-      for x <- 0..24 do
+      for _ <- 0..24 do
         assert {:ok, %Message{}} = Messages.create_message(valid_attrs)
       end
 
