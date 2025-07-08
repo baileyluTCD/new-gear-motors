@@ -70,6 +70,14 @@ defmodule NextGearMotors.Reservations.MessagesTest do
       assert message.text == "some text"
     end
 
+    test "create_message/1 stops working after 25 messages", %{valid_attrs: valid_attrs} do
+      for x <- 0..24 do
+        assert {:ok, %Message{}} = Messages.create_message(valid_attrs)
+      end
+
+      assert {:error, %Ecto.Changeset{}} = Messages.create_message(valid_attrs)
+    end
+
     test "create_message/1 with invalid data returns error changeset", %{
       invalid_attrs: invalid_attrs
     } do
