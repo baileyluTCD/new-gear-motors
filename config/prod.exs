@@ -11,7 +11,7 @@ config :next_gear_motors, NextGearMotorsWeb.Endpoint,
   force_ssl: [rewrite_on: [:x_forwarded_proto]]
 
 # Configures mail
-config :sample, NextGearMotors.Mailer,
+config :next_gear_motors, NextGearMotors.Mailer,
   adapter: Swoosh.Adapters.SMTP,
   relay: {:system, "SMTP_RELAY"},
   username: {:system, "SMTP_EMAIL"},
