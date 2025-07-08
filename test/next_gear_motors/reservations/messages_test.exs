@@ -2,6 +2,7 @@ defmodule NextGearMotors.Reservations.MessagesTest do
   use NextGearMotors.DataCase
 
   alias NextGearMotors.Reservations.Messages
+  import Swoosh.TestAssertions
 
   describe "messages" do
     alias NextGearMotors.Reservations.Messages.Message
@@ -68,6 +69,14 @@ defmodule NextGearMotors.Reservations.MessagesTest do
     test "create_message/1 with valid data creates a message", %{valid_attrs: valid_attrs} do
       assert {:ok, %Message{} = message} = Messages.create_message(valid_attrs)
       assert message.text == "some text"
+    end
+
+    test "create_message/1 with valid data sends an email", %{valid_attrs: valid_attrs} do
+      assert {:ok, %Message{} = message} = Messages.create_message(valid_attrs)
+
+      message = Messages.preload_from(message)
+
+      assert_email_sent(to: message.from.email, subject: "Your Reservation - New Message")
     end
 
     test "create_message/1 stops working after 25 messages", %{valid_attrs: valid_attrs} do
