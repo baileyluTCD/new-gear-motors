@@ -118,6 +118,13 @@
         <.link href={~p"/about"} class="hover:text-zinc-300 my-3">
           About
         </.link>
+        <.link
+          :if={@current_user && @current_user.is_admin}
+          patch={~p"/dashboard"}
+          class="hover:text-zinc-300 my-3"
+        >
+          Dashboard
+        </.link>
         <div class="flex flex-col mt-10">
           <%= if @current_user do %>
             <.link href={~p"/users/settings"}>
