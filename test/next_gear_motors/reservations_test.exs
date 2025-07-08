@@ -50,6 +50,16 @@ defmodule NextGearMotors.ReservationsTest do
       assert reservation.planned_meeting_time == ~N[2025-05-19 21:58:00]
     end
 
+    test "create_reservation/1 more than 3 times for a user fails", %{
+      valid_attrs: valid_attrs
+    } do
+      for _ <- 0..2 do
+        assert {:ok, %Reservation{}} = Reservations.create_reservation(valid_attrs)
+      end
+
+      assert {:error, %Ecto.Changeset{}} = Reservations.create_reservation(valid_attrs)
+    end
+
     test "create_reservation/1 with invalid data returns error changeset", %{
       invalid_attrs: invalid_attrs
     } do
