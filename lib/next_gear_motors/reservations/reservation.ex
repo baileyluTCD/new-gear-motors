@@ -31,10 +31,10 @@ defmodule NextGearMotors.Reservations.Reservation do
     |> assoc_constraint(:user)
     |> assoc_constraint(:vehicle)
     |> validate_required([:status, :planned_meeting_time, :user_id, :vehicle_id])
-    |> validate_reservation_limit()
+    |> validate_reservation_user_info()
   end
 
-  defp validate_reservation_limit(reservation) do
+  defp validate_reservation_user_info(reservation) do
     case fetch_field(reservation, :user_id) do
       {_, nil} ->
         add_error(
@@ -44,7 +44,9 @@ defmodule NextGearMotors.Reservations.Reservation do
         )
 
       {_, user_id} ->
-        check_count(reservation, user_id)
+        reservation
+        |> check_user_limits(user_id)
+        |> check_user_confirmation(user_id)
 
       _ ->
         add_error(
@@ -55,7 +57,7 @@ defmodule NextGearMotors.Reservations.Reservation do
     end
   end
 
-  defp check_count(reservation, user_id) do
+  defp check_user_limits(reservation, user_id) do
     count = Accounts.count_reservations_for_id(user_id)
 
     if count < @max_reservations_per_user do
@@ -63,8 +65,22 @@ defmodule NextGearMotors.Reservations.Reservation do
     else
       reservation
       |> add_error(
-        :existing_count,
+        :user_errors,
         "you already have the maximum number of concurrent reservations (#{@max_reservations_per_user}) - please delete some or wait for them to be resolved"
+      )
+    end
+  end
+
+  defp check_user_confirmation(reservation, user_id) do
+    user = Accounts.get_user!(user_id)
+
+    if user.confirmed_at do
+      reservation
+    else
+      reservation
+      |> add_error(
+        :user_errors,
+        "you must confirm your account before creating a reservation"
       )
     end
   end
