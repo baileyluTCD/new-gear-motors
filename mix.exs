@@ -56,6 +56,7 @@ defmodule NextGearMotors.MixProject do
       {:floki, ">= 0.30.0"},
       {:gettext, "~> 0.20"},
       {:hackney, "~> 1.9"},
+      {:hammer, "~> 7.0"},
       {:heroicons,
        github: "tailwindlabs/heroicons",
        tag: "v2.1.1",

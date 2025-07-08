@@ -9,6 +9,7 @@ defmodule NextGearMotors.Application do
   def start(_type, _args) do
     children = [
       NextGearMotorsWeb.Telemetry,
+      NextGearMotorsWeb.RateLimiter,
       NextGearMotors.Repo,
       {DNSCluster, query: Application.get_env(:next_gear_motors, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: NextGearMotors.PubSub},
