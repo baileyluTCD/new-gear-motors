@@ -5,7 +5,6 @@ defmodule NextGearMotors.Reservations.Messages do
 
   import Ecto.Query, warn: false
   alias NextGearMotors.Repo
-
   alias NextGearMotors.Reservations.Messages.Message
 
   @doc """
@@ -84,7 +83,7 @@ defmodule NextGearMotors.Reservations.Messages do
   """
   def create_message(attrs \\ %{}) do
     %Message{}
-    |> Message.changeset(attrs)
+    |> Message.create_changeset(attrs)
     |> Repo.insert()
   end
 
