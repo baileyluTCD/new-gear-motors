@@ -6,6 +6,12 @@ defmodule NextGearMotors.Accounts.UserNotifier do
   actions such as resetting their password, etc
   """
 
+  @notice """
+
+  NOTICE: This message was automatically generated and this mailbox is not monitored. Please check 'https://nextgearmotors.ie/contact' for up to date contact information.
+
+  """
+
   import Swoosh.Email
 
   alias NextGearMotors.Mailer
@@ -15,9 +21,9 @@ defmodule NextGearMotors.Accounts.UserNotifier do
     email =
       new()
       |> to(recipient)
-      |> from({"NextGearMotors", "contact@example.com"})
+      |> from({"NextGear Motors", "nextgearmotors@zohomail.eu"})
       |> subject(subject)
-      |> text_body(body)
+      |> text_body(body <> @notice)
 
     with {:ok, _metadata} <- Mailer.deliver(email) do
       {:ok, email}

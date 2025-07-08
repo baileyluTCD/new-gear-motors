@@ -10,6 +10,18 @@ config :next_gear_motors, NextGearMotorsWeb.Endpoint,
   server: true,
   force_ssl: [rewrite_on: [:x_forwarded_proto]]
 
+# Configures mail
+config :sample, NextGearMotors.Mailer,
+  adapter: Swoosh.Adapters.SMTP,
+  relay: {:system, "SMTP_RELAY"},
+  username: {:system, "SMTP_EMAIL"},
+  password: {:system, "SMTP_PASSWORD"},
+  ssl: true,
+  tls: :always,
+  auth: :always,
+  port: {:system, "SMTP_PORT"},
+  retries: 3
+
 # Configures Swoosh API Client
 config :swoosh, api_client: Swoosh.ApiClient.Finch, finch_name: NextGearMotors.Finch
 
