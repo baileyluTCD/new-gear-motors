@@ -601,26 +601,6 @@ let
         in
         drv;
 
-      gen_smtp =
-        let
-          version = "1.3.0";
-          drv = buildRebar3 {
-            inherit version;
-            name = "gen_smtp";
-
-            src = fetchHex {
-              inherit version;
-              pkg = "gen_smtp";
-              sha256 = "0b73fbf069864ecbce02fe653b16d3f35fd889d0fdd4e14527675565c39d84e6";
-            };
-
-            beamDeps = [
-              ranch
-            ];
-          };
-        in
-        drv;
-
       gettext =
         let
           version = "0.26.2";
@@ -746,6 +726,23 @@ let
             beamDeps = [
               decimal
             ];
+          };
+        in
+        drv;
+
+      mail =
+        let
+          version = "0.5.1";
+          drv = buildMix {
+            inherit version;
+            name = "mail";
+            appConfigPath = ./config;
+
+            src = fetchHex {
+              inherit version;
+              pkg = "mail";
+              sha256 = "595144340b74f23d651ea2b4a72a896819940478d7425dfa302ea3b5c9041ec9";
+            };
           };
         in
         drv;
@@ -1234,22 +1231,6 @@ let
         in
         drv;
 
-      ranch =
-        let
-          version = "2.2.0";
-          drv = buildRebar3 {
-            inherit version;
-            name = "ranch";
-
-            src = fetchHex {
-              inherit version;
-              pkg = "ranch";
-              sha256 = "fa0b99a1780c80218a4197a59ea8d3bdae32fbff7e88527d7d8a4787eff4f8e7";
-            };
-          };
-        in
-        drv;
-
       sobelow =
         let
           version = "0.14.0";
@@ -1323,9 +1304,9 @@ let
               bandit
               ex_aws
               finch
-              gen_smtp
               hackney
               jason
+              mail
               mime
               plug
               telemetry

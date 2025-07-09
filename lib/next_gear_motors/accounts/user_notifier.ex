@@ -24,7 +24,7 @@ defmodule NextGearMotors.Accounts.UserNotifier do
     email =
       new()
       |> to(recipient)
-      |> from({"NextGear Motors", "nextgearmotors@zohomail.eu"})
+      |> from({"NextGear Motors", "nextgearmotors1@gmail.com"})
       |> subject(subject)
       |> text_body(body <> @notice)
 
