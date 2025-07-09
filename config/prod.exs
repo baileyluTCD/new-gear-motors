@@ -12,15 +12,8 @@ config :next_gear_motors, NextGearMotorsWeb.Endpoint,
 
 # Configures mail
 config :next_gear_motors, NextGearMotors.Mailer,
-  adapter: Swoosh.Adapters.SMTP,
-  relay: {:system, "SMTP_RELAY"},
-  username: {:system, "SMTP_EMAIL"},
-  password: {:system, "SMTP_PASSWORD"},
-  ssl: true,
-  tls: :always,
-  auth: :always,
-  port: {:system, "SMTP_PORT"},
-  retries: 3
+  adapter: Swoosh.Adapters.Gmail,
+  access_token: {:system, "GMAIL_API_ACCESS_TOKEN"}
 
 # Configures Swoosh API Client
 config :swoosh, api_client: Swoosh.ApiClient.Finch, finch_name: NextGearMotors.Finch
