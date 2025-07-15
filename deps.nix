@@ -942,6 +942,27 @@ let
         in
         drv;
 
+      mua =
+        let
+          version = "0.2.4";
+          drv = buildMix {
+            inherit version;
+            name = "mua";
+            appConfigPath = ./config;
+
+            src = fetchHex {
+              inherit version;
+              pkg = "mua";
+              sha256 = "e7e4dacd5ad65f13e3542772e74a159c00bd2d5579e729e9bb72d2c73a266fb7";
+            };
+
+            beamDeps = [
+              castore
+            ];
+          };
+        in
+        drv;
+
       nimble_options =
         let
           version = "1.1.1";
@@ -1308,6 +1329,7 @@ let
               jason
               mail
               mime
+              mua
               plug
               telemetry
             ];
