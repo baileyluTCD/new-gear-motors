@@ -11,7 +11,7 @@ defmodule NextGearMotors.Accounts.UserNotifier do
 
   @notice """
 
-  NOTICE: This message was automatically generated and this mailbox is not monitored. Please check 'https://nextgearmotors.ie/contact' for up to date contact information.
+  NOTICE: This message was automatically generated. Please check 'https://nextgearmotors.ie/contact' for up to date contact information at any given moment.
 
   """
 
