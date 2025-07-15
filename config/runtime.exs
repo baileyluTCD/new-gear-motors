@@ -65,6 +65,16 @@ if config_env() == :prod do
     ],
     secret_key_base: secret_key_base
 
+  # Configures mail
+  config :next_gear_motors, NextGearMotors.Mailer,
+    adapter: Swoosh.Adapters.Mua,
+    relay: System.get_env("SMTP_RELAY"),
+    auth: [
+      username: System.get_env("SMTP_USERNAME"),
+      password: System.get_env("SMTP_PASSWORD")
+    ],
+    port: (System.get_env("SMTP_PORT") || "587") |> String.to_integer()
+
   # ## SSL Support
   #
   # To get SSL working, you will need to add the `https` key
