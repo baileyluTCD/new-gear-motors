@@ -18,7 +18,7 @@ config :next_gear_motors, NextGearMotors.Mailer,
     username: {:system, "SMTP_USERNAME"},
     password: {:system, "SMTP_PASSWORD"}
   ],
-  port: {:system, "SMTP_PORT"}
+  port: 587
 
 # Configures Swoosh API Client
 config :swoosh, api_client: Swoosh.ApiClient.Finch, finch_name: NextGearMotors.Finch

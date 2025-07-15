@@ -16,7 +16,6 @@ AWS_REGION = "auto"
 BUCKET_NAME = "weathered-butterfly-4548"
 SMTP_RELAY = "smtp.gmail.com"
 SMTP_USERNAME = "nextgearmotors1@gmail.com"
-SMTP_PORT = "587"
 
 [http_service]
 internal_port = 4000
