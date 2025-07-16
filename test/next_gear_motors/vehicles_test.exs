@@ -20,7 +20,7 @@ defmodule NextGearMotors.VehiclesTest do
 
     import NextGearMotors.VehiclesFixtures
 
-    @invalid_attrs %{name: nil, description: nil, price: nil, manufacturer: nil}
+    @invalid_attrs %{name: nil, description: nil, price: nil, manufacturer: nil, covers: nil}
 
     test "list_vehicles/0 returns all vehicles" do
       vehicle = vehicle_fixture()
@@ -33,9 +33,15 @@ defmodule NextGearMotors.VehiclesTest do
     end
 
     test "create_vehicle/1 with valid data creates a vehicle" do
-      cover = %Plug.Upload{
+      cover_a = %Plug.Upload{
         path: "test/support/fixtures/vehicles_fixtures/car.jpg",
         filename: "car.jpg",
+        content_type: "image/jpeg"
+      }
+
+      cover_b = %Plug.Upload{
+        path: "test/support/fixtures/vehicles_fixtures/updated_car.jpg",
+        filename: "updated_car.jpg",
         content_type: "image/jpeg"
       }
 
@@ -44,7 +50,7 @@ defmodule NextGearMotors.VehiclesTest do
         description: "some description",
         price: "€40,000",
         manufacturer: "some manufacturer",
-        cover: cover
+        covers: [cover_a, cover_b]
       }
 
       assert {:ok, %Vehicle{} = vehicle} = Vehicles.create_vehicle(valid_attrs)
@@ -52,7 +58,10 @@ defmodule NextGearMotors.VehiclesTest do
       assert vehicle.description == "some description"
       assert vehicle.price == "€40,000"
       assert vehicle.manufacturer == "some manufacturer"
-      assert vehicle.cover.file_name == "car.jpg"
+
+      [vehicle_cover_a, vehicle_cover_b] = vehicle.covers
+      assert vehicle_cover_a.file_name == "car.jpg"
+      assert vehicle_cover_b.file_name == "updated_car.jpg"
     end
 
     test "create_vehicle/1 with invalid price returns error changeset" do
@@ -67,7 +76,7 @@ defmodule NextGearMotors.VehiclesTest do
         description: "some description",
         price: "invalid price",
         manufacturer: "some manufacturer",
-        cover: cover
+        cover: [cover]
       }
 
       assert {:error, %Ecto.Changeset{}} = Vehicles.create_vehicle(invalid_attrs)
@@ -79,7 +88,7 @@ defmodule NextGearMotors.VehiclesTest do
 
     test "update_vehicle/2 with valid data updates the vehicle" do
       vehicle = vehicle_fixture()
-      prev_cover = vehicle.cover
+      [prev_cover] = vehicle.covers
 
       updated_cover = %Plug.Upload{
         path: "test/support/fixtures/vehicles_fixtures/updated_car.jpg",
@@ -92,7 +101,7 @@ defmodule NextGearMotors.VehiclesTest do
         description: "some updated description",
         price: "€50,000",
         manufacturer: "some updated manufacturer",
-        cover: updated_cover
+        covers: [updated_cover]
       }
 
       assert {:ok, %Vehicle{} = vehicle} = Vehicles.update_vehicle(vehicle, update_attrs)
@@ -100,7 +109,9 @@ defmodule NextGearMotors.VehiclesTest do
       assert vehicle.description == "some updated description"
       assert vehicle.price == "€50,000"
       assert vehicle.manufacturer == "some updated manufacturer"
-      assert vehicle.cover.file_name == "updated_car.jpg"
+
+      [vehicle_cover] = vehicle.covers
+      assert vehicle_cover.file_name == "updated_car.jpg"
 
       refute File.exists?("priv/static" <> Cover.url(prev_cover))
     end
@@ -113,7 +124,7 @@ defmodule NextGearMotors.VehiclesTest do
 
     test "delete_vehicle/1 deletes the vehicle" do
       vehicle = vehicle_fixture()
-      prev_cover = vehicle.cover
+      [prev_cover] = vehicle.covers
 
       assert {:ok, %Vehicle{}} = Vehicles.delete_vehicle(vehicle)
       assert_raise Ecto.NoResultsError, fn -> Vehicles.get_vehicle!(vehicle.id) end
