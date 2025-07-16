@@ -68,7 +68,7 @@ defmodule NextGearMotors.Vehicles do
   """
   def create_vehicle(attrs \\ %{}) do
     %Vehicle{}
-    |> Vehicle.changeset(attrs)
+    |> Vehicle.save_changeset(attrs)
     |> Repo.insert()
   end
 
@@ -85,12 +85,14 @@ defmodule NextGearMotors.Vehicles do
 
   """
   def update_vehicle(%Vehicle{} = vehicle, attrs) do
-    if Map.get(attrs, "cover", "") != vehicle.cover do
-      Cover.delete({vehicle.cover, vehicle})
+    if Map.get(attrs, "covers", []) != vehicle.covers do
+      for cover <- vehicle.covers do
+        Cover.delete({cover, vehicle})
+      end
     end
 
     vehicle
-    |> Vehicle.changeset(attrs)
+    |> Vehicle.save_changeset(attrs)
     |> Repo.update()
   end
 
@@ -107,7 +109,9 @@ defmodule NextGearMotors.Vehicles do
 
   """
   def delete_vehicle(%Vehicle{} = vehicle) do
-    Cover.delete({vehicle.cover, vehicle})
+    for cover <- vehicle.covers do
+      Cover.delete({cover, vehicle})
+    end
 
     Repo.delete(vehicle)
   end
@@ -122,6 +126,6 @@ defmodule NextGearMotors.Vehicles do
 
   """
   def change_vehicle(%Vehicle{} = vehicle, attrs \\ %{}) do
-    Vehicle.changeset(vehicle, attrs)
+    Vehicle.validate_changeset(vehicle, attrs)
   end
 end
