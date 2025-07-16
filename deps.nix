@@ -1491,21 +1491,22 @@ let
 
       waffle_ecto =
         let
-          version = "0.0.12";
+          version = "9c30ab8650408917c7bb9ef4f093531405b48d70";
           drv = buildMix {
             inherit version;
             name = "waffle_ecto";
             appConfigPath = ./config;
 
-            src = fetchHex {
-              inherit version;
-              pkg = "waffle_ecto";
-              sha256 = "585fe6371057066d2e8e3383ddd7a2437ff0668caf3f4cbf5a041e0de9837168";
+            src = pkgs.fetchFromGitHub {
+              owner = "nash-io";
+              repo = "waffle_ecto";
+              rev = "9c30ab8650408917c7bb9ef4f093531405b48d70";
+              hash = "sha256-9SbzH/OPGA4lreJRmG8w6WpXutjyr3mXof+2JoOsrVY=";
             };
 
             beamDeps = [
-              ecto
               waffle
+              ecto
             ];
           };
         in

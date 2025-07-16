@@ -66,6 +66,7 @@ defmodule NextGearMotors.MixProject do
        depth: 1},
       {:jason, "~> 1.2"},
       {:mail, "~> 0.5.1"},
+      {:mishka_chelekom, "~> 0.0.5", only: :dev},
       {:mix_audit, "~> 2.1", runtime: false},
       {:mix_test_watch, "~> 1.0", runtime: false},
       {:mogrify, "~> 0.9.3"},
@@ -84,7 +85,7 @@ defmodule NextGearMotors.MixProject do
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
       {:waffle, "~> 1.1"},
-      {:waffle_ecto, "~> 0.0"}
+      {:waffle_ecto, github: "nash-io/waffle_ecto", tag: "v0.0.12"}
     ]
   end
 
