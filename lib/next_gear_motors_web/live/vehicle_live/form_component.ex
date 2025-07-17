@@ -4,13 +4,17 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
   alias NextGearMotors.Vehicles
   alias NextGearMotors.Vehicles.Covers.Cover
 
+  import NextGearMotorsWeb.VehicleHelper
+
   @impl true
   def render(assigns) do
     ~H"""
     <div>
       <.header>
         {@title}
-        <:subtitle>Use this form to manage vehicle records in your database.</:subtitle>
+        <:subtitle>
+          Use this form to manage vehicle records in your database. Note that uploading a new batch of images overwrites the old one.
+        </:subtitle>
       </.header>
 
       <.simple_form
@@ -20,13 +24,27 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.live_file_input upload={@uploads.cover} />
+        <h2 class="block text-sm font-semibold leading-6 text-zinc-200">Images</h2>
+        <button phx-click="clear-existing-covers" phx-target={@myself}>
+          <.live_file_input upload={@uploads.covers} />
+        </button>
 
-        <%= if cover = @form[:cover].value do %>
-          <img src={Cover.url(cover)} alt="Previous Image" />
-        <% end %>
+        <article
+          :for={cover <- @covers}
+          class="p-4 bg-zinc-800/50 rounded-3xl border border-zinc-600 flex flex-col items-center shadow-xl my-8"
+        >
+          <figure class="w-full flex flex-col items-center px-2">
+            <img src={Cover.url(cover)} class="rounded-xl m-2 border border-zinc-500 shadow" />
+            <figcaption
+              title={Cover.to_filename(cover)}
+              class="max-sm:text-sm flex flex-col sm:flex-row justify-between items-center px-8 py-2 gap-3"
+            >
+              {shorten_text(Cover.to_filename(cover), 13)}
+            </figcaption>
+          </figure>
+        </article>
 
-        <%= if err = @form.errors[:cover] do %>
+        <%= if err = @form.errors[:covers] do %>
           <%= if {msg, _} = err do %>
             <.error>{msg}</.error>
           <% end %>
@@ -49,110 +67,88 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
     {:ok,
      socket
      |> assign(assigns)
-     |> allow_upload(:cover,
+     |> allow_upload(:covers,
        accept: ~w(.png .jpg .jpeg .avif),
-       max_entries: 1,
+       max_entries: 20,
        auto_upload: true,
        progress: &handle_progress/3
      )
+     |> assign(:covers, vehicle.covers || [])
      |> assign_new(:form, fn ->
        to_form(Vehicles.change_vehicle(vehicle))
      end)}
   end
 
-  defp handle_progress(:cover, entry, socket) do
-    if entry.done? do
-      vehicle_params =
-        socket.assigns.form.params
-        |> with_cover(socket)
+  defp handle_progress(:covers, %{:done? => true} = entry, socket) do
+    covers = [consume_cover(socket, entry) | socket.assigns.covers]
 
-      socket =
-        socket
-        |> put_flash(:info, "Image uploaded")
-        |> assign(
-          :form,
-          Map.put(socket.assigns.form, "cover", vehicle_params["cover"])
-        )
+    socket =
+      socket
+      |> put_flash(:info, "Image uploaded!")
+      |> assign(:covers, covers)
 
-      {_, socket} = handle_event("validate", %{"vehicle" => vehicle_params}, socket)
+    {_, socket} = handle_event("validate", %{"vehicle" => socket.assigns.form.params}, socket)
 
-      {:noreply, socket}
-    else
-      {:noreply, socket}
-    end
+    {:noreply, socket}
   end
+
+  defp handle_progress(:covers, _entry, socket) do
+    {:noreply, socket}
+  end
+
+  defp consume_cover(socket, entry) do
+    consume_uploaded_entry(socket, entry, fn %{} = meta ->
+      cover = %Plug.Upload{
+        content_type: entry.client_type,
+        filename: entry.client_name,
+        path: meta.path
+      }
+
+      {:postpone, cover}
+    end)
+  end
+
+  defp with_covers(params, socket), do: Map.put(params, "covers", socket.assigns.covers)
 
   @impl true
   def handle_event("validate", %{"vehicle" => vehicle_params}, socket) do
-    vehicle_params =
-      vehicle_params
-      |> with_cover(socket)
+    vehicle_params = with_covers(vehicle_params, socket)
 
     changeset = Vehicles.change_vehicle(socket.assigns.vehicle, vehicle_params)
     {:noreply, assign(socket, form: to_form(changeset, action: :validate))}
   end
 
   def handle_event("save", %{"vehicle" => vehicle_params}, socket) do
-    vehicle_params =
-      vehicle_params
-      |> with_cover(socket)
+    vehicle_params = with_covers(vehicle_params, socket)
 
-    socket
-    |> save_vehicle(socket.assigns.action, vehicle_params)
+    save_vehicle(socket, socket.assigns.action, vehicle_params)
   end
 
-  defp with_cover(vehicle_params, socket) do
-    if socket.assigns.uploads.cover.entries |> Enum.any?(&(!&1.done?)) do
-      vehicle_params
-    else
-      entries =
-        consume_uploaded_entries(socket, :cover, fn meta, entry ->
-          cover = %Plug.Upload{
-            content_type: entry.client_type,
-            filename: entry.client_name,
-            path: meta.path
-          }
-
-          updated_params = Map.put(vehicle_params, "cover", cover)
-          {:postpone, updated_params}
-        end)
-
-      case entries do
-        [vehicle_params] -> vehicle_params
-        _ -> vehicle_params
-      end
-    end
+  def handle_event("clear-existing-covers", _value, socket) do
+    {:noreply, assign(socket, :covers, [])}
   end
 
-  defp save_vehicle(socket, :edit, vehicle_params) do
-    case Vehicles.update_vehicle(socket.assigns.vehicle, vehicle_params) do
-      {:ok, vehicle} ->
-        notify_parent({:saved, vehicle})
+  defp save_vehicle(socket, :edit, vehicle_params),
+    do:
+      Vehicles.update_vehicle(socket.assigns.vehicle, vehicle_params)
+      |> notify_saved("Vehicle updated successfully", socket)
 
-        {:noreply,
-         socket
-         |> put_flash(:info, "Vehicle updated successfully")
-         |> push_patch(to: socket.assigns.patch)}
+  defp save_vehicle(socket, :new, vehicle_params),
+    do:
+      Vehicles.create_vehicle(vehicle_params)
+      |> notify_saved("Vehicle created successfully", socket)
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, form: to_form(changeset))}
-    end
+  defp notify_saved({:ok, vehicle}, msg, socket) do
+    notify_parent({:saved, vehicle})
+
+    {:noreply,
+     socket
+     |> put_flash(:info, msg)
+     |> push_patch(to: socket.assigns.patch)}
   end
 
-  defp save_vehicle(socket, :new, vehicle_params) do
-    case Vehicles.create_vehicle(vehicle_params) do
-      {:ok, vehicle} ->
-        notify_parent({:saved, vehicle})
-
-        {:noreply,
-         socket
-         |> put_flash(:info, "Vehicle created successfully")
-         |> push_patch(to: socket.assigns.patch)}
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, form: to_form(changeset))}
-    end
-  end
+  defp notify_saved({:error, %Ecto.Changeset{} = changeset}, _, socket),
+    do: {:noreply, assign(socket, form: to_form(changeset))}
 
   defp notify_parent(msg), do: send(self(), {__MODULE__, msg})
 end
