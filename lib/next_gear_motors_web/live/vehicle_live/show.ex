@@ -4,6 +4,8 @@ defmodule NextGearMotorsWeb.VehicleLive.Show do
   alias NextGearMotors.Vehicles
   alias NextGearMotors.Vehicles.Covers.Cover
 
+  import NextGearMotorsWeb.Components.Carousel
+
   on_mount {NextGearMotorsWeb.UserAuth, :mount_current_user}
 
   @impl true
