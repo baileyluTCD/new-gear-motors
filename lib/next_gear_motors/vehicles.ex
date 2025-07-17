@@ -68,7 +68,7 @@ defmodule NextGearMotors.Vehicles do
   """
   def create_vehicle(attrs \\ %{}) do
     %Vehicle{}
-    |> Vehicle.save_changeset(attrs)
+    |> Vehicle.changeset(attrs)
     |> Repo.insert()
   end
 
@@ -92,7 +92,7 @@ defmodule NextGearMotors.Vehicles do
     end
 
     vehicle
-    |> Vehicle.save_changeset(attrs)
+    |> Vehicle.changeset(attrs)
     |> Repo.update()
   end
 
@@ -126,6 +126,6 @@ defmodule NextGearMotors.Vehicles do
 
   """
   def change_vehicle(%Vehicle{} = vehicle, attrs \\ %{}) do
-    Vehicle.validate_changeset(vehicle, attrs)
+    Vehicle.changeset(vehicle, attrs)
   end
 end
