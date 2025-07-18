@@ -7,7 +7,7 @@
     )
   }
 >
-  <.box class="p-4 sm:w-5/6 lg:w-1/2">
+  <.box class="p-4 w-full sm:w-5/6 lg:w-1/2">
     <span class="flex flex-col sm:flex-row max-sm:items-center justify-between p-2">
       <h1 class="max-sm:mb-8 font-bold text-2xl text-center m-2">{@vehicle.name}</h1>
 
@@ -26,12 +26,20 @@
       </div>
     </span>
 
-    <span class="w-full flex flex-col items-center">
-      <img
-        src={Cover.url(@vehicle.cover)}
-        class="rounded-xl border border-zinc-600 m-2 shadow-xl p-2"
-        alt={"Vehicle Cover Image - #{@vehicle.name}"}
-      />
+    <span class="w-full flex flex-col items-center min-h-2/3">
+      <.carousel
+        id="vehicle-images"
+        class="flex items-center justify-center rounded-xl border border-zinc-600 m-2 shadow-xl p-2"
+        autoplay
+        indicator
+        hidden_slide_class="scale-0"
+      >
+        <:slide
+          :for={cover <- @vehicle.covers}
+          image={Cover.url(cover)}
+          image_class="rounded-lg h-48 md:h-56 lg:h-80 overflow-hidden"
+        />
+      </.carousel>
     </span>
 
     <div class="w-full px-2 shadow-xl">

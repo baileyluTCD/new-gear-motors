@@ -9,6 +9,9 @@ defmodule NextGearMotors.Vehicles.Vehicle do
   use Waffle.Ecto.Schema
   import Ecto.Changeset
 
+  alias NextGearMotors.Vehicles.Covers.Cover
+  require Logger
+
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "vehicles" do
@@ -16,7 +19,7 @@ defmodule NextGearMotors.Vehicles.Vehicle do
     field :description, :string
     field :price, :string
     field :manufacturer, :string
-    field :cover, NextGearMotors.Vehicles.Covers.Cover.Type
+    field :covers, {:array, Cover.Type}, default: []
     has_many :reservations, NextGearMotors.Reservations.Reservation
 
     timestamps(type: :utc_datetime)
@@ -25,11 +28,12 @@ defmodule NextGearMotors.Vehicles.Vehicle do
   @doc false
   def changeset(vehicle, attrs) do
     vehicle
-    |> cast(attrs, [:name, :price, :description, :manufacturer, :cover])
-    |> cast_attachments(attrs, [:cover])
-    |> validate_required([:name, :price, :description, :manufacturer, :cover])
-    |> validate_format(:price, ~r/^€[0-9|,]*/,
-      message: "price must be a number in euro - i.e. '€20,000'"
+    |> cast(attrs, [:name, :price, :description, :manufacturer, :covers])
+    |> cast_attachments(attrs, [:covers])
+    |> validate_required([:name, :price, :description, :manufacturer, :covers])
+    |> validate_format(:price, ~r/^€[0-9|,|.]*/,
+      message: "price must be a number in euro - i.e. '€19,999.99'"
     )
+    |> validate_length(:covers, min: 1, max: 20)
   end
 end

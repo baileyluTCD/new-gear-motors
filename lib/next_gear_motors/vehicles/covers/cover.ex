@@ -10,8 +10,8 @@ defmodule NextGearMotors.Vehicles.Covers.Cover do
   @versions [:original]
   @extensions ~w(.jpg .jpeg .gif .png .avif)
 
-  defp to_filename(%{filename: name}), do: name
-  defp to_filename(%{file_name: name}), do: name
+  def to_filename(%{filename: name}), do: name
+  def to_filename(%{file_name: name}), do: name
 
   def validate({file, _}) do
     file_extension = to_filename(file) |> Path.extname() |> String.downcase()
@@ -23,7 +23,7 @@ defmodule NextGearMotors.Vehicles.Covers.Cover do
   end
 
   def transform(:original, _) do
-    {:convert, "-format avif", :avif}
+    {:magick, "-format avif", :avif}
   end
 
   def filename(_version, {file, _scope}) do

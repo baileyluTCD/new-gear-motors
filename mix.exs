@@ -84,7 +84,7 @@ defmodule NextGearMotors.MixProject do
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
       {:waffle, "~> 1.1"},
-      {:waffle_ecto, "~> 0.0"}
+      {:waffle_ecto, github: "nash-io/waffle_ecto", tag: "v0.0.12"}
     ]
   end
 

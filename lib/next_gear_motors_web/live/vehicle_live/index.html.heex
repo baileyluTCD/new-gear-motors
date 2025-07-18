@@ -27,7 +27,7 @@
     <.link navigate={~p"/vehicles/#{vehicle}"} title={"More Details - #{vehicle.name}"}>
       <div class="size-48 md:size-56 lg:size-80 overflow-hidden flex items-center justify-center">
         <img
-          src={Cover.url(vehicle.cover)}
+          src={Cover.url(Enum.at(vehicle.covers, 0))}
           alt={"Vehicle Preview Image - #{vehicle.name}"}
           class="rounded-xl shadow-xl"
         />

@@ -85,8 +85,10 @@ defmodule NextGearMotors.Vehicles do
 
   """
   def update_vehicle(%Vehicle{} = vehicle, attrs) do
-    if Map.get(attrs, "cover", "") != vehicle.cover do
-      Cover.delete({vehicle.cover, vehicle})
+    if Map.get(attrs, "covers", []) != vehicle.covers do
+      for cover <- vehicle.covers do
+        Cover.delete({cover, vehicle})
+      end
     end
 
     vehicle
@@ -107,7 +109,9 @@ defmodule NextGearMotors.Vehicles do
 
   """
   def delete_vehicle(%Vehicle{} = vehicle) do
-    Cover.delete({vehicle.cover, vehicle})
+    for cover <- vehicle.covers do
+      Cover.delete({cover, vehicle})
+    end
 
     Repo.delete(vehicle)
   end
