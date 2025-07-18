@@ -6,6 +6,8 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
 
   import NextGearMotorsWeb.VehicleHelper
 
+  require Logger
+
   @impl true
   def render(assigns) do
     ~H"""
@@ -26,7 +28,7 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
       >
         <h2 class="block text-sm font-semibold leading-6 text-zinc-200">Images</h2>
         <button phx-click="clear-existing-covers" phx-target={@myself}>
-          <.live_file_input upload={@uploads.covers} />
+          <.live_file_input phx-change="clear-existing-covers" upload={@uploads.covers} />
         </button>
 
         <article
@@ -108,7 +110,13 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
     end)
   end
 
-  defp with_covers(params, socket), do: Map.put(params, "covers", socket.assigns.covers)
+  defp with_covers(params, socket) do
+    if Enum.any?(socket.assigns.covers, fn cover -> Map.has_key?(cover, :file_name) end) do
+      params
+    else
+      Map.put(params, "covers", socket.assigns.covers)
+    end
+  end
 
   @impl true
   def handle_event("validate", %{"vehicle" => vehicle_params}, socket) do
@@ -144,7 +152,7 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
     {:noreply,
      socket
      |> put_flash(:info, msg)
-     |> push_patch(to: socket.assigns.patch)}
+     |> push_navigate(to: socket.assigns.patch)}
   end
 
   defp notify_saved({:error, %Ecto.Changeset{} = changeset}, _, socket),
