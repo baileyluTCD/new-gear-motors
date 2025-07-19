@@ -26,14 +26,19 @@ defmodule NextGearMotors.Vehicles.Vehicle do
   end
 
   @doc false
-  def changeset(vehicle, attrs) do
+  def validate_changeset(vehicle, attrs) do
     vehicle
     |> cast(attrs, [:name, :price, :description, :manufacturer, :covers])
-    |> cast_attachments(attrs, [:covers])
     |> validate_required([:name, :price, :description, :manufacturer, :covers])
     |> validate_format(:price, ~r/^€[0-9|,|.]*/,
       message: "price must be a number in euro - i.e. '€19,999.99'"
     )
     |> validate_length(:covers, min: 1, max: 20)
+  end
+
+  def save_changeset(vehicle, attrs) do
+    vehicle
+    |> validate_changeset(attrs)
+    |> cast_attachments(attrs, [:covers])
   end
 end
