@@ -104,7 +104,7 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
       socket
       |> put_flash(:info, "Image uploaded!")
       |> assign(:covers, covers)
-      |> assign(:in_progress, Map.delete(socket.assigns.in_progress, entry.upload_ref))
+      |> assign(:in_progress, Map.delete(socket.assigns.in_progress, entry.uuid))
 
     {_, socket} = handle_event("validate", %{"vehicle" => socket.assigns.form.params}, socket)
 
@@ -114,7 +114,7 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
   defp handle_progress(:covers, entry, socket) do
     socket =
       socket
-      |> assign(:in_progress, Map.put(socket.assigns.in_progress, entry.upload_ref, entry))
+      |> assign(:in_progress, Map.put(socket.assigns.in_progress, entry.uuid, entry))
 
     {:noreply, socket}
   end

@@ -25,7 +25,8 @@ config :logger, level: :info
 config :waffle,
   storage: Waffle.Storage.S3,
   bucket: {:system, "BUCKET_NAME"},
-  asset_host: {:system, "AWS_ENDPOINT_URL_S3"}
+  asset_host: {:system, "AWS_ENDPOINT_URL_S3"},
+  version_timeout: 120_000
 
 config :ex_aws,
   debug_requests: true,
