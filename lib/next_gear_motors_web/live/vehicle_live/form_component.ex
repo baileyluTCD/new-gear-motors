@@ -32,6 +32,21 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
         </button>
 
         <article
+          :for={{_ref, entry} <- @in_progress}
+          class="p-4 bg-zinc-800/50 rounded-3xl border border-zinc-600 flex flex-row justify-between items-center shadow-xl my-8"
+        >
+          <p title={entry.client_name}>{shorten_text(entry.client_name, 13)}</p>
+          <progress
+            title={"File Upload - #{entry.progress}%"}
+            value={entry.progress}
+            max="100"
+            class="rounded-lg"
+          >
+            {entry.progress}%
+          </progress>
+        </article>
+
+        <article
           :for={cover <- @covers}
           class="p-4 bg-zinc-800/50 rounded-3xl border border-zinc-600 flex flex-col items-center shadow-xl my-8"
         >
@@ -76,6 +91,7 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
        progress: &handle_progress/3
      )
      |> assign(:covers, vehicle.covers || [])
+     |> assign(:in_progress, %{})
      |> assign_new(:form, fn ->
        to_form(Vehicles.change_vehicle(vehicle))
      end)}
@@ -88,13 +104,18 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
       socket
       |> put_flash(:info, "Image uploaded!")
       |> assign(:covers, covers)
+      |> assign(:in_progress, Map.delete(socket.assigns.in_progress, entry.uuid))
 
     {_, socket} = handle_event("validate", %{"vehicle" => socket.assigns.form.params}, socket)
 
     {:noreply, socket}
   end
 
-  defp handle_progress(:covers, _entry, socket) do
+  defp handle_progress(:covers, entry, socket) do
+    socket =
+      socket
+      |> assign(:in_progress, Map.put(socket.assigns.in_progress, entry.uuid, entry))
+
     {:noreply, socket}
   end
 
