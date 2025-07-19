@@ -33,14 +33,14 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
 
         <article
           :for={{_ref, entry} <- @in_progress}
-          class="p-4 bg-zinc-800/50 rounded-3xl border border-zinc-600 flex flex-row justify-between items-center shadow-xl my-8"
+          class="p-4 bg-zinc-800/50 rounded-3xl border border-zinc-600 flex flex-row justify-between items-center shadow-xl my-8 gap-4"
         >
           <p title={entry.client_name}>{shorten_text(entry.client_name, 13)}</p>
           <progress
             title={"File Upload - #{entry.progress}%"}
             value={entry.progress}
             max="100"
-            class="rounded-lg"
+            class="w-full rounded-lg animate-pulse"
           >
             {entry.progress}%
           </progress>
