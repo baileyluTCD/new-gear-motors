@@ -8,7 +8,7 @@ defmodule NextGearMotors.Vehicles.Covers.Cover do
   use Waffle.Ecto.Definition
 
   @versions [:original]
-  @extensions ~w(.jpg .jpeg .gif .png .avif)
+  @extensions ~w(.png .jpg .jpeg .avif)
 
   def to_filename(%{filename: name}), do: name
   def to_filename(%{file_name: name}), do: name
@@ -23,7 +23,7 @@ defmodule NextGearMotors.Vehicles.Covers.Cover do
   end
 
   def transform(:original, _) do
-    {:magick, "-format avif", :avif}
+    {:magick, "-format 'avif'", :avif}
   end
 
   def filename(_version, {file, _scope}) do
