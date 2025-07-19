@@ -23,7 +23,7 @@ defmodule NextGearMotors.Vehicles.Covers.Cover do
   end
 
   def transform(:original, _) do
-    {:magick, "-format avif", :avif}
+    {:magick, "-format 'avif'", :avif}
   end
 
   def filename(_version, {file, _scope}) do
