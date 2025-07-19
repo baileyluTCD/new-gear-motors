@@ -8,7 +8,7 @@ defmodule NextGearMotors.Vehicles.Covers.Cover do
   use Waffle.Ecto.Definition
 
   @versions [:original]
-  @extensions ~w(.jpg .jpeg .gif .png .avif)
+  @extensions ~w(.png .jpg .jpeg .avif)
 
   def to_filename(%{filename: name}), do: name
   def to_filename(%{file_name: name}), do: name
