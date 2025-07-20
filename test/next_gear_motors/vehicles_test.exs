@@ -86,6 +86,22 @@ defmodule NextGearMotors.VehiclesTest do
       assert {:error, %Ecto.Changeset{}} = Vehicles.create_vehicle(@invalid_attrs)
     end
 
+    test "update_vehicle/2 with empty covers does not update covers" do
+      vehicle = vehicle_fixture()
+      [prev_cover] = vehicle.covers
+
+      update_attrs = %{
+        name: "some updated name",
+        description: "some updated description",
+        price: "€50,000",
+        manufacturer: "some updated manufacturer"
+      }
+
+      assert {:ok, %Vehicle{} = vehicle} = Vehicles.update_vehicle(vehicle, update_attrs)
+      assert vehicle.covers == [prev_cover]
+      assert File.exists?("priv/static" <> Cover.url(prev_cover))
+    end
+
     test "update_vehicle/2 with valid data updates the vehicle" do
       vehicle = vehicle_fixture()
       [prev_cover] = vehicle.covers

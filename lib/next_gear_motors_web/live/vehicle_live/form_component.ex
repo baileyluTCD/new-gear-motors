@@ -2,10 +2,8 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
   use NextGearMotorsWeb, :live_component
 
   alias NextGearMotors.Vehicles
-  alias NextGearMotors.Vehicles.Covers.Cover
 
   import NextGearMotorsWeb.VehicleHelper
-
 
   @impl true
   def render(assigns) do
