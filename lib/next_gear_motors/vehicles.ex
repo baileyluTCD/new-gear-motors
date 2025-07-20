@@ -9,6 +9,8 @@ defmodule NextGearMotors.Vehicles do
   alias NextGearMotors.Vehicles.Vehicle
   alias NextGearMotors.Vehicles.Covers.Cover
 
+  require Logger
+
   @doc """
   Returns the list of vehicles.
 
@@ -85,7 +87,9 @@ defmodule NextGearMotors.Vehicles do
 
   """
   def update_vehicle(%Vehicle{} = vehicle, attrs) do
-    if Map.get(attrs, "covers", []) != vehicle.covers do
+    new_covers = Map.get(attrs, "covers", [])
+
+    if new_covers != [] && new_covers != vehicle.covers do
       for cover <- vehicle.covers do
         Cover.delete({cover, vehicle})
       end
