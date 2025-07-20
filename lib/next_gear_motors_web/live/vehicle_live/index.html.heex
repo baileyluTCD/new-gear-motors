@@ -22,7 +22,7 @@
   <.box
     :for={{id, vehicle} <- @streams.vehicles}
     id={id}
-    class="w-68 md:w-72 lg:w-96 p-4 m-4 hover:border-zinc-400 hover:scale-105 transition duration-300 flex flex-col items-center"
+    class="w-full md:w-72 lg:w-96 p-4 m-4 hover:border-zinc-400 hover:scale-105 transition duration-300 flex flex-col items-center"
   >
     <.link navigate={~p"/vehicles/#{vehicle}"} title={"More Details - #{vehicle.name}"}>
       <div class="size-48 md:size-56 lg:size-80 overflow-hidden flex items-center justify-center">
