@@ -2,7 +2,6 @@ defmodule NextGearMotorsWeb.CSP do
   @moduledoc """
   Contains functions used for producing the applications nonce
   """
-  require Logger
 
   import NextGearMotorsWeb.CSP.Macros
 

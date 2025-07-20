@@ -174,7 +174,7 @@ defmodule NextGearMotorsWeb.VehicleLiveTest do
 
       assert show_live
              |> file_input("#vehicle-form", :covers, [@updated_cover])
-             |> render_upload("updated_car.jpg") =~ "img src=\"/uploads/car"
+             |> render_upload("updated_car.jpg") =~ "img id=\"phx-preview-"
 
       {:ok, _show_live, html} =
         show_live

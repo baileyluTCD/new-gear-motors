@@ -2,11 +2,8 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
   use NextGearMotorsWeb, :live_component
 
   alias NextGearMotors.Vehicles
-  alias NextGearMotors.Vehicles.Covers.Cover
 
   import NextGearMotorsWeb.VehicleHelper
-
-  require Logger
 
   @impl true
   def render(assigns) do
@@ -47,16 +44,17 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
         </article>
 
         <article
-          :for={cover <- @covers}
+          :for={entry <- @uploads.covers.entries}
+          :if={entry.done?}
           class="p-4 bg-zinc-800/50 rounded-3xl border border-zinc-600 flex flex-col items-center shadow-xl my-8"
         >
           <figure class="w-full flex flex-col items-center px-2">
-            <img src={Cover.url(cover)} class="rounded-xl m-2 border border-zinc-500 shadow" />
+            <.live_img_preview entry={entry} class="rounded-xl m-2 border border-zinc-500 shadow" />
             <figcaption
-              title={Cover.to_filename(cover)}
+              title={entry.client_name}
               class="max-sm:text-sm flex flex-col sm:flex-row justify-between items-center px-8 py-2 gap-3"
             >
-              {shorten_text(Cover.to_filename(cover), 13)}
+              {entry.client_name}
             </figcaption>
           </figure>
         </article>
@@ -72,7 +70,7 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
         <.input field={@form[:description]} type="textarea" label="Description" />
         <.input field={@form[:manufacturer]} type="text" label="Manufacturer" />
         <:actions>
-          <.button phx-disable-with="Saving...">Save Vehicle</.button>
+          <.button phx-disable-with="Saving and Compressing Images...">Save Vehicle</.button>
         </:actions>
       </.simple_form>
     </div>

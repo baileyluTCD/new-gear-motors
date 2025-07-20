@@ -85,7 +85,7 @@ defmodule NextGearMotors.Vehicles do
 
   """
   def update_vehicle(%Vehicle{} = vehicle, attrs) do
-    if Map.get(attrs, "covers", []) != vehicle.covers do
+    if Map.has_key?(attrs, "covers") || Map.has_key?(attrs, :covers) do
       for cover <- vehicle.covers do
         Cover.delete({cover, vehicle})
       end
