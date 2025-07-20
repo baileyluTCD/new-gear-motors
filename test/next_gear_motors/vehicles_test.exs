@@ -48,7 +48,7 @@ defmodule NextGearMotors.VehiclesTest do
       valid_attrs = %{
         name: "some name",
         description: "some description",
-        price: "€40,000",
+        price: "€40,000.50",
         manufacturer: "some manufacturer",
         covers: [cover_a, cover_b]
       }
@@ -56,7 +56,7 @@ defmodule NextGearMotors.VehiclesTest do
       assert {:ok, %Vehicle{} = vehicle} = Vehicles.create_vehicle(valid_attrs)
       assert vehicle.name == "some name"
       assert vehicle.description == "some description"
-      assert vehicle.price == "€40,000"
+      assert vehicle.price == "€40,000.50"
       assert vehicle.manufacturer == "some manufacturer"
 
       [vehicle_cover_a, vehicle_cover_b] = vehicle.covers
