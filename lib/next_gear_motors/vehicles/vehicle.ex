@@ -10,7 +10,6 @@ defmodule NextGearMotors.Vehicles.Vehicle do
   import Ecto.Changeset
 
   alias NextGearMotors.Vehicles.Covers.Cover
-  require Logger
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
@@ -25,20 +24,20 @@ defmodule NextGearMotors.Vehicles.Vehicle do
     timestamps(type: :utc_datetime)
   end
 
-  @doc false
   def validate_changeset(vehicle, attrs) do
     vehicle
-    |> cast(attrs, [:name, :price, :description, :manufacturer, :covers])
-    |> validate_required([:name, :price, :description, :manufacturer, :covers])
-    |> validate_format(:price, ~r/^€[0-9|,|.]*/,
-      message: "price must be a number in euro - i.e. '€19,999.99'"
+    |> cast(attrs, [:name, :price, :description, :manufacturer])
+    |> validate_required([:name, :price, :description, :manufacturer])
+    |> validate_format(:price, ~r/^€[0-9|,|\.]*$/,
+      message: "must be a number in euro - i.e. '€19,999.99'"
     )
-    |> validate_length(:covers, min: 1, max: 20)
   end
 
   def save_changeset(vehicle, attrs) do
     vehicle
     |> validate_changeset(attrs)
     |> cast_attachments(attrs, [:covers])
+    |> validate_required([:covers])
+    |> validate_length(:covers, min: 1, max: 20)
   end
 end
