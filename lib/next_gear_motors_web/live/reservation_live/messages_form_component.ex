@@ -1,5 +1,4 @@
 defmodule NextGearMotorsWeb.ReservationLive.MessagesFormComponent do
-  require Logger
   use NextGearMotorsWeb, :live_component
 
   alias NextGearMotors.Reservations.Messages

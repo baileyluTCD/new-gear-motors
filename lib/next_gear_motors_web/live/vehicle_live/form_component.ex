@@ -6,7 +6,6 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
 
   import NextGearMotorsWeb.VehicleHelper
 
-  require Logger
 
   @impl true
   def render(assigns) do

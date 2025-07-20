@@ -9,7 +9,6 @@ defmodule NextGearMotors.Vehicles do
   alias NextGearMotors.Vehicles.Vehicle
   alias NextGearMotors.Vehicles.Covers.Cover
 
-  require Logger
 
   @doc """
   Returns the list of vehicles.
