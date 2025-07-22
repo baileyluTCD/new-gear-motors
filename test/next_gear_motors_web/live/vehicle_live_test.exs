@@ -105,12 +105,13 @@ defmodule NextGearMotorsWeb.VehicleLiveTest do
              |> file_input("#vehicle-form", :covers, [@cover])
              |> render_upload("car.jpg") =~ "img src=\"/uploads/car"
 
-      {:ok, _index_live, html} =
-        index_live
-        |> form("#vehicle-form", vehicle: @create_attrs)
-        |> render_submit()
-        |> follow_redirect(conn, ~p"/vehicles")
+      assert index_live
+             |> form("#vehicle-form", vehicle: @create_attrs)
+             |> render_submit()
 
+      assert_patch(index_live, ~p"/vehicles")
+
+      html = render(index_live)
       assert html =~ "Vehicle created successfully"
       assert html =~ "some name"
     end
@@ -128,12 +129,13 @@ defmodule NextGearMotorsWeb.VehicleLiveTest do
              |> form("#vehicle-form", vehicle: @invalid_attrs)
              |> render_change() =~ "can&#39;t be blank"
 
-      {:ok, _index_live, html} =
-        index_live
-        |> form("#vehicle-form", vehicle: @update_attrs)
-        |> render_submit()
-        |> follow_redirect(conn, ~p"/vehicles")
+      assert index_live
+             |> form("#vehicle-form", vehicle: @update_attrs)
+             |> render_submit()
 
+      assert_patch(index_live, ~p"/vehicles")
+
+      html = render(index_live)
       assert html =~ "Vehicle updated successfully"
       assert html =~ "some updated name"
     end
@@ -176,12 +178,13 @@ defmodule NextGearMotorsWeb.VehicleLiveTest do
              |> file_input("#vehicle-form", :covers, [@updated_cover])
              |> render_upload("updated_car.jpg") =~ "img id=\"phx-preview-"
 
-      {:ok, _show_live, html} =
-        show_live
-        |> form("#vehicle-form", vehicle: @update_attrs)
-        |> render_submit()
-        |> follow_redirect(conn, ~p"/vehicles/#{vehicle}")
+      assert show_live
+             |> form("#vehicle-form", vehicle: @update_attrs)
+             |> render_submit()
 
+      assert_patch(show_live, ~p"/vehicles/#{vehicle}")
+
+      html = render(show_live)
       assert html =~ "Vehicle updated successfully"
       assert html =~ "some updated name"
     end

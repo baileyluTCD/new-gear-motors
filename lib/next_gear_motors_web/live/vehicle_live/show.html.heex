@@ -26,9 +26,11 @@
       </div>
     </span>
 
-    <span class="w-full flex flex-col items-center min-h-2/3">
+    <span
+      class="w-full flex flex-col items-center min-h-2/3"
+      id={"vehicle-images-#{@vehicle.updated_at}"}
+    >
       <.carousel
-        id="vehicle-images"
         class="flex items-center justify-center rounded-xl border border-zinc-600 m-2 shadow-xl p-2"
         autoplay
         indicator

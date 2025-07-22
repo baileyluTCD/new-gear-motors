@@ -48,6 +48,16 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
           :if={entry.done?}
           class="p-4 bg-zinc-800/50 rounded-3xl border border-zinc-600 flex flex-col items-center shadow-xl my-8"
         >
+          <button
+            type="button"
+            phx-click="cancel-upload"
+            phx-value-ref={entry.ref}
+            aria-label="cancel"
+            class="w-full text-right text-lg hover:text-red-400"
+            phx-target={@myself}
+          >
+            &times;
+          </button>
           <figure class="w-full flex flex-col items-center px-2">
             <.live_img_preview entry={entry} class="rounded-xl m-2 border border-zinc-500 shadow" />
             <figcaption
@@ -82,18 +92,24 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
   end
 
   @impl true
-  def update(%{vehicle: vehicle} = assigns, socket) do
+  def mount(socket) do
     {:ok,
      socket
-     |> assign(assigns)
      |> allow_upload(:covers,
        accept: ~w(.png .jpg .jpeg .avif),
        max_entries: 20,
        auto_upload: true,
        progress: &handle_progress/3
      )
-     |> assign(:covers, vehicle.covers || [])
-     |> assign(:in_progress, %{})
+     |> assign(:covers, [])
+     |> assign(:in_progress, %{})}
+  end
+
+  @impl true
+  def update(%{vehicle: vehicle} = assigns, socket) do
+    {:ok,
+     socket
+     |> assign(assigns)
      |> assign_new(:form, fn ->
        to_form(Vehicles.change_vehicle(vehicle))
      end)}
@@ -155,6 +171,10 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
     save_vehicle(socket, socket.assigns.action, vehicle_params)
   end
 
+  def handle_event("cancel-upload", %{"ref" => ref}, socket) do
+    {:noreply, cancel_upload(socket, :covers, ref)}
+  end
+
   def handle_event("clear-existing-covers", _value, socket) do
     {:noreply, assign(socket, :covers, [])}
   end
@@ -175,7 +195,7 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
     {:noreply,
      socket
      |> put_flash(:info, msg)
-     |> push_navigate(to: socket.assigns.patch)}
+     |> push_patch(to: socket.assigns.patch)}
   end
 
   defp notify_saved({:error, %Ecto.Changeset{} = changeset}, _, socket),
