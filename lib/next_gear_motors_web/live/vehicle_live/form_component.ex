@@ -57,7 +57,11 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
               {entry.client_name}
             </figcaption>
           </figure>
+
+          <.error :for={err <- upload_errors(@uploads.covers, entry)}>{error_to_string(err)}</.error>
         </article>
+
+        <.error :for={err <- upload_errors(@uploads.covers)}>{error_to_string(err)}</.error>
 
         <%= if err = @form.errors[:covers] do %>
           <%= if {msg, _} = err do %>
@@ -178,4 +182,10 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
     do: {:noreply, assign(socket, form: to_form(changeset))}
 
   defp notify_parent(msg), do: send(self(), {__MODULE__, msg})
+
+  defp error_to_string(:too_large), do: "Too large"
+  defp error_to_string(:not_accepted), do: "You have selected an unacceptable file type"
+  defp error_to_string(:too_many_files), do: "You have selected too many files"
+  defp error_to_string(:external_client_failure), do: "Something went terribly wrong"
+  defp error_to_string({:writer_failiure, reason}), do: "Failed writing image - #{reason}"
 end
