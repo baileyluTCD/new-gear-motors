@@ -48,6 +48,16 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
           :if={entry.done?}
           class="p-4 bg-zinc-800/50 rounded-3xl border border-zinc-600 flex flex-col items-center shadow-xl my-8"
         >
+          <button
+            type="button"
+            phx-click="cancel-upload"
+            phx-value-ref={entry.ref}
+            aria-label="cancel"
+            class="w-full text-right text-lg hover:text-red-400"
+            phx-target={@myself}
+          >
+            &times;
+          </button>
           <figure class="w-full flex flex-col items-center px-2">
             <.live_img_preview entry={entry} class="rounded-xl m-2 border border-zinc-500 shadow" />
             <figcaption
@@ -159,6 +169,10 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
     vehicle_params = with_covers(vehicle_params, socket)
 
     save_vehicle(socket, socket.assigns.action, vehicle_params)
+  end
+
+  def handle_event("cancel-upload", %{"ref" => ref}, socket) do
+    {:noreply, cancel_upload(socket, :covers, ref)}
   end
 
   def handle_event("clear-existing-covers", _value, socket) do
