@@ -9,7 +9,10 @@ defmodule NextGearMotors.Vehicles.Vehicle do
   use Waffle.Ecto.Schema
   import Ecto.Changeset
 
+  require Logger
+
   alias NextGearMotors.Vehicles.Covers.Cover
+  alias NextGearMotors.Vehicles
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
@@ -34,10 +37,15 @@ defmodule NextGearMotors.Vehicles.Vehicle do
   end
 
   def save_changeset(vehicle, attrs) do
-    vehicle
-    |> validate_changeset(attrs)
-    |> cast_attachments(attrs, [:covers])
-    |> validate_required([:covers])
-    |> validate_length(:covers, min: 1, max: 20)
+    covers = Vehicles.get_covers_from_attrs(attrs)
+
+    if covers && !Enum.empty?(covers) do
+      vehicle
+      |> validate_changeset(attrs)
+      |> cast_attachments(attrs, [:covers])
+      |> validate_length(:covers, min: 1, max: 20)
+    else
+      validate_changeset(vehicle, attrs)
+    end
   end
 end

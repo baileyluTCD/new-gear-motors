@@ -73,6 +73,25 @@ defmodule NextGearMotors.Vehicles do
   end
 
   @doc """
+  Accesses covers if it exists on attrs
+
+  ## Examples
+
+      iex> get_covers_from_attrs(%{"covers" => [...]})
+      [...]
+
+      iex> get_covers_from_attrs(%{:covers => [...]})
+      [...]
+
+      iex> get_covers_from_attrs(%{})
+      nil
+
+  """
+  def get_covers_from_attrs(%{"covers" => covers}), do: covers
+  def get_covers_from_attrs(%{:covers => covers}), do: covers
+  def get_covers_from_attrs(_attrs), do: nil
+
+  @doc """
   Updates a vehicle.
 
   ## Examples
@@ -85,7 +104,9 @@ defmodule NextGearMotors.Vehicles do
 
   """
   def update_vehicle(%Vehicle{} = vehicle, attrs) do
-    if Map.has_key?(attrs, "covers") || Map.has_key?(attrs, :covers) do
+    covers = get_covers_from_attrs(attrs)
+
+    if covers && !Enum.empty?(covers) do
       for cover <- vehicle.covers do
         Cover.delete({cover, vehicle})
       end
