@@ -82,18 +82,24 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
   end
 
   @impl true
-  def update(%{vehicle: vehicle} = assigns, socket) do
+  def mount(socket) do
     {:ok,
      socket
-     |> assign(assigns)
      |> allow_upload(:covers,
        accept: ~w(.png .jpg .jpeg .avif),
        max_entries: 20,
        auto_upload: true,
        progress: &handle_progress/3
      )
-     |> assign(:covers, vehicle.covers || [])
-     |> assign(:in_progress, %{})
+     |> assign(:covers, [])
+     |> assign(:in_progress, %{})}
+  end
+
+  @impl true
+  def update(%{vehicle: vehicle} = assigns, socket) do
+    {:ok,
+     socket
+     |> assign(assigns)
      |> assign_new(:form, fn ->
        to_form(Vehicles.change_vehicle(vehicle))
      end)}
