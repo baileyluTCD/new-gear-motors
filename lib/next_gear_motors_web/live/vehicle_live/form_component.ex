@@ -181,7 +181,7 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
     {:noreply,
      socket
      |> put_flash(:info, msg)
-     |> push_navigate(to: socket.assigns.patch)}
+     |> push_patch(to: socket.assigns.patch)}
   end
 
   defp notify_saved({:error, %Ecto.Changeset{} = changeset}, _, socket),
