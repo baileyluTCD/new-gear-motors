@@ -47,7 +47,8 @@ let
               };
               nativeBuildInputs = [
                 extendedPkgs.cmake
-              ] ++ extendedPkgs.lib.lists.optional extendedPkgs.stdenv.isDarwin extendedPkgs.darwin.IOKit;
+              ]
+              ++ extendedPkgs.lib.lists.optional extendedPkgs.stdenv.isDarwin extendedPkgs.darwin.IOKit;
               doCheck = false;
             };
 
