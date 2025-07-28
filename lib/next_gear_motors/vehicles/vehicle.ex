@@ -9,8 +9,6 @@ defmodule NextGearMotors.Vehicles.Vehicle do
   use Waffle.Ecto.Schema
   import Ecto.Changeset
 
-  require Logger
-
   alias NextGearMotors.Vehicles.Covers.Cover
   alias NextGearMotors.Vehicles
 
