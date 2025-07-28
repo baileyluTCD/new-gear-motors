@@ -102,7 +102,7 @@ defmodule NextGearMotorsWeb.VehicleLiveTest do
              |> render_change() =~ "can&#39;t be blank"
 
       assert index_live
-             |> file_input("#vehicle-form", :covers, [@cover])
+             |> file_input("#upload-form", :covers, [@cover])
              |> render_upload("car.jpg") =~ "img src=\"/uploads/car"
 
       assert index_live
@@ -175,7 +175,7 @@ defmodule NextGearMotorsWeb.VehicleLiveTest do
              |> render_change() =~ "can&#39;t be blank"
 
       assert show_live
-             |> file_input("#vehicle-form", :covers, [@updated_cover])
+             |> file_input("#upload-form", :covers, [@updated_cover])
              |> render_upload("updated_car.jpg") =~ "img id=\"phx-preview-"
 
       assert show_live
