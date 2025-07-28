@@ -2,6 +2,7 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
   use NextGearMotorsWeb, :live_component
 
   alias NextGearMotors.Vehicles
+  alias NextGearMotorsWeb.VehicleLive.ImagesComponent
 
   import NextGearMotorsWeb.VehicleHelper
 
@@ -16,6 +17,8 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
         </:subtitle>
       </.header>
 
+      <.live_component module={ImagesComponent} id={:images_form} parent={@myself} />
+
       <.simple_form
         for={@form}
         id="vehicle-form"
@@ -23,62 +26,6 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <h2 class="block text-sm font-semibold leading-6 text-zinc-200">Images</h2>
-        <button phx-click="clear-existing-covers" phx-target={@myself}>
-          <.live_file_input phx-change="clear-existing-covers" upload={@uploads.covers} />
-        </button>
-
-        <article
-          :for={{_ref, entry} <- @in_progress}
-          class="p-4 bg-zinc-800/50 rounded-3xl border border-zinc-600 flex flex-row justify-between items-center shadow-xl my-8 gap-4"
-        >
-          <p title={entry.client_name}>{shorten_text(entry.client_name, 13)}</p>
-          <progress
-            title={"File Upload - #{entry.progress}%"}
-            value={entry.progress}
-            max="100"
-            class="w-full rounded-lg animate-pulse"
-          >
-            {entry.progress}%
-          </progress>
-        </article>
-
-        <article
-          :for={entry <- @uploads.covers.entries}
-          :if={entry.done?}
-          class="p-4 bg-zinc-800/50 rounded-3xl border border-zinc-600 flex flex-col items-center shadow-xl my-8"
-        >
-          <button
-            type="button"
-            phx-click="cancel-upload"
-            phx-value-ref={entry.ref}
-            aria-label="cancel"
-            class="w-full text-right text-lg hover:text-red-400"
-            phx-target={@myself}
-          >
-            &times;
-          </button>
-          <figure class="w-full flex flex-col items-center px-2">
-            <.live_img_preview entry={entry} class="rounded-xl m-2 border border-zinc-500 shadow" />
-            <figcaption
-              title={entry.client_name}
-              class="max-sm:text-sm flex flex-col sm:flex-row justify-between items-center px-8 py-2 gap-3"
-            >
-              {entry.client_name}
-            </figcaption>
-          </figure>
-
-          <.error :for={err <- upload_errors(@uploads.covers, entry)}>{error_to_string(err)}</.error>
-        </article>
-
-        <.error :for={err <- upload_errors(@uploads.covers)}>{error_to_string(err)}</.error>
-
-        <%= if err = @form.errors[:covers] do %>
-          <%= if {msg, _} = err do %>
-            <.error>{msg}</.error>
-          <% end %>
-        <% end %>
-
         <.input field={@form[:name]} type="text" label="Name" />
         <.input field={@form[:price]} type="text" label="Price" />
         <.input field={@form[:description]} type="textarea" label="Description" />
@@ -92,20 +39,6 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
   end
 
   @impl true
-  def mount(socket) do
-    {:ok,
-     socket
-     |> allow_upload(:covers,
-       accept: ~w(.png .jpg .jpeg .avif),
-       max_entries: 20,
-       auto_upload: true,
-       progress: &handle_progress/3
-     )
-     |> assign(:covers, [])
-     |> assign(:in_progress, %{})}
-  end
-
-  @impl true
   def update(%{vehicle: vehicle} = assigns, socket) do
     {:ok,
      socket
@@ -115,68 +48,23 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
      end)}
   end
 
-  defp handle_progress(:covers, %{:done? => true} = entry, socket) do
-    covers = [consume_cover(socket, entry) | socket.assigns.covers]
-
-    socket =
-      socket
-      |> put_flash(:info, "Image uploaded!")
-      |> assign(:covers, covers)
-      |> assign(:in_progress, Map.delete(socket.assigns.in_progress, entry.uuid))
-
-    {_, socket} = handle_event("validate", %{"vehicle" => socket.assigns.form.params}, socket)
-
-    {:noreply, socket}
-  end
-
-  defp handle_progress(:covers, entry, socket) do
-    socket =
-      socket
-      |> assign(:in_progress, Map.put(socket.assigns.in_progress, entry.uuid, entry))
-
-    {:noreply, socket}
-  end
-
-  defp consume_cover(socket, entry) do
-    consume_uploaded_entry(socket, entry, fn %{} = meta ->
-      cover = %Plug.Upload{
-        content_type: entry.client_type,
-        filename: entry.client_name,
-        path: meta.path
-      }
-
-      {:postpone, cover}
-    end)
-  end
-
-  defp with_covers(params, socket) do
-    if Enum.any?(socket.assigns.covers, fn cover -> Map.has_key?(cover, :file_name) end) do
-      params
-    else
-      Map.put(params, "covers", socket.assigns.covers)
-    end
+  def update(%{:covers => covers}, socket) do
+    {:ok, assign(socket, :covers, covers)}
   end
 
   @impl true
-  def handle_event("validate", %{"vehicle" => vehicle_params}, socket) do
-    vehicle_params = with_covers(vehicle_params, socket)
+  def handle_event(event, %{"vehicle" => vehicle_params}, socket) do
+    vehicle_params = Map.put(vehicle_params, "covers", Map.get(socket.assigns, :covers, nil))
+    handle_event_with_covers(event, vehicle_params, socket)
+  end
 
+  def handle_event_with_covers("validate", vehicle_params, socket) do
     changeset = Vehicles.change_vehicle(socket.assigns.vehicle, vehicle_params)
     {:noreply, assign(socket, form: to_form(changeset, action: :validate))}
   end
 
-  def handle_event("save", %{"vehicle" => vehicle_params}, socket) do
-    vehicle_params = with_covers(vehicle_params, socket)
-
+  def handle_event_with_covers("save", vehicle_params, socket) do
     save_vehicle(socket, socket.assigns.action, vehicle_params)
-  end
-
-  def handle_event("cancel-upload", %{"ref" => ref}, socket) do
-    {:noreply, cancel_upload(socket, :covers, ref)}
-  end
-
-  def handle_event("clear-existing-covers", _value, socket) do
-    {:noreply, assign(socket, :covers, [])}
   end
 
   defp save_vehicle(socket, :edit, vehicle_params),
@@ -202,10 +90,4 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
     do: {:noreply, assign(socket, form: to_form(changeset))}
 
   defp notify_parent(msg), do: send(self(), {__MODULE__, msg})
-
-  defp error_to_string(:too_large), do: "Too large"
-  defp error_to_string(:not_accepted), do: "You have selected an unacceptable file type"
-  defp error_to_string(:too_many_files), do: "You have selected too many files"
-  defp error_to_string(:external_client_failure), do: "Something went terribly wrong"
-  defp error_to_string({:writer_failiure, reason}), do: "Failed writing image - #{reason}"
 end
