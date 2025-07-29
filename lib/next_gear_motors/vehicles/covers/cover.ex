@@ -23,7 +23,7 @@ defmodule NextGearMotors.Vehicles.Covers.Cover do
   end
 
   def transform(:original, _) do
-    {:magick, "-strip -interlace Plane -sampling-factor 4:2:0 -quality 85% -format avif", :avif}
+    {:magick, "-strip -interlace Plane -sampling-factor 4:2:0 -quality 85%"}
   end
 
   def filename(_version, {file, _scope}) do
