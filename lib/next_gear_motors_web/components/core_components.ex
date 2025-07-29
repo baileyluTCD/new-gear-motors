@@ -49,22 +49,25 @@ defmodule NextGearMotorsWeb.CoreComponents do
       <.status mode={:accepted}/>
   """
   attr(:mode, :atom, default: :pending)
+  attr(:rest, :global, doc: "the arbitrary HTML attributes to add to the flash container")
 
   def status(assigns) do
     case assigns.mode do
       :accepted ->
         ~H"""
-        <p class="text-green-600"><.icon name="hero-check-circle" class="m-2 w-5 h-5" />Accepted</p>
+        <p class="text-green-600" {@rest}>
+          <.icon name="hero-check-circle" class="m-2 w-5 h-5" />Accepted
+        </p>
         """
 
       :denied ->
         ~H"""
-        <p class="text-red-600"><.icon name="hero-x-circle" class="m-2 w-5 h-5" />Denied</p>
+        <p class="text-red-600" {@rest}><.icon name="hero-x-circle" class="m-2 w-5 h-5" />Denied</p>
         """
 
       :pending ->
         ~H"""
-        <p class="text-yellow-400">
+        <p class="text-yellow-400" {@rest}>
           <.icon name="hero-question-mark-circle" class="m-2 w-5 h-5" />Pending
         </p>
         """
