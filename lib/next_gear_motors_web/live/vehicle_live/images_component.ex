@@ -106,10 +106,12 @@ defmodule NextGearMotorsWeb.VehicleLive.ImagesComponent do
     covers = Map.put(socket.assigns.covers, ref, cover)
 
     send_update(socket.assigns.parent, covers: to_waffle_ecto_type_array(covers))
-
     send(self(), {:put_flash, [:info, "Image Processing Completed!"]})
 
-    {:ok, assign(socket, :covers, covers)}
+    {:ok,
+     socket
+     |> assign(:covers, covers)
+     |> cancel_upload(:covers, ref)}
   end
 
   defp to_waffle_ecto_type_array(covers) do
@@ -121,31 +123,34 @@ defmodule NextGearMotorsWeb.VehicleLive.ImagesComponent do
 
   def update(assigns, socket), do: {:ok, assign(socket, assigns)}
 
-  defp handle_progress(:covers, %{:done? => true} = entry, socket) do
-    pid = self()
-
-    Task.async(fn ->
-      cover =
-        consume_uploaded_entry(socket, entry, fn %{} = meta ->
-          cover = %Plug.Upload{
-            content_type: entry.client_type,
-            filename: entry.client_name,
-            path: meta.path
-          }
-
-          Cover.store({cover, socket.assigns.vehicle})
-        end)
-
-      send_update(pid, socket.assigns.myself, data: {:finish_image_processing, entry.ref, cover})
-    end)
-
-    send(pid, {:put_flash, [:info, "Image uploaded - Starting Processing..."]})
+  defp handle_progress(:covers, entry, socket) do
+    if entry.done? do
+      async_upload_waffle_file(socket, entry)
+    end
 
     {:noreply, socket}
   end
 
-  defp handle_progress(:covers, _entry, socket) do
-    {:noreply, socket}
+  defp async_upload_waffle_file(socket, %Phoenix.LiveView.UploadEntry{} = entry) do
+    lv = self()
+
+    send(lv, {:put_flash, [:info, "Image uploaded - Starting Processing..."]})
+
+    consume_uploaded_entry(socket, entry, fn %{} = meta ->
+      Task.Supervisor.start_child(NextGearMotors.TaskSupervisor, fn ->
+        cover = %Plug.Upload{
+          content_type: entry.client_type,
+          filename: entry.client_name,
+          path: meta.path
+        }
+
+        {:ok, cover} = Cover.store({cover, socket.assigns.vehicle})
+
+        send_update(lv, socket.assigns.myself, data: {:finish_image_processing, entry.ref, cover})
+      end)
+
+      {:postpone, :ok}
+    end)
   end
 
   @impl true

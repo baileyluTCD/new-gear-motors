@@ -15,6 +15,7 @@ defmodule NextGearMotors.Application do
       {Phoenix.PubSub, name: NextGearMotors.PubSub},
       # Start the Finch HTTP client for sending emails
       {Finch, name: NextGearMotors.Finch},
+      {Task.Supervisor, name: NextGearMotors.TaskSupervisor},
       # Start a worker by calling: NextGearMotors.Worker.start_link(arg)
       # {NextGearMotors.Worker, arg},
       # Start to serve requests, typically the last entry
