@@ -17,7 +17,14 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
         </:subtitle>
       </.header>
 
-      <.live_component module={ImagesComponent} id={:images_form} parent={@myself} />
+      <.live_component
+        module={ImagesComponent}
+        id={:images_form}
+        parent={@myself}
+        patch={@patch}
+        vehicle={@vehicle}
+      />
+      <.error :for={err <- @form[:covers].errors}>{translate_error(err)}</.error>
 
       <.simple_form
         for={@form}
@@ -31,7 +38,7 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
         <.input field={@form[:description]} type="textarea" label="Description" />
         <.input field={@form[:manufacturer]} type="text" label="Manufacturer" />
         <:actions>
-          <.button phx-disable-with="Saving and Compressing Images...">Save Vehicle</.button>
+          <.button phx-disable-with="Saving...">Save Vehicle</.button>
         </:actions>
       </.simple_form>
     </div>
@@ -43,6 +50,7 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
     {:ok,
      socket
      |> assign(assigns)
+     |> assign(:covers, vehicle.covers)
      |> assign_new(:form, fn ->
        to_form(Vehicles.change_vehicle(vehicle))
      end)}
@@ -54,7 +62,7 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
 
   @impl true
   def handle_event(event, %{"vehicle" => vehicle_params}, socket) do
-    vehicle_params = Map.put(vehicle_params, "covers", Map.get(socket.assigns, :covers, nil))
+    vehicle_params = Map.put(vehicle_params, "covers", Map.get(socket.assigns, :covers, []))
     handle_event_with_covers(event, vehicle_params, socket)
   end
 
