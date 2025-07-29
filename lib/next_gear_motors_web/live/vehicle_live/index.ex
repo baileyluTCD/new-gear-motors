@@ -53,6 +53,10 @@ defmodule NextGearMotorsWeb.VehicleLive.Index do
   end
 
   @impl true
+  def handle_info({:put_flash, [type, message]}, socket) do
+    {:noreply, put_flash(socket, type, message)}
+  end
+
   def handle_info({NextGearMotorsWeb.VehicleLive.FormComponent, {:saved, vehicle}}, socket) do
     {:noreply, stream_insert(socket, :vehicles, vehicle)}
   end

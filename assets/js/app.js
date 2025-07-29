@@ -23,9 +23,26 @@ import "./markdown-block.js";
 import "./humanize-date.js";
 import "./data-animate.js";
 import MishkaComponents from "../vendor/mishka_components.js";
+
+let Hooks = {};
+Hooks.HandleFlashClick = {
+  mounted() {
+    this.el.addEventListener("click", (event) => {
+      event.stopPropagation();
+      this.pushEvent("lv:clear-flash", {
+        value: {
+          key: this.el.getAttribute("data-kind"),
+        },
+      });
+      this.el.style.cssText += "hidden";
+    });
+  },
+};
+
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content");
+
 let liveSocket = new LiveSocket("/live", Socket, {
   longPollFallbackMs: 2500,
   params: {
@@ -33,6 +50,7 @@ let liveSocket = new LiveSocket("/live", Socket, {
   },
   hooks: {
     ...MishkaComponents,
+    ...Hooks,
   },
 });
 // Show progress bar on live navigation and form submits

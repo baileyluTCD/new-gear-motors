@@ -25,25 +25,13 @@ defmodule NextGearMotors.Vehicles.Vehicle do
     timestamps(type: :utc_datetime)
   end
 
-  def validate_changeset(vehicle, attrs) do
+  def changeset(vehicle, attrs) do
     vehicle
-    |> cast(attrs, [:name, :price, :description, :manufacturer])
-    |> validate_required([:name, :price, :description, :manufacturer])
+    |> cast(attrs, [:name, :covers, :price, :description, :manufacturer])
+    |> validate_required([:name, :covers, :price, :description, :manufacturer])
     |> validate_format(:price, ~r/^€[0-9|,|\.]*$/,
       message: "must be a number in euro - i.e. '€19,999.99'"
     )
-  end
-
-  def save_changeset(vehicle, attrs) do
-    covers = Vehicles.get_covers_from_attrs(attrs)
-
-    if covers && !Enum.empty?(covers) do
-      vehicle
-      |> validate_changeset(attrs)
-      |> cast_attachments(attrs, [:covers])
-      |> validate_length(:covers, min: 1, max: 20)
-    else
-      validate_changeset(vehicle, attrs)
-    end
+    |> validate_length(:covers, min: 1, max: 20)
   end
 end
