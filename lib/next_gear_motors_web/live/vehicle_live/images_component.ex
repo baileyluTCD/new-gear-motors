@@ -42,14 +42,7 @@ defmodule NextGearMotorsWeb.VehicleLive.ImagesComponent do
               class="max-sm:text-sm flex flex-col sm:flex-row justify-between items-center px-8 py-2 gap-3"
             >
               <p title={entry.client_name}>{shorten_text(entry.client_name, 13)}</p>
-              <progress
-                title={"File Upload - #{entry.progress}%"}
-                value={entry.progress}
-                max="100"
-                class="w-full rounded-lg"
-              >
-                {entry.progress}%
-              </progress>
+              <.status mode={:pending} title={"#{entry.progress}%"} />
             </figcaption>
           </figure>
           <.error :for={err <- upload_errors(@uploads.covers, entry)}>{error_to_string(err)}</.error>
@@ -80,6 +73,7 @@ defmodule NextGearMotorsWeb.VehicleLive.ImagesComponent do
               class="max-sm:text-sm flex flex-col sm:flex-row justify-between items-center px-8 py-2 gap-3"
             >
               <p title={cover}>{shorten_text(cover, 13)}</p>
+              <.status mode={:accepted} />
             </figcaption>
           </figure>
         </article>
