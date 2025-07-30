@@ -89,7 +89,7 @@ defmodule NextGearMotorsWeb.VehicleLive.ImagesComponent do
      |> assign(:covers, %{})
      |> allow_upload(:covers,
        accept: ~w(.png .jpg .jpeg .avif),
-       max_entries: 10,
+       max_entries: 20,
        auto_upload: true,
        progress: &handle_progress/3
      )}
