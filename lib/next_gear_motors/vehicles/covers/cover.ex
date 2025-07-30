@@ -7,6 +7,8 @@ defmodule NextGearMotors.Vehicles.Covers.Cover do
   use Waffle.Definition
   use Waffle.Ecto.Definition
 
+  import NextGearMotors.Vehicles.Covers.Cover.Macros
+
   @versions [:original]
   @extensions ~w(.png .jpg .jpeg .avif)
 
@@ -22,8 +24,18 @@ defmodule NextGearMotors.Vehicles.Covers.Cover do
     end
   end
 
+  args do
+    [
+      "-strip",
+      {"-interlace", "Plane"},
+      {"-sampling-factor", "4:2:0"},
+      {"-quality", "85%"},
+      "-auto-orient"
+    ]
+  end
+
   def transform(:original, _) do
-    {:magick, "-strip -interlace Plane -sampling-factor 4:2:0 -quality 85%"}
+    {:gm, &args/2}
   end
 
   def filename(_version, {file, _scope}) do
