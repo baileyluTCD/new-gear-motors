@@ -31,6 +31,7 @@
       id={"vehicle-images-#{@vehicle.updated_at}"}
     >
       <.carousel
+        :if={!Enum.empty?(@vehicle.covers)}
         class="flex items-center justify-center rounded-xl border border-zinc-600 m-2 shadow-xl p-2"
         autoplay
         indicator
