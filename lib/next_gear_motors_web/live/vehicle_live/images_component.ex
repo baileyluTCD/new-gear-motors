@@ -67,7 +67,10 @@ defmodule NextGearMotorsWeb.VehicleLive.ImagesComponent do
             &times;
           </button>
           <figure class="w-full flex flex-col items-center px-2">
-            <img class="rounded-xl m-2 border border-zinc-500 shadow" src={Cover.url(cover)} />
+            <img
+              class="rounded-xl m-2 border border-zinc-500 shadow"
+              src={Cover.url({cover, @vehicle})}
+            />
             <figcaption
               title={cover}
               class="max-sm:text-sm flex flex-col sm:flex-row justify-between items-center px-8 py-2 gap-3"
@@ -88,7 +91,7 @@ defmodule NextGearMotorsWeb.VehicleLive.ImagesComponent do
      socket
      |> assign(:covers, %{})
      |> allow_upload(:covers,
-       accept: ~w(.png .jpg .jpeg .avif),
+       accept: ~w(.png .jpg .jpeg),
        max_entries: 20,
        auto_upload: true,
        progress: &handle_progress/3
