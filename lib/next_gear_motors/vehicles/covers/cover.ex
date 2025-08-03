@@ -7,43 +7,46 @@ defmodule NextGearMotors.Vehicles.Covers.Cover do
   use Waffle.Definition
   use Waffle.Ecto.Definition
 
-  import NextGearMotors.Vehicles.Covers.Cover.Macros
+  alias Image
 
   @versions [:original]
-  @extensions ~w(.png .jpg .jpeg .avif)
+  @extensions ~w(.png .jpg .jpeg)
 
-  def to_filename(%{filename: name}), do: name
-  def to_filename(%{file_name: name}), do: name
+  def validate({%Waffle.File{} = file, _}) do
+    file_extension =
+      file.file_name
+      |> Path.extname()
+      |> String.downcase()
 
-  def validate({file, _}) do
-    file_extension = to_filename(file) |> Path.extname() |> String.downcase()
+    Enum.member?(@extensions, file_extension)
+  end
 
-    case Enum.member?(@extensions, file_extension) do
-      true -> :ok
-      false -> {:error, "file type is invalid"}
+  def transform(_version, _), do: {&to_webp/2, fn _, _ -> :webp end}
+
+  defp to_webp(_version, file) do
+    new_path = Waffle.File.generate_temporary_path("webp")
+
+    with {:ok, image} <- Image.open(file.path),
+         {:ok, {image, _flags}} <- Image.autorotate(image),
+         {:ok, _image} <-
+           Image.write(image, new_path, strip_metadata: true, minimize_file_size: true, effort: 8) do
+      {:ok,
+       %Waffle.File{
+         file
+         | path: new_path,
+           is_tempfile?: true
+       }}
     end
   end
 
-  args do
-    [
-      "-strip",
-      {"-interlace", "Plane"},
-      {"-sampling-factor", "4:2:0"},
-      {"-quality", "85%"},
-      "-auto-orient"
-    ]
+  def filename(_version, {file, _vehicle}) do
+    :crypto.hash_init(:sha512)
+    |> :crypto.hash_update(file.file_name)
+    |> :crypto.hash_final()
+    |> Base.encode16(case: :lower)
   end
 
-  def transform(:original, _) do
-    {:gm, &args/2}
-  end
-
-  def filename(_version, {file, _scope}) do
-    name = to_filename(file)
-
-    hash = :crypto.hash(:sha256, name) |> Base.encode16()
-    file_title = name |> Path.rootname() |> String.downcase()
-
-    "#{file_title}-#{hash}"
+  def storage_dir(_version, {_file, _scope}) do
+    "/uploads/vehicles/covers/"
   end
 end

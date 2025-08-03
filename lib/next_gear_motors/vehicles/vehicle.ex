@@ -10,7 +10,6 @@ defmodule NextGearMotors.Vehicles.Vehicle do
   import Ecto.Changeset
 
   alias NextGearMotors.Vehicles.Covers.Cover
-  alias NextGearMotors.Vehicles
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id

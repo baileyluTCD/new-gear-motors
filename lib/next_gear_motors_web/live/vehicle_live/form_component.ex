@@ -4,8 +4,6 @@ defmodule NextGearMotorsWeb.VehicleLive.FormComponent do
   alias NextGearMotors.Vehicles
   alias NextGearMotorsWeb.VehicleLive.ImagesComponent
 
-  import NextGearMotorsWeb.VehicleHelper
-
   @impl true
   def render(assigns) do
     ~H"""

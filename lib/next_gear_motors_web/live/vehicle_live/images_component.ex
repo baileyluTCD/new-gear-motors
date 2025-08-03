@@ -1,7 +1,6 @@
 defmodule NextGearMotorsWeb.VehicleLive.ImagesComponent do
   use NextGearMotorsWeb, :live_component
 
-  alias NextGearMotorsWeb.VehicleLive.FormComponent
   alias NextGearMotors.Vehicles.Covers.Cover
 
   import NextGearMotorsWeb.VehicleHelper
@@ -88,7 +87,7 @@ defmodule NextGearMotorsWeb.VehicleLive.ImagesComponent do
      socket
      |> assign(:covers, %{})
      |> allow_upload(:covers,
-       accept: ~w(.png .jpg .jpeg .avif),
+       accept: ~w(.png .jpg .jpeg),
        max_entries: 20,
        auto_upload: true,
        progress: &handle_progress/3
@@ -108,14 +107,14 @@ defmodule NextGearMotorsWeb.VehicleLive.ImagesComponent do
      |> cancel_upload(:covers, ref)}
   end
 
+  def update(assigns, socket), do: {:ok, assign(socket, assigns)}
+
   defp to_waffle_ecto_type_array(covers) do
     Map.values(covers)
     |> Enum.map(fn cover ->
       %{file_name: cover, updated_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)}
     end)
   end
-
-  def update(assigns, socket), do: {:ok, assign(socket, assigns)}
 
   defp handle_progress(:covers, entry, socket) do
     if entry.done? do
@@ -138,7 +137,7 @@ defmodule NextGearMotorsWeb.VehicleLive.ImagesComponent do
           path: meta.path
         }
 
-        {:ok, cover} = Cover.store({cover, socket.assigns.vehicle})
+        {:ok, cover} = Cover.store(cover)
 
         send_update(lv, socket.assigns.myself, data: {:finish_image_processing, entry.ref, cover})
       end)
@@ -168,7 +167,7 @@ defmodule NextGearMotorsWeb.VehicleLive.ImagesComponent do
 
     if cover do
       Task.async(fn ->
-        Cover.delete({cover, socket.assigns.vehicle})
+        Cover.delete(cover)
       end)
     end
 

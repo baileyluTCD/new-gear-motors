@@ -103,7 +103,7 @@ defmodule NextGearMotorsWeb.VehicleLiveTest do
 
       assert index_live
              |> file_input("#upload-form", :covers, [@cover])
-             |> render_upload("car.jpg") =~ "img src=\"/uploads/car"
+             |> render_upload("car.jpg") =~ "img src=\"/uploads/vehicles/covers"
 
       assert index_live
              |> form("#vehicle-form", vehicle: @create_attrs)
