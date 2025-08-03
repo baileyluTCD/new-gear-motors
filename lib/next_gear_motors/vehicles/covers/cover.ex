@@ -7,11 +7,7 @@ defmodule NextGearMotors.Vehicles.Covers.Cover do
   use Waffle.Definition
   use Waffle.Ecto.Definition
 
-  alias NextGearMotors.Vehicles.Vehicle
-
-  alias Vix.Vips.{Image, Operation}
-
-  require Logger
+  alias Image
 
   @versions [:original]
   @extensions ~w(.png .jpg .jpeg)
@@ -22,40 +18,35 @@ defmodule NextGearMotors.Vehicles.Covers.Cover do
       |> Path.extname()
       |> String.downcase()
 
-    case Enum.member?(@extensions, file_extension) do
-      true ->
-        :ok
+    Enum.member?(@extensions, file_extension)
+  end
 
-      false ->
-        {:error,
-         "file extension is not supported - accepted extensions: #{inspect(@extensions, pretty: true)}"}
+  def transform(_version, _), do: {&to_webp/2, fn _, _ -> :webp end}
+
+  defp to_webp(_version, file) do
+    new_path = Waffle.File.generate_temporary_path("webp")
+
+    with {:ok, image} <- Image.open(file.path),
+         {:ok, {image, _flags}} <- Image.autorotate(image),
+         {:ok, _image} <-
+           Image.write(image, new_path, strip_metadata: true, minimize_file_size: true, effort: 8) do
+      {:ok,
+       %Waffle.File{
+         file
+         | path: new_path,
+           is_tempfile?: true
+       }}
     end
   end
 
-  def transform(:original, _), do: {&process/2, fn _, _ -> :webp end}
-
-  def process(_version, file) do
-    tmp_path = Waffle.File.generate_temporary_path("webp")
-
-    with {:ok, image} <- Image.new_from_file(file.path),
-         :ok <- Operation.webpsave(image, tmp_path) do
-      ret = {
-        :ok,
-        %Waffle.File{
-          file
-          | path: tmp_path,
-            is_tempfile?: true,
-            file_name: "#{Path.rootname(file.file_name)}.webp"
-        }
-      }
-
-      Logger.warn("ret: #{inspect(ret)}")
-
-      ret
-    end
+  def filename(_version, {file, _vehicle}) do
+    :crypto.hash_init(:sha512)
+    |> :crypto.hash_update(file.file_name)
+    |> :crypto.hash_final()
+    |> Base.encode16(case: :lower)
   end
 
-  def filename(_version, {%{file_name: file_name}, %Vehicle{} = vehicle}) do
-    "vehicle-#{vehicle.id}$cover-#{Path.rootname(file_name)}$"
+  def storage_dir(_version, {_file, _scope}) do
+    "/uploads/vehicles/covers/"
   end
 end
