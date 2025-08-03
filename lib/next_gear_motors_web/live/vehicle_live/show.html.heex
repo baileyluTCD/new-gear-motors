@@ -39,7 +39,7 @@
       >
         <:slide
           :for={cover <- @vehicle.covers}
-          image={Cover.url({cover, @vehicle})}
+          image={Cover.url(cover)}
           image_class="rounded-lg h-48 md:h-56 lg:h-80 overflow-hidden"
         />
       </.carousel>

@@ -1,7 +1,6 @@
 defmodule NextGearMotorsWeb.VehicleLive.ImagesComponent do
   use NextGearMotorsWeb, :live_component
 
-  alias NextGearMotorsWeb.VehicleLive.FormComponent
   alias NextGearMotors.Vehicles.Covers.Cover
 
   import NextGearMotorsWeb.VehicleHelper
@@ -67,10 +66,7 @@ defmodule NextGearMotorsWeb.VehicleLive.ImagesComponent do
             &times;
           </button>
           <figure class="w-full flex flex-col items-center px-2">
-            <img
-              class="rounded-xl m-2 border border-zinc-500 shadow"
-              src={Cover.url({cover, @vehicle})}
-            />
+            <img class="rounded-xl m-2 border border-zinc-500 shadow" src={Cover.url(cover)} />
             <figcaption
               title={cover}
               class="max-sm:text-sm flex flex-col sm:flex-row justify-between items-center px-8 py-2 gap-3"
@@ -111,14 +107,14 @@ defmodule NextGearMotorsWeb.VehicleLive.ImagesComponent do
      |> cancel_upload(:covers, ref)}
   end
 
+  def update(assigns, socket), do: {:ok, assign(socket, assigns)}
+
   defp to_waffle_ecto_type_array(covers) do
     Map.values(covers)
     |> Enum.map(fn cover ->
       %{file_name: cover, updated_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)}
     end)
   end
-
-  def update(assigns, socket), do: {:ok, assign(socket, assigns)}
 
   defp handle_progress(:covers, entry, socket) do
     if entry.done? do
@@ -141,7 +137,7 @@ defmodule NextGearMotorsWeb.VehicleLive.ImagesComponent do
           path: meta.path
         }
 
-        {:ok, cover} = Cover.store({cover, socket.assigns.vehicle})
+        {:ok, cover} = Cover.store(cover)
 
         send_update(lv, socket.assigns.myself, data: {:finish_image_processing, entry.ref, cover})
       end)
@@ -171,7 +167,7 @@ defmodule NextGearMotorsWeb.VehicleLive.ImagesComponent do
 
     if cover do
       Task.async(fn ->
-        Cover.delete({cover, socket.assigns.vehicle})
+        Cover.delete(cover)
       end)
     end
 
