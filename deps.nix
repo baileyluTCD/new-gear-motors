@@ -222,6 +222,27 @@ let
         in
         drv;
 
+      cc_precompiler =
+        let
+          version = "0.1.10";
+          drv = buildMix {
+            inherit version;
+            name = "cc_precompiler";
+            appConfigPath = ./config;
+
+            src = fetchHex {
+              inherit version;
+              pkg = "cc_precompiler";
+              sha256 = "f6e046254e53cd6b41c6bacd70ae728011aa82b2742a80d6e2214855c6e06b22";
+            };
+
+            beamDeps = [
+              elixir_make
+            ];
+          };
+        in
+        drv;
+
       certifi =
         let
           version = "2.15.0";
@@ -625,7 +646,7 @@ let
 
       hackney =
         let
-          version = "1.24.1";
+          version = "1.25.0";
           drv = buildRebar3 {
             inherit version;
             name = "hackney";
@@ -633,7 +654,7 @@ let
             src = fetchHex {
               inherit version;
               pkg = "hackney";
-              sha256 = "f4a7392a0b53d8bbc3eb855bdcc919cd677358e65b2afd3840b5b3690c4c8a39";
+              sha256 = "7209bfd75fd1f42467211ff8f59ea74d6f2a9e81cbcee95a56711ee79fd6b1d4";
             };
 
             beamDeps = [
@@ -651,7 +672,7 @@ let
 
       hammer =
         let
-          version = "7.0.1";
+          version = "7.1.0";
           drv = buildMix {
             inherit version;
             name = "hammer";
@@ -660,7 +681,7 @@ let
             src = fetchHex {
               inherit version;
               pkg = "hammer";
-              sha256 = "796edf14ab2aa80df72080210fcf944ee5e8868d8ece7a7511264d802f58cc2d";
+              sha256 = "0ef3f0b9b92ae10a01604ca58adc2bfc8df0af4414a3afcf2dd79e256bc94c17";
             };
           };
         in
@@ -1232,7 +1253,7 @@ let
 
       postgrex =
         let
-          version = "0.20.0";
+          version = "0.21.0";
           drv = buildMix {
             inherit version;
             name = "postgrex";
@@ -1241,7 +1262,7 @@ let
             src = fetchHex {
               inherit version;
               pkg = "postgrex";
-              sha256 = "d36ef8b36f323d29505314f704e21a1a038e2dc387c6409ee0cd24144e187c0f";
+              sha256 = "c35cd8f18b5c59da08eff27cb40c8533c561320af830821c740efd7e97c8ac9f";
             };
 
             beamDeps = [
@@ -1310,7 +1331,7 @@ let
 
       swoosh =
         let
-          version = "1.19.3";
+          version = "1.19.5";
           drv = buildMix {
             inherit version;
             name = "swoosh";
@@ -1319,7 +1340,7 @@ let
             src = fetchHex {
               inherit version;
               pkg = "swoosh";
-              sha256 = "04a10f8496786b744b84130e3510eb53ca51e769c39511b65023bdf4136b732f";
+              sha256 = "c953f51ee0a8b237e0f4307c9cefd3eb1eb751c35fcdda2a8bccb991766473be";
             };
 
             beamDeps = [
@@ -1411,7 +1432,7 @@ let
 
       telemetry_poller =
         let
-          version = "1.2.0";
+          version = "1.3.0";
           drv = buildRebar3 {
             inherit version;
             name = "telemetry_poller";
@@ -1419,7 +1440,7 @@ let
             src = fetchHex {
               inherit version;
               pkg = "telemetry_poller";
-              sha256 = "7216e21a6c326eb9aa44328028c34e9fd348fb53667ca837be59d0aa2a0156e8";
+              sha256 = "51f18bed7128544a50f75897db9974436ea9bfba560420b646af27a9a9b35211";
             };
 
             beamDeps = [
@@ -1462,6 +1483,35 @@ let
               pkg = "unicode_util_compat";
               sha256 = "b3a917854ce3ae233619744ad1e0102e05673136776fb2fa76234f3e03b23642";
             };
+          };
+        in
+        drv;
+
+      vix =
+        let
+          version = "0.35.0";
+          drv = buildMix {
+            inherit version;
+            name = "vix";
+            appConfigPath = ./config;
+
+            VIX_COMPILATION_MODE = "PLATFORM_PROVIDED_LIBVIPS";
+
+            nativeBuildInputs = with pkgs; [
+              pkg-config
+              vips
+            ];
+
+            src = fetchHex {
+              inherit version;
+              pkg = "vix";
+              sha256 = "a3e80067a89d0631b6cf2b93594e03c1b303a2c7cddbbdd28040750d521984e5";
+            };
+
+            beamDeps = [
+              cc_precompiler
+              elixir_make
+            ];
           };
         in
         drv;

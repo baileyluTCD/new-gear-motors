@@ -83,6 +83,7 @@ defmodule NextGearMotors.MixProject do
       {:tailwind, "~> 0.3", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
+      {:vix, "~> 0.35"},
       {:waffle, "~> 1.1"},
       {:waffle_ecto, github: "nash-io/waffle_ecto", tag: "v0.0.12"}
     ]
