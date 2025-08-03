@@ -64,6 +64,7 @@ defmodule NextGearMotors.MixProject do
        app: false,
        compile: false,
        depth: 1},
+      {:image, "~> 0.61"},
       {:jason, "~> 1.2"},
       {:mail, "~> 0.5.1"},
       {:mix_audit, "~> 2.1", runtime: false},
@@ -83,7 +84,6 @@ defmodule NextGearMotors.MixProject do
       {:tailwind, "~> 0.3", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
-      {:vix, "~> 0.35"},
       {:waffle, "~> 1.1"},
       {:waffle_ecto, github: "nash-io/waffle_ecto", tag: "v0.0.12"}
     ]

@@ -731,6 +731,31 @@ let
         in
         drv;
 
+      image =
+        let
+          version = "0.61.1";
+          drv = buildMix {
+            inherit version;
+            name = "image";
+            appConfigPath = ./config;
+
+            src = fetchHex {
+              inherit version;
+              pkg = "image";
+              sha256 = "88f1fdeaeec36696acb9b261f035bbe53198cd2830f841c3e9cbf9010c16a5f9";
+            };
+
+            beamDeps = [
+              jason
+              phoenix_html
+              plug
+              sweet_xml
+              vix
+            ];
+          };
+        in
+        drv;
+
       jason =
         let
           version = "1.4.4";
